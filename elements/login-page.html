@@ -1,0 +1,85 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/firebase-element/firebase-auth.html">
+
+<dom-module id="login-page">
+    <template>
+        <style>
+            paper-button {
+                margin-top: 20px;
+                background: var(--button-gray-background);
+            }
+        </style>
+
+        <div class="layout center vertical">
+            <firebase-auth
+                id="fbAuth"
+                user="{{user}}"
+                ref="{{fbRef}}"
+                provider="password"
+                location="https://radiant-heat-2359.firebaseio.com"
+                on-error="_errorCallback"
+                on-login="_loginCallback"
+            ></firebase-auth>
+            <form is="iron-form" id="loginForm">
+                <paper-input id="loginEmail" name="email" label="Email"
+                             required auto-validate error-message="必填"></paper-input>
+                <paper-input id="loginPassword" name="password" label="密碼" type="password"
+                             required auto-validate error-message="必填"></paper-input>
+                <div class="layout horizontal center around-justified">
+                    <paper-button on-tap="_doLogin">登入</paper-button>
+                    <paper-button on-tap="_clearForm">清除</paper-button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'login-page',
+
+            properties:{
+                redirectUrl: {
+                    type: String,
+                    value: "/"
+                },
+
+                user: {
+                    type: Object
+                },
+                fbRef: {
+                    type: Object
+                }
+            },
+
+            _errorCallback: function(e){
+                console.log('Error: ');
+                console.log(e);
+            },
+            _loginCallback: function(e){
+                console.log('Login!');
+                console.log(e);
+
+                window.location.href = '/index.html';
+            },
+            _doLogin: function(){
+                var fb = this.$.fbAuth;
+                var email = this.$.loginEmail.value;
+                var password = this.$.loginPassword.value;
+                console.log('Email: ' + email + ', Password: ' + password);
+
+                fb.login({
+                    email: email,
+                    password: password
+                });
+            },
+            _clearForm: function(){
+                //var form = this.$.loginForm;
+
+            }
+        });
+    </script>
+</dom-module>

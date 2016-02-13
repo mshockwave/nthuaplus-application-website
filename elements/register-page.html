@@ -1,0 +1,39 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<dom-module id="register-page">
+    <template>
+        <style>
+            paper-button {
+                margin-top: 20px;
+                background: var(--button-gray-background);
+            }
+        </style>
+
+        <div class="layout center vertical">
+            <form is="iron-form" method="post">
+                <paper-input name="email" label="Email"
+                             required auto-validate error-message="必填"></paper-input>
+                <paper-input name="username" label="使用者名稱"
+                             required auto-validate error-message="必填"></paper-input>
+                <paper-input name="password" label="密碼" type="password"
+                             required auto-validate error-message="必填"></paper-input>
+                <paper-input name="password_re" label="再次輸入密碼" type="password" required></paper-input>
+
+                <div class="layout horizontal center around-justified">
+                    <paper-button>註冊</paper-button>
+                    <paper-button>清除</paper-button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'register-page'
+        });
+    </script>
+</dom-module>

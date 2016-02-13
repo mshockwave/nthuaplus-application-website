@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>NTHU A+ Application</title>
+
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+    <link rel="import" href="elements/base-elements.html">
+    <link rel="import" href="bower_components/firebase-element/firebase-auth.html">
+</head>
+<body unresolved class="fullbleed">
+    <template is="dom-bind" id="app">
+        <firebase-auth
+                id="fbAuth"
+                provider="password"
+                location="https://radiant-heat-2359.firebaseio.com"
+        ></firebase-auth>
+    </template>
+
+    <script>
+        var app = document.querySelector('#app');
+        app.addEventListener('dom-change', function(){
+            //On init
+
+            //FireBase
+            var fb = app.$.fbAuth;
+            fb.addEventListener('status-known-changed', function(){
+                console.log('Status known');
+                if(fb.user === null || fb.user === undefined){
+                    //Not login
+                    window.location.href = '/login.html';
+                }else{
+                    //Login
+                    window.location.href = '/dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
