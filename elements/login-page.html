@@ -2,6 +2,7 @@
 <link rel="import" href="base-elements.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/firebase-element/firebase-auth.html">
 
@@ -25,8 +26,10 @@
                 on-login="_loginCallback"
             ></firebase-auth>
             <form is="iron-form" id="loginForm">
-                <paper-input id="loginEmail" name="email" label="Email"
-                             required auto-validate error-message="必填"></paper-input>
+                <!-- <paper-input id="loginEmail" name="email" label="Email"
+                             required auto-validate error-message="必填"></paper-input> -->
+                <gold-email-input name="email" label="Email"
+                                  required auto-validate error-message="必填"></gold-email-input>
                 <paper-input id="loginPassword" name="password" label="密碼" type="password"
                              required auto-validate error-message="必填"></paper-input>
                 <div class="layout horizontal center around-justified">

@@ -2,6 +2,14 @@
 <link rel="import" href="base-elements.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/gold-date-input/date-input.html">
+<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 
 <dom-module id="form-page">
     <template>
@@ -9,10 +17,56 @@
             .main-content {
                 padding: 10px;
             }
+
+            paper-input.expand{
+                width: 50%;
+            }
         </style>
 
-        <div class="layout vertical center main-content">
-            <form is="iron-form">
+        <div class="layout horizontal start center-justified main-content">
+            <form is="iron-form" class="layout vertical start">
+                <h3>申請主題</h3>
+                <paper-radio-group>
+                    <paper-radio-button name="1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br />
+                    <paper-radio-button name="2">具穩健機率運算能力之突波式神經網路系統研發</paper-radio-button><br />
+                    <paper-radio-button name="3">虛擬載具在高效能異質環境研究</paper-radio-button><br />
+                </paper-radio-group>
+                <br/>
+
+                <paper-input label="姓名" class="expand"
+                             required auto-validate error-message="必填"></paper-input><br />
+                <paper-input label="學校" class="expand"
+                             required auto-validate error-message="必填"></paper-input><br />
+                <paper-input label="系所" class="expand"
+                             required auto-validate error-message="必填"></paper-input><br />
+
+                <div class="layout horizontal center ">
+                    <paper-dropdown-menu label="年級種類" style="margin-right: 5px;">
+                        <paper-listbox class="dropdown-content">
+                            <paper-item>學士班</paper-item>
+                            <paper-item>碩士班</paper-item>
+                            <paper-item>博士班</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                    <paper-input label="年級"
+                                 required auto-validate error-message="必填" type="number"></paper-input><br />
+                </div>
+
+                <br/>
+                <div class="layout horizontal center ">
+                    <span>生日</span>
+                    <date-input required></date-input>
+                </div><br/>
+
+                <paper-input label="身分證字號" class="expand"
+                             required auto-validate error-message="必填"></paper-input><br />
+                <gold-phone-input label="聯絡電話"
+                            country-code="886"
+                            phone-number-pattern="XXXX-XXX-XXX"
+                            required auto-validate error-message="必填"></gold-phone-input><br/>
+                <gold-email-input label="Email"
+                            required auto-validate error-message="必填"></gold-email-input><br/>
+
 
             </form>
         </div>

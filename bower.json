@@ -15,11 +15,9 @@
     "test",
     "tests"
   ],
-
   "dependencies": {
     "jquery": "latest",
     "jquery.scrollTo": "latest",
-
     "iron-flex-layout": "PolymerElements/iron-flex-layout",
     "iron-icon": "PolymerElements/iron-icon",
     "iron-icons": "PolymerElements/iron-icons",
@@ -41,6 +39,13 @@
     "paper-listbox": "PolymerElements/paper-listbox",
     "paper-checkbox": "PolymerElements/paper-checkbox",
     "paper-radio-button": "PolymerElements/paper-radio-button",
-    "paper-radio-group": "PolymerElements/paper-radio-group"
+    "paper-radio-group": "PolymerElements/paper-radio-group",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu",
+    "paper-menu": "PolymerElements/paper-menu",
+    "gold-email-input": "PolymerElements/gold-email-input",
+    "gold-phone-input": "PolymerElements/gold-phone-input",
+    "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^1.0.0",
+    "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#^1.0.0",
+    "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#^1.0.0"
   }
 }
