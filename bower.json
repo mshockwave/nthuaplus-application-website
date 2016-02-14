@@ -42,6 +42,8 @@
     "paper-radio-group": "PolymerElements/paper-radio-group",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu",
     "paper-menu": "PolymerElements/paper-menu",
+    "paper-fab": "PolymerElements/paper-fab",
+    "paper-tooltip": "PolymerElements/paper-tooltip",
     "gold-email-input": "PolymerElements/gold-email-input",
     "gold-phone-input": "PolymerElements/gold-phone-input",
     "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^1.0.0",

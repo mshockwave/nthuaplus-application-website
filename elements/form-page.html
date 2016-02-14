@@ -2,6 +2,7 @@
 <link rel="import" href="base-elements.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
@@ -10,6 +11,8 @@
 <link rel="import" href="../bower_components/gold-date-input/date-input.html">
 <link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 <dom-module id="form-page">
     <template>
@@ -21,7 +24,42 @@
             paper-input.expand{
                 width: 50%;
             }
+            paper-textarea.expand {
+                width: 60%;
+            }
+
+            #fab-group {
+                position: fixed;
+                right: 30px;
+                bottom: 30px;
+            }
+            #fab-group paper-fab {
+                margin: 10px;
+            }
+            #butDrafts {
+                --paper-fab-background: #009688;
+            }
+            #butSubmit {
+                --paper-fab-background: #FF5722;
+            }
+
+            paper-tooltip {
+                --paper-tooltip-background: black;
+                --paper-tooltip-opacity: 1.0;
+                --paper-tooltip: {
+                    font-size: 14px;
+                };
+            }
+
         </style>
+
+        <div id="fab-group" class="layout vertical center around-justified">
+            <paper-fab id="butDrafts" icon="drafts"></paper-fab>
+            <paper-tooltip for="butDrafts" position="left">儲存草稿</paper-tooltip>
+
+            <paper-fab id="butSubmit" icon="send"></paper-fab>
+            <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
+        </div>
 
         <div class="layout horizontal start center-justified main-content">
             <form is="iron-form" class="layout vertical start">
@@ -67,6 +105,51 @@
                 <gold-email-input label="Email"
                             required auto-validate error-message="必填"></gold-email-input><br/>
 
+                <paper-textarea label="通訊地址" class="expand" multiple
+                            required auto-validate error-message="必填"></paper-textarea><br/>
+
+                <paper-textarea label="研究領域" class="expand" multiple rows="3"
+                            required auto-validate error-message="必填"></paper-textarea><br/>
+
+                <!-- TODO: 預修課程-->
+
+                <paper-textarea label="相關專業能力" class="expand" multiple rows="3"
+                                required auto-validate error-message="必填"></paper-textarea><br/>
+
+                <br/>
+                <div class="layout horizontal center around-justified">
+                    <span>成績排名</span>
+                    <paper-input label="總平均" style="margin: 0 20px;"
+                                 required auto-validate error-message="必填" type="text"></paper-input>
+                    <paper-input label="年級排名"
+                                 required auto-validate error-message="必填" type="text"></paper-input>
+                </div><br/>
+
+                <!-- TODO: 語言能力-->
+
+                <br/>
+                <div class="layout horizontal center around-justified">
+                    <span>研究規劃書</span>
+                    <input style="margin: 0 20px;" is="iron-input" type="file">
+                </div><br/>
+
+                <br/>
+                <div class="layout horizontal center around-justified">
+                    <span>推薦函（至少兩封）</span>
+                    <input style="margin: 0 20px;" is="iron-input" type="file">
+                </div><br/>
+
+                <br/>
+                <div class="layout horizontal center around-justified">
+                    <span>成績單</span>
+                    <input style="margin: 0 20px;" is="iron-input" type="file">
+                </div><br/>
+
+                <br/>
+                <div class="layout horizontal center around-justified">
+                    <span>其他補充資料</span>
+                    <input style="margin: 0 20px;" is="iron-input" type="file">
+                </div><br/>
 
             </form>
         </div>
