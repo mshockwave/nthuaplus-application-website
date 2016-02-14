@@ -13,6 +13,9 @@
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="language-ability-dialog.html">
 
 <dom-module id="form-page">
     <template>
@@ -54,8 +57,10 @@
         </style>
 
         <div id="fab-group" class="layout vertical center around-justified">
+            <!--
             <paper-fab id="butDrafts" icon="drafts"></paper-fab>
             <paper-tooltip for="butDrafts" position="left">儲存草稿</paper-tooltip>
+            -->
 
             <paper-fab id="butSubmit" icon="send"></paper-fab>
             <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
@@ -72,11 +77,11 @@
                 <br/>
 
                 <paper-input label="姓名" class="expand"
-                             required auto-validate error-message="必填"></paper-input><br />
+                             required auto-validate error-message="錯誤"></paper-input><br />
                 <paper-input label="學校" class="expand"
-                             required auto-validate error-message="必填"></paper-input><br />
+                             required auto-validate error-message="錯誤"></paper-input><br />
                 <paper-input label="系所" class="expand"
-                             required auto-validate error-message="必填"></paper-input><br />
+                             required auto-validate error-message="錯誤"></paper-input><br />
 
                 <div class="layout horizontal center ">
                     <paper-dropdown-menu label="年級種類" style="margin-right: 5px;">
@@ -87,7 +92,7 @@
                         </paper-listbox>
                     </paper-dropdown-menu>
                     <paper-input label="年級"
-                                 required auto-validate error-message="必填" type="number"></paper-input><br />
+                                 required auto-validate error-message="錯誤" type="number"></paper-input><br />
                 </div>
 
                 <br/>
@@ -97,13 +102,13 @@
                 </div><br/>
 
                 <paper-input label="身分證字號" class="expand"
-                             required auto-validate error-message="必填"></paper-input><br />
+                             required auto-validate error-message="錯誤"></paper-input><br />
                 <gold-phone-input label="聯絡電話"
                             country-code="886"
                             phone-number-pattern="XXXX-XXX-XXX"
-                            required auto-validate error-message="必填"></gold-phone-input><br/>
+                            required auto-validate error-message="錯誤"></gold-phone-input><br/>
                 <gold-email-input label="Email"
-                            required auto-validate error-message="必填"></gold-email-input><br/>
+                            required auto-validate error-message="錯誤"></gold-email-input><br/>
 
                 <paper-textarea label="通訊地址" class="expand" multiple
                             required auto-validate error-message="必填"></paper-textarea><br/>
@@ -120,12 +125,14 @@
                 <div class="layout horizontal center around-justified">
                     <span>成績排名</span>
                     <paper-input label="總平均" style="margin: 0 20px;"
-                                 required auto-validate error-message="必填" type="text"></paper-input>
+                                 required auto-validate error-message="錯誤" type="text"></paper-input>
                     <paper-input label="年級排名"
-                                 required auto-validate error-message="必填" type="text"></paper-input>
+                                 required auto-validate error-message="錯誤" type="text"></paper-input>
                 </div><br/>
 
-                <!-- TODO: 語言能力-->
+                <br/>
+                <paper-button on-click="_showLanguageDialog" raised>編輯語言能力</paper-button>
+                <language-ability-dialog></language-ability-dialog>
 
                 <br/>
                 <div class="layout horizontal center around-justified">
@@ -157,7 +164,11 @@
 
     <script>
         Polymer({
-            is: 'form-page'
+            is: 'form-page',
+
+            _showLanguageDialog: function(){
+                document.querySelector('language-ability-dialog').show();
+            }
         });
     </script>
 </dom-module>
