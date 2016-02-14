@@ -1,0 +1,11 @@
+[submodule "firebase"]
+    path = bower_components/firebase
+    url = https://github.com/firebase/firebase-bower.git
+
+[submodule "firebase-element"]
+    path = bower_components/firebase-element
+    url = https://github.com/GoogleWebComponents/firebase-element.git
+
+[submodule "gold-date-input"]
+    path = bower_components/gold-date-input
+    url = https://github.com/mshockwave/gold-cc-expiration-input.git
