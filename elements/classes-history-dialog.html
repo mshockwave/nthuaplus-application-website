@@ -7,7 +7,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
-<dom-module id="language-ability-dialog">
+<dom-module id="classes-history-dialog">
     <template>
         <style>
             table {
@@ -35,27 +35,18 @@
                     </tr>
                     -->
 
-                    <template is="dom-repeat" items="{{languageRows}}" as="langRow" index-as="rowIndex">
+                    <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
                         <tr>
-                            <td><paper-input label="語言" value="{{langRow.langName}}"></paper-input></td>
-                            <template is="dom-repeat" items="{{langRow.abilities}}" as="ability" index-as="abIndex">
-                                <td>
-                                    <paper-dropdown-menu label="{{ability.text}}">
-                                        <paper-listbox class="dropdown-content" selected="{{ability.value}}">
-                                            <paper-item>精通</paper-item>
-                                            <paper-item>中等</paper-item>
-                                            <paper-item>略懂</paper-item>
-                                        </paper-listbox>
-                                    </paper-dropdown-menu>
-                                </td>
-                            </template>
+                            <td><paper-input label="課程名稱" value="{{classRow.name}}"></paper-input></td>
+                            <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}"></paper-input></td>
+                            <td><paper-input label="成績" value="{{classRow.grade}}"></paper-input></td>
                             <td><paper-icon-button icon="clear"
                                                    data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
                         </tr>
                     </template>
                 </table>
                 <div class="layout horizontal center around-justified">
-                    <paper-button raised on-click="_addLanguage">增加語言</paper-button>
+                    <paper-button raised on-click="_addClass">增加課程</paper-button>
                     <paper-button raised on-click="_clearAll">清除所有</paper-button>
                 </div>
             </div>
@@ -64,17 +55,13 @@
 
     <script>
         Polymer({
-            is: 'language-ability-dialog',
+            is: 'classes-history-dialog',
 
             ready: function(){
-                this.languageRows = [{
-                    langName: "",
-                    abilities: [
-                        {text: "聽"},
-                        {text: "說"},
-                        {text: "讀"},
-                        {text: "寫"}
-                    ]
+                this.classRows = [{
+                    name: "",
+                    semester: "",
+                    grade: ""
                 }];
             },
 
@@ -82,15 +69,11 @@
                 this.$.dialog.open();
             },
 
-            _addLanguage: function(){
-                this.push('languageRows', {
-                    langName: "",
-                    abilities: [
-                        {text: "聽"},
-                        {text: "說"},
-                        {text: "讀"},
-                        {text: "寫"}
-                    ]
+            _addClass: function(){
+                this.push('classRows', {
+                    name: "",
+                    semester: "",
+                    grade: ""
                 });
             },
 
@@ -99,25 +82,21 @@
                 var index = e.target.dataHost.dataRowIndex;
                 if(typeof index == 'string') index = parseInt(index);
 
-                if(this.languageRows.length == 1 && index == 0) return;
-                this.splice('languageRows', index, 1);
+                if(this.classRows.length == 1 && index == 0) return;
+                this.splice('classRows', index, 1);
             },
             _clearAll: function(){
-                if(this.languageRows.length > 1){
-                    this.splice('languageRows', 1, this.languageRows.length - 1);
+                if(this.classRows.length > 1){
+                    this.splice('classRows', 1, this.classRows.length - 1);
                 }
 
-                this.push('languageRows', {
-                    langName: "",
-                    abilities: [
-                        {text: "聽"},
-                        {text: "說"},
-                        {text: "讀"},
-                        {text: "寫"}
-                    ]
+                this.push('classRows', {
+                    name: "",
+                    semester: "",
+                    grade: ""
                 });
-                if(this.languageRows.length > 1){
-                    this.splice('languageRows', 0, 1);
+                if(this.classRows.length > 1){
+                    this.splice('classRows', 0, 1);
                 }
 
             }

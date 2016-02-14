@@ -16,6 +16,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="language-ability-dialog.html">
+<link rel="import" href="classes-history-dialog.html">
 
 <dom-module id="form-page">
     <template>
@@ -54,6 +55,9 @@
                 };
             }
 
+            paper-button {
+                background: var(--button-gray-background);
+            }
         </style>
 
         <div id="fab-group" class="layout vertical center around-justified">
@@ -116,7 +120,9 @@
                 <paper-textarea label="研究領域" class="expand" multiple rows="3"
                             required auto-validate error-message="必填"></paper-textarea><br/>
 
-                <!-- TODO: 預修課程-->
+                <br/>
+                <classes-history-dialog></classes-history-dialog>
+                <paper-button on-click="_showClassDialog" raised >編輯預修課程</paper-button><br/>
 
                 <paper-textarea label="相關專業能力" class="expand" multiple rows="3"
                                 required auto-validate error-message="必填"></paper-textarea><br/>
@@ -131,8 +137,8 @@
                 </div><br/>
 
                 <br/>
-                <paper-button on-click="_showLanguageDialog" raised>編輯語言能力</paper-button>
                 <language-ability-dialog></language-ability-dialog>
+                <paper-button on-click="_showLanguageDialog" raised >編輯語言能力</paper-button><br/>
 
                 <br/>
                 <div class="layout horizontal center around-justified">
@@ -168,6 +174,9 @@
 
             _showLanguageDialog: function(){
                 document.querySelector('language-ability-dialog').show();
+            },
+            _showClassDialog: function(){
+                document.querySelector('classes-history-dialog').show();
             }
         });
     </script>
