@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
 
 <dom-module id="classes-history-dialog">
     <template>
@@ -37,9 +38,15 @@
 
                     <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
                         <tr>
-                            <td><paper-input label="課程名稱" value="{{classRow.name}}"></paper-input></td>
-                            <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}"></paper-input></td>
-                            <td><paper-input label="成績" value="{{classRow.grade}}"></paper-input></td>
+                            <td><paper-input label="課程名稱" value="{{classRow.name}}"
+                                                on-change="_computeValue"></paper-input></td>
+
+                            <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}"
+                                                on-change="_computeValue"></paper-input></td>
+
+                            <td><paper-input label="成績" value="{{classRow.grade}}"
+                                                on-change="_computeValue"></paper-input></td>
+
                             <td><paper-icon-button icon="clear"
                                                    data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
                         </tr>
@@ -57,16 +64,31 @@
         Polymer({
             is: 'classes-history-dialog',
 
+            behaviors: [
+                Polymer.IronFormElementBehavior
+            ],
+
+            properties: {
+                classRows: {
+                    type: Array,
+                    value: [{
+                        name: "",
+                        semester: "",
+                        grade: ""
+                    }]
+                }
+            },
+
             ready: function(){
-                this.classRows = [{
-                    name: "",
-                    semester: "",
-                    grade: ""
-                }];
+                this.value = JSON.stringify([]);
             },
 
             show: function(){
                 this.$.dialog.open();
+            },
+
+            _computeValue: function(){
+                this.value = JSON.stringify(this.classRows);
             },
 
             _addClass: function(){
@@ -84,6 +106,8 @@
 
                 if(this.classRows.length == 1 && index == 0) return;
                 this.splice('classRows', index, 1);
+
+                this._computeValue();
             },
             _clearAll: function(){
                 if(this.classRows.length > 1){
@@ -99,6 +123,7 @@
                     this.splice('classRows', 0, 1);
                 }
 
+                this._computeValue();
             }
         });
     </script>

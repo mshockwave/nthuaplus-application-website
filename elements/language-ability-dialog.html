@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
 
 <dom-module id="language-ability-dialog">
     <template>
@@ -37,11 +38,15 @@
 
                     <template is="dom-repeat" items="{{languageRows}}" as="langRow" index-as="rowIndex">
                         <tr>
-                            <td><paper-input label="語言" value="{{langRow.langName}}"></paper-input></td>
+
+                            <td><paper-input label="語言" value="{{langRow.langName}}"
+                                                on-change="_computeValue"></paper-input></td>
+
                             <template is="dom-repeat" items="{{langRow.abilities}}" as="ability" index-as="abIndex">
                                 <td>
                                     <paper-dropdown-menu label="{{ability.text}}">
-                                        <paper-listbox class="dropdown-content" selected="{{ability.value}}">
+                                        <paper-listbox class="dropdown-content"
+                                                       selected="{{ability.value}}" on-iron-select="_computeValue">
                                             <paper-item>精通</paper-item>
                                             <paper-item>中等</paper-item>
                                             <paper-item>略懂</paper-item>
@@ -66,6 +71,10 @@
         Polymer({
             is: 'language-ability-dialog',
 
+            behaviors: [
+                Polymer.IronFormElementBehavior
+            ],
+
             ready: function(){
                 this.languageRows = [{
                     langName: "",
@@ -76,10 +85,16 @@
                         {text: "寫"}
                     ]
                 }];
+
+                this._computeValue();
             },
 
             show: function(){
                 this.$.dialog.open();
+            },
+
+            _computeValue: function(){
+                this.value = JSON.stringify(this.languageRows);
             },
 
             _addLanguage: function(){
@@ -101,6 +116,8 @@
 
                 if(this.languageRows.length == 1 && index == 0) return;
                 this.splice('languageRows', index, 1);
+
+                this._computeValue();
             },
             _clearAll: function(){
                 if(this.languageRows.length > 1){
@@ -120,6 +137,7 @@
                     this.splice('languageRows', 0, 1);
                 }
 
+                this._computeValue();
             }
         });
     </script>
