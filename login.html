@@ -12,6 +12,8 @@
     <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
     <link rel="import" href="bower_components/paper-tabs/paper-tab.html">
     <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+
     <link rel="import" href="elements/login-page.html">
     <link rel="import" href="elements/register-page.html">
 
@@ -34,7 +36,17 @@
     </style>
 </head>
 <body unresolved class="layout vertical center center-justified">
+
+    <script src="bower_components/dentistjs/js/dentist.js"></script>
+
     <template is="dom-bind" id="app">
+        <iron-ajax
+            id="accountAjax"
+            auto
+            handle-as="json"
+            url="/api/user/profile"
+        ></iron-ajax>
+
         <img src="img/nthu-a-plus-logo.svg" style="width: 70px;height: 70px">
         <paper-card>
             <div class="card-content">
@@ -54,6 +66,18 @@
         app.addEventListener('dom-change', function(){
             //On init
             this.selectIndex = 0;
+
+            //Get url parameter
+            this.params = document.URL.extract();
+
+            app.$.accountAjax.addEventListener('response', function(e){
+                //console.log(e.detail);
+                if(app.params && app.params['rdr']){
+                    window.location.href = app.params['rdr'];
+                }else{
+                    window.location.href = '/dashboard.html';
+                }
+            });
         });
     </script>
 </body>

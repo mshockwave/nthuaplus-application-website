@@ -23,7 +23,7 @@
         <div class="layout center vertical">
 
             <form id="submitForm" is="iron-form"
-                  action="/someplace" method="post"
+                  action="/api/user/register" method="post"
                   on-iron-form-error="_handleFormSubmitError"
                   on-iron-form-response="_handleFormSubmit">
 
@@ -111,13 +111,21 @@
                 this.set('registerError', false);
             },
 
-            _handleFormSubmit: function(){
-                //TODO
+            _handleFormSubmit: function(e){
+                console.log('Register Success!');
+                window.location.href = '/dashboard.html';
             },
             _handleFormSubmitError: function(e){
                 console.log('Register Error');
                 console.log(e.detail);
-                this.set('registerError', true);
+
+                if(e.detail.request.status == 400){
+                    this.set('registerError', false);
+                    this.set('invalid', true);
+                }else{
+                    this.set('registerError', true);
+                    this.set('invalid', false);
+                }
             }
         });
     </script>

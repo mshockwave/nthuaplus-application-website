@@ -18,9 +18,10 @@
   "dependencies": {
     "jquery": "latest",
     "jquery.scrollTo": "latest",
-    "dropzone": "latest",
+    "dentistjs": "latest",
 
     "iron-flex-layout": "PolymerElements/iron-flex-layout",
+    "iron-ajax": "PolymerElements/iron-ajax",
     "iron-icon": "PolymerElements/iron-icon",
     "iron-icons": "PolymerElements/iron-icons",
     "iron-pages": "PolymerElements/iron-pages",

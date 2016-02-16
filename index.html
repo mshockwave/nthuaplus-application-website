@@ -8,15 +8,16 @@
     <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
 
     <link rel="import" href="elements/base-elements.html">
-    <link rel="import" href="bower_components/firebase-element/firebase-auth.html">
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 </head>
 <body unresolved class="fullbleed">
     <template is="dom-bind" id="app">
-        <firebase-auth
-                id="fbAuth"
-                provider="password"
-                location="https://radiant-heat-2359.firebaseio.com"
-        ></firebase-auth>
+        <iron-ajax
+                id="accountAjax"
+                auto
+                handle-as="json"
+                url="/api/user/profile"
+        ></iron-ajax>
     </template>
 
     <script>
@@ -24,17 +25,12 @@
         app.addEventListener('dom-change', function(){
             //On init
 
-            //FireBase
-            var fb = app.$.fbAuth;
-            fb.addEventListener('status-known-changed', function(){
-                console.log('Status known');
-                if(fb.user === null || fb.user === undefined){
-                    //Not login
-                    window.location.href = '/login.html';
-                }else{
-                    //Login
-                    window.location.href = '/dashboard.html';
-                }
+            app.$.accountAjax.addEventListener('response', function(){
+                //console.log(e.detail);
+                window.location.href = '/dashboard.html';
+            });
+            app.$.accountAjax.addEventListener('error', function(){
+                window.location.href = '/login.html';
             });
         });
     </script>

@@ -50,6 +50,13 @@
 </head>
 <body unresolved class="fullbleed">
     <template is="dom-bind" id="app">
+        <iron-ajax
+                id="accountAjax"
+                auto
+                handle-as="json"
+                url="/api/user/profile"
+        ></iron-ajax>
+
         <paper-drawer-panel>
             <paper-header-panel main>
                 <paper-toolbar>
@@ -89,6 +96,10 @@
         app.addEventListener('dom-change', function(){
             //On init
             app.pageIndex = 0;
+
+            app.$.accountAjax.addEventListener('error', function(){
+                window.location.href = '/login.html';
+            });
         });
     </script>
 </body>

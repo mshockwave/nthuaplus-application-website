@@ -21,7 +21,8 @@
 
         <div class="layout center vertical">
             <form is="iron-form" id="loginForm"
-                  method="post" action="/somewhere"
+                  method="post"
+                  action="/api/user/login"
                   on-iron-form-error="_handleFormSubmitError"
                   on-iron-form-response="_handleFormSubmit">
 
@@ -90,8 +91,10 @@
                 this.set('loginError', false);
             },
 
-            _handleFormSubmit: function(){
+            _handleFormSubmit: function(e){
                 //TODO
+                console.log('Login Success!');
+                window.location.href = '/dashboard.html';
             },
             _handleFormSubmitError: function(e){
                 console.log('Login Error');
