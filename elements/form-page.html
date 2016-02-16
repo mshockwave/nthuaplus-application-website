@@ -66,14 +66,16 @@
             <paper-tooltip for="butDrafts" position="left">儲存草稿</paper-tooltip>
             -->
 
-            <paper-fab id="butSubmit" icon="send"></paper-fab>
+            <paper-fab id="butSubmit" icon="send" on-click="_handleFormSubmit"></paper-fab>
             <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
         </div>
 
         <div class="layout horizontal start center-justified main-content">
-            <form is="iron-form" class="layout vertical start" method="post" action="/form/submit">
+            <!-- iron-form hasn't support multipart/form-data!-->
+            <form id="appForm" is="iron-form" class="layout vertical start"
+                  method="post" action="/api/form/submit">
                 <h3>申請主題</h3>
-                <paper-radio-group>
+                <paper-radio-group required>
                     <paper-radio-button name="topic1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br />
                     <paper-radio-button name="topic2">具穩健機率運算能力之突波式神經網路系統研發</paper-radio-button><br />
                     <paper-radio-button name="topic3">虛擬載具在高效能異質環境研究</paper-radio-button><br />
@@ -88,7 +90,7 @@
                              required auto-validate error-message="錯誤"></paper-input><br />
 
                 <div class="layout horizontal center ">
-                    <paper-dropdown-menu name="gradeType" label="年級種類" style="margin-right: 5px;">
+                    <paper-dropdown-menu name="gradeType" label="年級種類" required style="margin-right: 5px;">
                         <paper-listbox class="dropdown-content">
                             <paper-item>學士班</paper-item>
                             <paper-item>碩士班</paper-item>
@@ -120,6 +122,9 @@
                 <paper-textarea name="researchArea" label="研究領域" class="expand" multiple rows="3"
                             required auto-validate error-message="必填"></paper-textarea><br/>
 
+                <paper-input label="指導老師" name="teacher" class="expand"
+                             required auto-validate error-message="必填"></paper-input><br />
+
                 <br/>
                 <classes-history-dialog name="classHistory"></classes-history-dialog>
                 <paper-button on-click="_showClassDialog" raised >編輯預修課程</paper-button><br/>
@@ -141,28 +146,20 @@
                 <paper-button on-click="_showLanguageDialog" raised >編輯語言能力</paper-button><br/>
 
                 <br/>
-                <div class="layout horizontal center around-justified">
-                    <span>研究規劃書</span>
-                    <input name="researchPlan" style="margin: 0 20px;" is="iron-input" type="file">
-                </div><br/>
+                <paper-input name="researchPlan" label="研究規劃書"
+                             type="file" required></paper-input><br/>
 
                 <br/>
-                <div class="layout horizontal center around-justified">
-                    <span>推薦函（至少兩封）</span>
-                    <input name="recommendationLetters" style="margin: 0 20px;" is="iron-input" type="file">
-                </div><br/>
+                <paper-input name="recommendationLetters" label="推薦函（至少兩封）"
+                             type="file" required></paper-input><br/>
 
                 <br/>
-                <div class="layout horizontal center around-justified">
-                    <span>成績單</span>
-                    <input name="transcript" style="margin: 0 20px;" is="iron-input" type="file">
-                </div><br/>
+                <paper-input name="transcript" label="成績單"
+                             type="file" required></paper-input><br/>
 
                 <br/>
-                <div class="layout horizontal center around-justified">
-                    <span>其他補充資料</span>
-                    <input name="others" style="margin: 0 20px;" is="iron-input" type="file">
-                </div><br/>
+                <paper-input name="others" label="其他補充資料"
+                             type="file"></paper-input><br/>
 
                 <!-- <input type="submit"> -->
             </form>
@@ -178,6 +175,14 @@
             },
             _showClassDialog: function(){
                 document.querySelector('classes-history-dialog').show();
+            },
+
+            _handleFormSubmit: function(){
+                var form = this.$.appForm;
+
+                if(form.validate()){
+                    form.submit();
+                }
             }
         });
     </script>
