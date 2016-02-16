@@ -2,6 +2,7 @@
 <link rel="import" href="base-elements.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/firebase-element/firebase-auth.html">
 
@@ -12,31 +13,49 @@
                 margin-top: 20px;
                 background: var(--button-gray-background);
             }
+
+            .error {
+                color: red;
+                font-size: 14px;
+            }
         </style>
 
         <div class="layout center vertical">
-            <firebase-auth
-                    id="fbAuth"
-                    user="{{user}}"
-                    ref="{{fbRef}}"
-                    provider="password"
-                    location="https://nthu-a-plus-application.firebaseio.com"
-                    on-error="_errorCallback"
-                    on-login="_loginCallback"
-            ></firebase-auth>
 
-            <form is="iron-form">
-                <paper-input name="email" label="Email"
+            <form id="submitForm" is="iron-form"
+                  action="/someplace" method="post"
+                  on-iron-form-error="_handleFormSubmitError"
+                  on-iron-form-response="_handleFormSubmit">
+
+                <gold-email-input id="email" name="email" label="Email" value="{{email}}"
+                                    required auto-validate error-message="格式錯誤，必填"></gold-email-input>
+
+                <paper-input id="username" name="username" label="使用者名稱" value="{{username}}"
                              required auto-validate error-message="必填"></paper-input>
-                <paper-input name="username" label="使用者名稱"
+
+                <paper-input id="formalId" name="formalId" label="身分證字號" value="{{formalId}}"
                              required auto-validate error-message="必填"></paper-input>
-                <paper-input name="password" label="密碼" type="password"
-                             required auto-validate error-message="必填"></paper-input>
-                <paper-input name="password_re" label="再次輸入密碼" type="password" required></paper-input>
+
+                <paper-input id="password" name="password" label="密碼" type="password" value="{{pwd}}"
+                             required auto-validate error-message="必填，英文大小寫或數字"
+                             pattern="[a-zA-Z0-9]*"></paper-input>
+                <paper-input id="passwordRe" name="passwordRe" label="再次輸入密碼" type="password" value="{{pwdRe}}"
+                             required auto-validate error-message="密碼不符"
+                             pattern="[[pwd]]"></paper-input>
+
+                <paper-input label="大頭貼" name="thumbnail"
+                             type="file" accept="image/*"></paper-input>
+
+                <template is="dom-if" if="[[invalid]]">
+                    <span class="error">註冊單格式有誤</span>
+                </template>
+                <template is="dom-if" if="[[registerError]]">
+                    <span class="error">註冊錯誤，請稍候再試</span>
+                </template>
 
                 <div class="layout horizontal center around-justified">
-                    <paper-button>註冊</paper-button>
-                    <paper-button>清除</paper-button>
+                    <paper-button on-click="_submitOnClick">註冊</paper-button>
+                    <paper-button on-click="_clearOnClick">清除</paper-button>
                 </div>
             </form>
         </div>
@@ -44,7 +63,62 @@
 
     <script>
         Polymer({
-            is: 'register-page'
+            is: 'register-page',
+
+            properties: {
+                invalid: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                registerError: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+
+            _submitOnClick: function(){
+
+                if(this.$.submitForm.validate()){
+                    //Submit
+                    this.set('registerError', false);
+                    this.set('invalid', false);
+                    this.$.submitForm.submit();
+                }else{
+                    //Error
+                    this.set('registerError', false);
+                    this.set('invalid', true);
+                }
+            },
+            _clearOnClick: function(){
+                this.set('email', undefined);
+                this.$.email.invalid = false;
+
+                this.set('username', undefined);
+                this.$.username.invalid = false;
+
+                this.set('formalId', undefined);
+                this.$.formalId.invalid = false;
+
+                this.set('pwd', undefined);
+                this.$.password.invalid = false;
+
+                this.set('pwdRe', undefined);
+                this.$.passwordRe.invalid = false;
+
+                this.set('invalid', false);
+                this.set('registerError', false);
+            },
+
+            _handleFormSubmit: function(){
+                //TODO
+            },
+            _handleFormSubmitError: function(e){
+                console.log('Register Error');
+                console.log(e.detail);
+                this.set('registerError', true);
+            }
         });
     </script>
 </dom-module>

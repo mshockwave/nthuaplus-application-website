@@ -4,7 +4,6 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../bower_components/firebase-element/firebase-auth.html">
 
 <dom-module id="login-page">
     <template>
@@ -13,25 +12,32 @@
                 margin-top: 20px;
                 background: var(--button-gray-background);
             }
+
+            .error {
+                color: red;
+                font-size: 14px;
+            }
         </style>
 
         <div class="layout center vertical">
-            <firebase-auth
-                id="fbAuth"
-                user="{{user}}"
-                ref="{{fbRef}}"
-                provider="password"
-                location="https://nthu-a-plus-application.firebaseio.com"
-                on-error="_errorCallback"
-                on-login="_loginCallback"
-            ></firebase-auth>
-            <form is="iron-form" id="loginForm">
-                <!-- <paper-input id="loginEmail" name="email" label="Email"
-                             required auto-validate error-message="必填"></paper-input> -->
-                <gold-email-input name="email" label="Email"
-                                  required auto-validate error-message="必填"></gold-email-input>
+            <form is="iron-form" id="loginForm"
+                  method="post" action="/somewhere"
+                  on-iron-form-error="_handleFormSubmitError"
+                  on-iron-form-response="_handleFormSubmit">
+
+                <gold-email-input id="loginEmail" name="email" label="Email"
+                                  required auto-validate error-message="格式錯誤，必填"></gold-email-input>
+
                 <paper-input id="loginPassword" name="password" label="密碼" type="password"
-                             required auto-validate error-message="必填"></paper-input>
+                             required auto-validate error-message="必填"></paper-input><br/>
+
+                <template is="dom-if" if="[[invalid]]">
+                    <span class="error">Email或密碼錯誤</span>
+                </template>
+                <template is="dom-if" if="[[loginError]]">
+                    <span class="error">登入錯誤，請稍候再試</span>
+                </template>
+
                 <div class="layout horizontal center around-justified">
                     <paper-button on-tap="_doLogin">登入</paper-button>
                     <paper-button on-tap="_clearForm">清除</paper-button>
@@ -50,38 +56,47 @@
                     value: "/"
                 },
 
-                user: {
-                    type: Object
+                invalid: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
                 },
-                fbRef: {
-                    type: Object
+                loginError: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
                 }
             },
 
-            _errorCallback: function(e){
-                console.log('Error: ');
-                console.log(e);
-            },
-            _loginCallback: function(e){
-                console.log('Login!');
-                console.log(e);
-
-                window.location.href = '/index.html';
-            },
             _doLogin: function(){
-                var fb = this.$.fbAuth;
-                var email = this.$.loginEmail.value;
-                var password = this.$.loginPassword.value;
-                console.log('Email: ' + email + ', Password: ' + password);
-
-                fb.login({
-                    email: email,
-                    password: password
-                });
+                if(this.$.loginForm.validate()){
+                    //Submit
+                    this.set('invalid', false);
+                    this.$.loginForm.submit();
+                }else{
+                    //Error
+                    this.set('invalid', true);
+                }
             },
-            _clearForm: function(){
-                //var form = this.$.loginForm;
 
+            _clearForm: function(){
+                this.$.loginEmail.value = undefined;
+                this.$.loginEmail.invalid = false;
+
+                this.$.loginPassword.value = undefined;
+                this.$.loginPassword.invalid = false;
+
+                this.set('invalid', false);
+                this.set('loginError', false);
+            },
+
+            _handleFormSubmit: function(){
+                //TODO
+            },
+            _handleFormSubmitError: function(e){
+                console.log('Login Error');
+                console.log(e.detail);
+                this.set('loginError', true);
             }
         });
     </script>

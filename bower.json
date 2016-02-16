@@ -18,6 +18,8 @@
   "dependencies": {
     "jquery": "latest",
     "jquery.scrollTo": "latest",
+    "dropzone": "latest",
+
     "iron-flex-layout": "PolymerElements/iron-flex-layout",
     "iron-icon": "PolymerElements/iron-icon",
     "iron-icons": "PolymerElements/iron-icons",
