@@ -1,0 +1,29 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="form-view.html">
+
+<dom-module id="history-page">
+    <template>
+        <iron-ajax
+            auto
+            handle-as="json"
+            url="/api/form/view"
+            last-response="{{formList}}"
+        ></iron-ajax>
+        <div class="layout horizontal center center-justified">
+            <div class="layout vertical">
+                <template is="dom-repeat" items="[[formList]]">
+                    <form-view form-data="[[item]]"></form-view>
+                </template>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'history-page'
+        });
+    </script>
+</dom-module>

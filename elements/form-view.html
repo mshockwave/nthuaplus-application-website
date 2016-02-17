@@ -1,0 +1,118 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+
+<dom-module id="form-view">
+    <template>
+        <style>
+            :host{
+                margin: 20px;
+            }
+
+            table{
+                border-collapse: collapse;
+            }
+            table,tr,td {
+                border: 2px solid;
+            }
+            td {
+                padding: 10px;
+                text-align: right;
+            }
+            td.value {
+                text-align: left;
+            }
+        </style>
+
+        <table>
+            <tr>
+                <td>姓名</td>
+                <td class="value">[[formData.Name]]</td>
+                <td>身分證字號</td>
+                <td class="value">[[formData.FormalId]]</td>
+            </tr>
+            <tr>
+                <td>學校</td>
+                <td class="value">[[formData.School]]</td>
+                <td>系級</td>
+                <td class="value">[[_computeSchoolGrade(formData.Department, formData.SchoolGrade)]]</td>
+            </tr>
+            <tr>
+                <td>生日</td>
+                <td class="value">[[_computeBirthday(formData.Birthday)]]</td>
+                <td>電話</td>
+                <td class="value">[[formData.Phone]]</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td class="value" colspan="3">[[formData.Email]]</td>
+            </tr>
+            <tr>
+                <td>通訊地址</td>
+                <td class="value" colspan="3">[[formData.Address]]</td>
+            </tr>
+            <tr>
+                <td>申請主題</td>
+                <td class="value" colspan="3">[[_computeTopic(formData.Topic)]]</td>
+            </tr>
+            <tr>
+                <td>指導教授</td>
+                <td class="value" colspan="3">[[formData.Teacher]]</td>
+            </tr>
+            <tr>
+                <td>研究領域</td>
+                <td class="value" colspan="3">[[formData.ResearchArea]]</td>
+            </tr>
+            <tr>
+                <td>相關專業技能</td>
+                <td class="value" colspan="3">[[formData.RelatedSkills]]</td>
+            </tr>
+            <tr>
+                <td>總平均</td>
+                <td class="value">[[formData.AcademicGrade.Average]]</td>
+                <td>年級排名</td>
+                <td class="value">[[formData.AcademicGrade.Rank]]</td>
+            </tr>
+        </table>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'form-view',
+
+            properties: {
+                formData: {
+                    type: Object,
+                    notify: true
+                }
+            },
+
+            _computeSchoolGrade: function(department, schoolGrade){
+                var array = schoolGrade.split("@", 2);
+                var gradeStr = array.join("") + "年級";
+                return department + " " + gradeStr;
+            },
+
+            _computeBirthday: function(birthday){
+                try{
+                    var date = new Date(birthday);
+                    return date.toLocaleDateString();
+                }catch(e){
+                    return birthday;
+                }
+            },
+
+            _computeTopic: function(index){
+                switch(index){
+                    case 0:
+                        return "電腦視覺三維模型重建與辨識技術";
+                    case 1:
+                        return "具穩健機率運算能力之突波式神經網路系統研發";
+                    case 2:
+                        return "虛擬載具在高效能異質環境研究";
+                    default:
+                        return ""
+                }
+            }
+        });
+    </script>
+</dom-module>
