@@ -48,6 +48,7 @@
     "paper-menu": "PolymerElements/paper-menu",
     "paper-fab": "PolymerElements/paper-fab",
     "paper-tooltip": "PolymerElements/paper-tooltip",
+    "paper-toast": "PolymerElements/paper-toast",
     "gold-email-input": "PolymerElements/gold-email-input",
     "gold-phone-input": "PolymerElements/gold-phone-input",
     "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^1.0.0",

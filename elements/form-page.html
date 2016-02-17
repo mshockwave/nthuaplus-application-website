@@ -15,6 +15,7 @@
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/file-upload/file-upload.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="language-ability-dialog.html">
 <link rel="import" href="classes-history-dialog.html">
@@ -72,6 +73,25 @@
             .hidden {
                 display: none;
             }
+
+            paper-toast {
+                right: 30%;
+                left: 20%;
+                bottom: 20px;
+
+                font-size: 20px;
+
+                --paper-toast-background-color: #689F38;
+                --paper-toast-color: white;
+            }
+            paper-toast.error {
+                --paper-toast-background-color: red;
+                --paper-toast-color: white;
+            }
+            paper-toast.invalid {
+                --paper-toast-background-color: #E91E63;
+                --paper-toast-color: white;
+            }
         </style>
 
         <div id="fab-group" class="layout vertical center around-justified">
@@ -82,13 +102,24 @@
 
             <paper-fab id="butSubmit" icon="send" on-click="_handleFormSubmit"></paper-fab>
             <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
+
+            <paper-toast id="toastSuccess" text="提交成功!"
+                         auto-fit-on-attach></paper-toast>
+
+            <paper-toast id="toastError" class="error" text="提交失敗"
+                         auto-fit-on-attach></paper-toast>
+
+            <paper-toast id="toastInvalid" class="invalid" text="表單格式錯誤，請再檢查一次"
+                         auto-fit-on-attach></paper-toast>
         </div>
 
         <div class="layout horizontal start center-justified main-content">
-            <div class="layout vertical start">
+            <div id="formContainer" class="layout vertical start">
                 <!-- iron-form hasn't support multipart/form-data!-->
                 <form id="appForm" is="iron-form"
-                      method="post" action="/api/form/submit">
+                      method="post" action="/api/form/submit"
+                      on-iron-form-response="_onFormSuccess"
+                      on-iron-form-error="_onFormFailed">
                     <h3>申請主題</h3>
                     <paper-radio-group required>
                         <paper-radio-button name="topic1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br />
@@ -176,28 +207,28 @@
                 </form>
 
                 <br/><br/>
-                <file-upload target="/api/form/test"
+                <file-upload target="/api/form/upload"
                              raised
                              data-name="researchPlan"
                              on-success="_handleFileUpload"
                              on-error="_handleFileUploadError"
                              on-before-upload="_handleFileBeforeUpload">研究規劃書上傳</file-upload>
 
-                <file-upload target="/api/form/test"
+                <file-upload target="/api/form/upload"
                              raised
                              data-name="recommendationLetters"
                              on-success="_handleFileUpload"
                              on-error="_handleFileUploadError"
                              on-before-upload="_handleFileBeforeUpload">推薦函（至少兩封，請合併成一份）上傳</file-upload>
 
-                <file-upload target="/api/form/test"
+                <file-upload target="/api/form/upload"
                              raised
                              data-name="transcript"
                              on-success="_handleFileUpload"
                              on-error="_handleFileUploadError"
                              on-before-upload="_handleFileBeforeUpload">成績單上傳</file-upload>
 
-                <file-upload target="/api/form/test"
+                <file-upload target="/api/form/upload"
                              raised
                              data-name="others"
                              on-success="_handleFileUpload"
@@ -261,7 +292,15 @@
 
                 if(form.validate()){
                     form.submit();
+                }else{
+                    this.$.toastInvalid.open();
                 }
+            },
+            _onFormSuccess: function(){
+                this.$.toastSuccess.open();
+            },
+            _onFormFailed: function(){
+                this.$.toastError.open();
             }
         });
     </script>
