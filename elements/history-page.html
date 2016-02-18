@@ -1,11 +1,43 @@
 <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
 <link rel="import" href="base-elements.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="form-view.html">
 
 <dom-module id="history-page">
     <template>
+        <style>
+            table{
+                border-collapse: collapse;
+                margin: 20px;
+            }
+
+            table,tr,td,th {
+                border: 2px solid;
+            }
+            th {
+                padding: 5px;
+                text-align: center;
+            }
+            td {
+                padding: 5px;
+                text-align: left;
+            }
+            td.middle {
+                text-align: center;
+            }
+
+            paper-dialog {
+                width: 60%;
+            }
+            form-view {
+                width: 100%;
+            }
+        </style>
+
         <iron-ajax
             auto
             handle-as="json"
@@ -13,17 +45,57 @@
             last-response="{{formList}}"
         ></iron-ajax>
         <div class="layout horizontal center center-justified">
-            <div class="layout vertical">
+            <table style="width: 70%">
+                <tr>
+                    <th>繳交時間</th>
+                    <th>狀態</th>
+                    <th>預覽</th>
+                </tr>
+
                 <template is="dom-repeat" items="[[formList]]">
-                    <form-view form-data="[[item]]"></form-view>
+                    <tr>
+                        <td>[[_computeDateText(item.Timestamp)]]</td>
+                        <td class="middle">審查中</td> <!-- TODO-->
+                        <td class="middle">
+                            <paper-icon-button icon="visibility" on-click="_handleItemOnClick"></paper-icon-button>
+                            <paper-dialog id="[[_computeItemId(index)]]">
+                                <paper-dialog-scrollable>
+                                    <form-view form-data="[[item]]"></form-view>
+                                </paper-dialog-scrollable>
+                            </paper-dialog>
+                        </td>
+                    </tr>
                 </template>
-            </div>
+            </table>
         </div>
     </template>
 
     <script>
         Polymer({
-            is: 'history-page'
+            is: 'history-page',
+
+            _computeDateText: function(date){
+                try{
+                    var d = new Date(date);
+                    return d.toLocaleString();
+                }catch(err){
+                    return date;
+                }
+            },
+
+            _computeItemId: function(index){
+                return "itemDialog" + index;
+            },
+            _handleItemOnClick: function(e){
+                //console.log(e.model);
+                var index = e.model.index;
+                //console.log(this._computeItemId(index));
+                var dialog = this.querySelector('#' + this._computeItemId(index));
+                if(dialog){
+                    //console.log('Get dialog');
+                    dialog.open();
+                }
+            }
         });
     </script>
 </dom-module>
