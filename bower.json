@@ -27,6 +27,7 @@
     "iron-icons": "PolymerElements/iron-icons",
     "iron-pages": "PolymerElements/iron-pages",
     "iron-form": "PolymerElements/iron-form",
+    "iron-image": "PolymerElements/iron-image",
     "paper-button": "PolymerElements/paper-button",
     "paper-card": "PolymerElements/paper-card",
     "paper-header-panel": "PolymerElements/paper-header-panel",

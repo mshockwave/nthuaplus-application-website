@@ -1,0 +1,65 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="account-info">
+    <template>
+        <style>
+            paper-card {
+                width: 60%;
+            }
+
+            img {
+                width: 90%;
+                height: auto;
+            }
+        </style>
+
+        <iron-ajax
+                id="accountAjax"
+                auto
+                handle-as="json"
+                url="/api/user/profile"
+                last-response="{{accountInfo}}"
+        ></iron-ajax>
+        <div class="layout horizontal center center-justified" style="height: 100%;">
+            <paper-card heading="[[accountInfo.Username]]">
+                <div class="card-content layout horizontal start">
+                    <iron-pages class="flex-1" selected="{{imgIndex}}">
+                        <img src="/img/person-placeholder.jpg">
+                        <img src="[[accountInfo.Thumbnail]]">
+                    </iron-pages>
+
+                    <div class="layout vertical start flex-1" style="margin-left: 10px;">
+                        <span>Email：[[accountInfo.Email]]</span>
+                        <span>身分證字號：[[accountInfo.FormalId]]</span>
+                    </div>
+                </div>
+            </paper-card>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'account-info',
+
+            ready: function(){
+                this.imgIndex = 0;
+            },
+
+            properties: {
+                accountInfo: {
+                    type: Object,
+                    notify: true,
+                    observer: '_onReceiveAccountInfo'
+                }
+            },
+
+            _onReceiveAccountInfo: function(v){
+                if(v.Thumbnail && v.Thumbnail != "") this.imgIndex = 1;
+            }
+        });
+    </script>
+</dom-module>
