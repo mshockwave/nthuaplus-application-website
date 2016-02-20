@@ -1,0 +1,167 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+
+<dom-module id="register-page">
+    <template>
+        <style>
+            paper-button {
+                margin-top: 20px;
+                background: var(--button-gray-background);
+            }
+
+            .error {
+                color: red;
+                font-size: 14px;
+            }
+
+            paper-dialog {
+                min-width: 50%;
+                padding: 14px;
+            }
+            paper-dialog p {
+                font-size: 20px;
+                line-height: 150%;
+            }
+            paper-dialog h2 {
+                font-size: 25px;
+                font-weight: bold;
+            }
+            #successDialog paper-button {
+                background: var(--primary-color);
+                color: white;
+                font-size: 20px;
+            }
+        </style>
+
+        <div class="layout center vertical">
+
+            <form id="submitForm" is="iron-form"
+                  action="/api/review/register" method="post"
+                  on-iron-form-error="_handleFormSubmitError"
+                  on-iron-form-response="_handleFormSubmit">
+
+                <gold-email-input id="email" name="email" label="學校信箱" value="{{email}}"
+                                    required auto-validate error-message="格式錯誤，必填"></gold-email-input>
+
+                <paper-input id="username" name="username" label="本名" value="{{username}}"
+                             required auto-validate error-message="必填"></paper-input>
+
+                <paper-input id="formalId" name="formalId" label="身分證字號" value="{{formalId}}"
+                             required auto-validate error-message="必填"></paper-input>
+
+                <paper-input id="password" name="password" label="密碼" type="password" value="{{pwd}}"
+                             required auto-validate error-message="必填，英文大小寫或數字"
+                             pattern="[a-zA-Z0-9]*"></paper-input>
+                <paper-input id="passwordRe" name="passwordRe" label="再次輸入密碼" type="password" value="{{pwdRe}}"
+                             required auto-validate error-message="密碼不符"
+                             pattern="[[pwd]]"></paper-input>
+
+                <paper-input label="大頭貼" name="thumbnail"
+                             type="file" accept="image/*"></paper-input>
+
+                <template is="dom-if" if="[[invalid]]">
+                    <span class="error">註冊單格式有誤</span>
+                </template>
+                <template is="dom-if" if="[[registerError]]">
+                    <span class="error">註冊錯誤，請稍候再試</span>
+                </template>
+
+                <div class="layout horizontal center around-justified">
+                    <paper-button on-click="_submitOnClick">註冊</paper-button>
+                    <paper-button on-click="_clearOnClick">清除</paper-button>
+                </div>
+            </form>
+
+            <paper-dialog id="successDialog" on-iron-overlay-closed="_onSuccessDialogClose">
+                <div class="layout vertical start">
+                    <h2>註冊單已送出</h2>
+                    <p>
+                        親愛的審查者您好，您的審查身份註冊單將由人工審查後，才會給予您審查的權利。
+                        <br/>您可登入審查頁面查詢狀態。謝謝！
+                    </p>
+                    <paper-button raised dialog-dismiss>前往審查頁面</paper-button>
+                </div>
+            </paper-dialog>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'register-page',
+
+            properties: {
+                invalid: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                registerError: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+
+            _submitOnClick: function(){
+
+                if(this.$.submitForm.validate()){
+                    //Submit
+                    this.set('registerError', false);
+                    this.set('invalid', false);
+                    this.$.submitForm.submit();
+                }else{
+                    //Error
+                    this.set('registerError', false);
+                    this.set('invalid', true);
+                }
+            },
+            _clearOnClick: function(){
+                this.set('email', undefined);
+                this.$.email.invalid = false;
+
+                this.set('username', undefined);
+                this.$.username.invalid = false;
+
+                this.set('formalId', undefined);
+                this.$.formalId.invalid = false;
+
+                this.set('pwd', undefined);
+                this.$.password.invalid = false;
+
+                this.set('pwdRe', undefined);
+                this.$.passwordRe.invalid = false;
+
+                this.set('invalid', false);
+                this.set('registerError', false);
+            },
+
+            _handleFormSubmit: function(e){
+                console.log('Register Success!');
+                //window.location.href = '/dashboard.html';
+                this.$.successDialog.open();
+            },
+            _handleFormSubmitError: function(e){
+                console.log('Register Error');
+                console.log(e.detail);
+
+                if(e.detail.request.status == 400){
+                    this.set('registerError', false);
+                    this.set('invalid', true);
+                }else{
+                    this.set('registerError', true);
+                    this.set('invalid', false);
+                }
+            },
+
+            _onSuccessDialogClose: function(){
+                //console.log('Dialog closed!');
+                //window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</dom-module>
