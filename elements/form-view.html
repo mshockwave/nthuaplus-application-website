@@ -42,8 +42,8 @@
 
         <table>
             <tr>
-                <td>姓名</td>
-                <td class="value">[[formData.Name]]</td>
+                <td>中 / 英文姓名</td>
+                <td class="value">[[_computeDisplayName(formData.Name)]]</td>
                 <td>身分證字號</td>
                 <td class="value">[[formData.FormalId]]</td>
             </tr>
@@ -178,6 +178,10 @@
                     type: Object,
                     notify: true
                 }
+            },
+
+            _computeDisplayName: function(fullName){
+                return fullName.replace("#", " / ");
             },
 
             _computeSchoolGrade: function(department, schoolGrade){

@@ -130,8 +130,15 @@
                     </paper-radio-group>
                     <br/>
 
-                    <paper-input label="姓名" name="name" class="expand"
-                                 required auto-validate error-message="錯誤"></paper-input><br />
+                    <paper-input label="姓名" class="expand"
+                                 required auto-validate error-message="錯誤"
+                                 value="{{chiName}}"></paper-input><br />
+                    <paper-input label="英文姓名（護照）" class="expand"
+                                 required auto-validate error-message="錯誤"
+                                 value="{{engName}}"></paper-input><br />
+                    <paper-input name="name" style="display: none;"
+                                 value="[[_computeFullName(chiName, engName)]]"></paper-input>
+
                     <paper-input label="學校" name="school" class="expand"
                                  required auto-validate error-message="錯誤"></paper-input><br />
                     <paper-input label="系所" name="department" class="expand"
@@ -289,6 +296,9 @@
                 }
             },
 
+            _computeFullName: function(chi, eng){
+                return chi + '#' + eng;
+            },
             _handleFormSubmit: function(){
                 var form = this.$.appForm;
 
