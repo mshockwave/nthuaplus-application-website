@@ -43,6 +43,10 @@
                 width: 90%;
             }
 
+            .highlight {
+                color: red;
+            }
+
             #fab-group {
                 position: fixed;
                 right: 30px;
@@ -130,19 +134,25 @@
                     </paper-radio-group>
                     <br/>
 
-                    <paper-input label="姓名" class="expand"
+                    <br/>
+                    <h3>※除了中文姓名以外，其他欄位請一律用<span class="highlight">英文</span>填寫</h3>
+
+                    <paper-input label="中文姓名" class="expand"
                                  required auto-validate error-message="錯誤"
                                  value="{{chiName}}"></paper-input><br />
                     <paper-input label="英文姓名（護照）" class="expand"
                                  required auto-validate error-message="錯誤"
+                                 pattern="[a-zA-Z]*"
                                  value="{{engName}}"></paper-input><br />
                     <paper-input name="name" style="display: none;"
                                  value="[[_computeFullName(chiName, engName)]]"></paper-input>
 
                     <paper-input label="學校" name="school" class="expand"
-                                 required auto-validate error-message="錯誤"></paper-input><br />
+                                 required auto-validate error-message="錯誤"
+                                 pattern="[a-zA-Z]*"></paper-input><br />
                     <paper-input label="系所" name="department" class="expand"
-                                 required auto-validate error-message="錯誤"></paper-input><br />
+                                 required auto-validate error-message="錯誤"
+                                 pattern="[a-zA-Z]*"></paper-input><br />
 
                     <div class="layout horizontal center ">
                         <paper-dropdown-menu name="gradeType" label="年級種類" required style="margin-right: 5px;">
@@ -172,20 +182,24 @@
                                       required auto-validate error-message="錯誤"></gold-email-input><br/>
 
                     <paper-textarea name="address" label="通訊地址" class="expand" multiple
-                                    required auto-validate error-message="必填"></paper-textarea><br/>
+                                    required auto-validate error-message="必填"
+                                    pattern="[a-zA-Z]*"></paper-textarea><br/>
 
                     <paper-textarea name="researchArea" label="研究領域" class="expand" multiple rows="3"
-                                    required auto-validate error-message="必填"></paper-textarea><br/>
+                                    required auto-validate error-message="必填"
+                                    pattern="[a-zA-Z]*"></paper-textarea><br/>
 
                     <paper-input label="指導老師" name="teacher" class="expand"
-                                 required auto-validate error-message="必填"></paper-input><br />
+                                 required auto-validate error-message="必填"
+                                 pattern="[a-zA-Z]*"></paper-input><br />
 
                     <br/>
                     <classes-history-dialog name="classHistory"></classes-history-dialog>
                     <paper-button on-click="_showClassDialog" raised >編輯預修課程</paper-button><br/>
 
                     <paper-textarea name="relatedSkills" label="相關專業能力" class="expand" multiple rows="3"
-                                    required auto-validate error-message="必填"></paper-textarea><br/>
+                                    required auto-validate error-message="必填"
+                                    pattern="[a-zA-Z]*"></paper-textarea><br/>
 
                     <br/>
                     <div class="layout horizontal center around-justified expand">
