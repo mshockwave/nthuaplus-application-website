@@ -16,12 +16,14 @@
     <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
     <link rel="import" href="bower_components/iron-icon/iron-icon.html">
     <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="bower_components/iron-icons/social-icons.html">
 
     <link rel="import" href="bower_components/firebase-element/firebase-auth.html">
 
     <link rel="import" href="elements/form-page.html">
     <link rel="import" href="elements/history-page.html">
     <link rel="import" href="elements/account-info.html">
+    <link rel="import" href="elements/bulletin-board-page.html">
 
     <style is="custom-style">
         paper-toolbar {
@@ -66,6 +68,7 @@
                 </paper-toolbar>
 
                 <iron-pages class="content fit" selected="{{pageIndex}}">
+                    <bulletin-board-page></bulletin-board-page>
                     <form-page></form-page>
                     <history-page></history-page>
                     <account-info></account-info>
@@ -78,6 +81,10 @@
                 </div>
 
                 <paper-listbox selected="{{pageIndex}}" selected-item="{{selectedItem}}" id="drawerList">
+                    <paper-icon-item>
+                        <iron-icon icon="social:notifications"></iron-icon>
+                        公告
+                    </paper-icon-item>
                     <paper-icon-item>
                         <iron-icon icon="assignment"></iron-icon>
                         申請表單

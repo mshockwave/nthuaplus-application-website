@@ -50,6 +50,8 @@
     "paper-fab": "PolymerElements/paper-fab",
     "paper-tooltip": "PolymerElements/paper-tooltip",
     "paper-toast": "PolymerElements/paper-toast",
+    "paper-badge": "PolymerElements/paper-badge",
+    "marker-element": "PolymerElements/marked-element",
     "gold-email-input": "PolymerElements/gold-email-input",
     "gold-phone-input": "PolymerElements/gold-phone-input",
     "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^1.0.0",
