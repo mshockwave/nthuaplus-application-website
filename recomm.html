@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>NTHU A+ Recommendation</title>
+
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <script src="bower_components/dentistjs/js/dentist.js"></script>
+
+    <link rel="import" href="elements/base-elements.html">
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
+    <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
+    <link rel="import" href="bower_components/paper-input/paper-textarea.html">
+    <link rel="import" href="bower_components/file-upload/file-upload.html">
+    <link rel="import" href="bower_components/paper-button/paper-button.html">
+
+    <style is="custom-style">
+        paper-toolbar {
+            --paper-toolbar-title: {
+                @apply(--my-title-text);
+            };
+        }
+
+        .cover{
+            margin: 15%;
+        }
+        /*For desktop*/
+        @media screen and (min-width: 768px){
+            .cover {
+                margin: 5% 15%;
+            }
+        }
+        paper-header-panel {
+            --paper-header-panel: {
+                background: #e0e0e0;
+            };
+        }
+        paper-header-panel .content {
+            @apply(--shadow-elevation-8dp);
+            padding: 20px;
+            background: white;
+            min-height: 100%;
+        }
+        .content p,span {
+            font-size: 20px;
+            line-height: 150%;
+        }
+
+        .submit-button {
+            @apply(--layout-self-center);
+            background: #E91E63;
+            color: white;
+        }
+    </style>
+</head>
+<body unresolved class="fullbleed layout vertical">
+    <template is="dom-bind" id="app">
+
+        <iron-ajax
+            url="/api/form/recomm/[[hashId]]"
+            auto
+            handle-as="json"
+            last-response="{{recommObj}}"
+        ></iron-ajax>
+
+        <paper-header-panel class="flex" mode="cover">
+            <paper-toolbar class="tall">
+                <div class="title">NTHU A+ 推薦信</div>
+            </paper-toolbar>
+
+            <div class="content cover layout vertical">
+                <p>[[recommObj.Recommender.Name]]&nbsp先生/小姐&nbsp您好，
+                    下列 <a href="http://www.nthuaplus.org">NTHU A+</a>
+                    計畫申請人邀請您為他(她)撰寫推薦信</p>
+
+                <span><strong>姓名：</strong>[[recommObj.ApplyUser.Name]]</span>
+                <span><strong>Email：</strong>[[recommObj.ApplyUser.Email]]</span>
+
+                <paper-textarea
+                    label="推薦內容，您也可直接使用下方按鈕上傳推薦信"
+                    rows="15"
+                ></paper-textarea>
+
+                <br/>
+                <file-upload
+                    target=""
+                    raised
+                >補充資料或推薦信文件檔</file-upload>
+
+                <br/><br/>
+                <paper-button raised class="submit-button">確認提交</paper-button>
+            </div>
+        </paper-header-panel>
+    </template>
+
+    <script>
+        var app = document.querySelector('#app');
+        app.addEventListener('dom-change', function(){
+            //Init
+
+            var urlParams = document.URL.extract();
+            this.set('hashId', urlParams["hash"]);
+            //TODO: Redirect to 404 page if hash empty
+        });
+    </script>
+</body>
+</html>
