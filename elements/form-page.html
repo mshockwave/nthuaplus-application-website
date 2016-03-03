@@ -19,6 +19,7 @@
 
 <link rel="import" href="language-ability-dialog.html">
 <link rel="import" href="classes-history-dialog.html">
+<link rel="import" href="recommendation-dialog.html">
 
 <dom-module id="form-page">
     <template>
@@ -142,17 +143,17 @@
                                  value="{{chiName}}"></paper-input><br />
                     <paper-input label="英文姓名（護照）" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z]*"
+                                 pattern="[a-zA-Z ]*"
                                  value="{{engName}}"></paper-input><br />
                     <paper-input name="name" style="display: none;"
                                  value="[[_computeFullName(chiName, engName)]]"></paper-input>
 
                     <paper-input label="學校" name="school" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z]*"></paper-input><br />
+                                 pattern="[a-zA-Z ]*"></paper-input><br />
                     <paper-input label="系所" name="department" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z]*"></paper-input><br />
+                                 pattern="[a-zA-Z ]*"></paper-input><br />
 
                     <div class="layout horizontal center ">
                         <paper-dropdown-menu name="gradeType" label="年級種類" required style="margin-right: 5px;">
@@ -183,15 +184,15 @@
 
                     <paper-textarea name="address" label="通訊地址" class="expand" multiple
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z]*"></paper-textarea><br/>
+                                    pattern="[a-zA-Z ]*"></paper-textarea><br/>
 
                     <paper-textarea name="researchArea" label="研究領域" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z]*"></paper-textarea><br/>
+                                    pattern="[a-zA-Z ]*"></paper-textarea><br/>
 
                     <paper-input label="指導老師" name="teacher" class="expand"
                                  required auto-validate error-message="必填"
-                                 pattern="[a-zA-Z]*"></paper-input><br />
+                                 pattern="[a-zA-Z ]*"></paper-input><br />
 
                     <br/>
                     <classes-history-dialog name="classHistory"></classes-history-dialog>
@@ -199,7 +200,7 @@
 
                     <paper-textarea name="relatedSkills" label="相關專業能力" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z]*"></paper-textarea><br/>
+                                    pattern="[a-zA-Z ]*"></paper-textarea><br/>
 
                     <br/>
                     <div class="layout horizontal center around-justified expand">
@@ -217,32 +218,35 @@
                     <paper-input name="researchPlan" class="hidden"
                                  required value="{{filePlan}}"></paper-input>
 
-                    <paper-input name="recommendationLetters" class="hidden"
-                                 required value="{{fileLetters}}"></paper-input>
-
                     <paper-input name="transcript" class="hidden"
                                  required value="{{fileTranscript}}"></paper-input>
 
                     <paper-input name="others" class="hidden"
-                                 value="{{fileOthers}}"></paper-input>
+                                 value="{{fileOthers}}"></paper-input><br/><br/>
 
                     <!-- <input type="submit"> -->
+
+                    <recommendation-dialog name="recommendationLetters"></recommendation-dialog>
+                    <paper-button on-click="_showRecommDialog" raised>推薦者（至少兩位）</paper-button>
                 </form>
 
-                <br/><br/>
-                <file-upload target="/api/form/upload"
-                             raised
-                             data-name="researchPlan"
-                             on-success="_handleFileUpload"
-                             on-error="_handleFileUploadError"
-                             on-before-upload="_handleFileBeforeUpload">研究規劃書上傳</file-upload>
+                <br/>
 
+                <!--
                 <file-upload target="/api/form/upload"
                              raised
                              data-name="recommendationLetters"
                              on-success="_handleFileUpload"
                              on-error="_handleFileUploadError"
                              on-before-upload="_handleFileBeforeUpload">推薦函（至少兩封，請合併成一份）上傳</file-upload>
+                             -->
+
+                <file-upload target="/api/form/upload"
+                             raised
+                             data-name="researchPlan"
+                             on-success="_handleFileUpload"
+                             on-error="_handleFileUploadError"
+                             on-before-upload="_handleFileBeforeUpload">研究規劃書上傳</file-upload>
 
                 <file-upload target="/api/form/upload"
                              raised
@@ -271,6 +275,9 @@
             _showClassDialog: function(){
                 document.querySelector('classes-history-dialog').show();
             },
+            _showRecommDialog: function(){
+                document.querySelector('recommendation-dialog').show();
+            },
 
             _handleFileUpload: function(e){
                 //console.log('Success');
@@ -283,10 +290,6 @@
                 switch (name) {
                     case "researchPlan":
                         this.set('filePlan', objName.Description);
-                        break;
-
-                    case "recommendationLetters":
-                        this.set('fileLetters', objName.Description);
                         break;
 
                     case "transcript":

@@ -1,0 +1,117 @@
+<script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+<link rel="import" href="base-elements.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+
+<dom-module id="recommendation-dialog">
+    <template>
+        <style>
+            table {
+                width: 100%;
+            }
+            table th {
+                text-align: center;
+            }
+
+            paper-button {
+                background: var(--button-gray-background);
+            }
+        </style>
+
+        <paper-dialog id="dialog">
+            <div class="layout vertical center">
+                <p><strong>※系統將寄信至下列填寫之推薦者，請推薦者為您撰寫推薦信。
+                    因此請您務必通知推薦者</strong></p>
+
+                <table>
+                    <template is="dom-repeat" items="{{recommRows}}" as="recommRow" index-as="rowIndex">
+                        <tr>
+                            <td><paper-input label="推薦者姓名" value="{{recommRow.name}}"
+                                                on-change="_computeValue"></paper-input></td>
+
+                            <td><paper-input label="推薦者Email" value="{{recommRow.email}}"
+                                                on-change="_computeValue"></paper-input></td>
+
+                            <td><paper-icon-button icon="clear"
+                                                   data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                        </tr>
+                    </template>
+                </table>
+                <div class="layout horizontal center around-justified">
+                    <paper-button raised on-click="_addClass">增加推薦者</paper-button>
+                    <paper-button raised on-click="_clearAll">清除所有</paper-button>
+                </div>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'recommendation-dialog',
+
+            behaviors: [
+                Polymer.IronFormElementBehavior
+            ],
+
+            properties: {
+                recommRows: {
+                    type: Array,
+                    value: [{
+                        name: "",
+                        email: ""
+                    }]
+                }
+            },
+
+            ready: function(){
+                this.value = JSON.stringify([]);
+            },
+
+            show: function(){
+                this.$.dialog.open();
+            },
+
+            _computeValue: function(){
+                this.value = JSON.stringify(this.recommRows);
+            },
+
+            _addClass: function(){
+                this.push('recommRows', {
+                    name: "",
+                    email: ""
+                });
+            },
+
+            _handleClearRow: function(e){
+                //console.log(e.target.dataHost.dataRowIndex);
+                var index = e.target.dataHost.dataRowIndex;
+                if(typeof index == 'string') index = parseInt(index);
+
+                if(this.recommRows.length == 1 && index == 0) return;
+                this.splice('recommRows', index, 1);
+
+                this._computeValue();
+            },
+            _clearAll: function(){
+                if(this.recommRows.length > 1){
+                    this.splice('recommRows', 1, this.recommRows.length - 1);
+                }
+
+                this.push('recommRows', {
+                    name: "",
+                    email: ""
+                });
+                if(this.recommRows.length > 1){
+                    this.splice('recommRows', 0, 1);
+                }
+
+                this._computeValue();
+            }
+        });
+    </script>
+</dom-module>
