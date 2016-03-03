@@ -10,11 +10,14 @@
 
     <link rel="import" href="elements/base-elements.html">
     <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <link rel="import" href="bower_components/iron-form/iron-form.html">
     <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
     <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
     <link rel="import" href="bower_components/paper-input/paper-textarea.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html">
     <link rel="import" href="bower_components/file-upload/file-upload.html">
     <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="bower_components/paper-toast/paper-toast.html">
 
     <style is="custom-style">
         paper-toolbar {
@@ -53,6 +56,26 @@
             background: #E91E63;
             color: white;
         }
+
+        .hidden {
+            display: none;
+        }
+
+        paper-toast {
+            right: 30%;
+            left: 20%;
+            bottom: 20px;
+
+            font-size: 20px;
+
+            --paper-toast-color: white;
+        }
+        paper-toast.success-bg {
+            --paper-toast-background-color: #689F38;
+        }
+        paper-toast.failed-bg {
+            --paper-toast-background-color: red;
+        }
     </style>
 </head>
 <body unresolved class="fullbleed layout vertical">
@@ -75,22 +98,40 @@
                     下列 <a href="http://www.nthuaplus.org">NTHU A+</a>
                     計畫申請人邀請您為他(她)撰寫推薦信</p>
 
-                <span><strong>姓名：</strong>[[recommObj.ApplyUser.Name]]</span>
+                <span><strong>姓名(中/英)：</strong>[[_transformName(recommObj.ApplyUser.Name)]]</span>
                 <span><strong>Email：</strong>[[recommObj.ApplyUser.Email]]</span>
 
-                <paper-textarea
-                    label="推薦內容，您也可直接使用下方按鈕上傳推薦信"
-                    rows="15"
-                ></paper-textarea>
+                <form id="mainForm" is="iron-form"
+                      method="post" action$="/api/form/recomm/[[hashId]]"
+                      on-iron-form-response="_onFormSuccess"
+                      on-iron-form-error="_onFormFailed">
+                    <paper-textarea
+                            label="推薦內容，您也可直接使用下方按鈕上傳推薦信"
+                            rows="15"
+                            name="textContent"
+                    ></paper-textarea>
+                    <paper-input class="hidden"
+                                 name="fileObj"
+                                 value="{{fileContent}}"></paper-input>
+                </form>
 
                 <br/>
                 <file-upload
-                    target=""
+                    target="/api/form/upload"
                     raised
+                    on-before-upload="_handleFileBeforeUpload"
+                    on-success="_handleFileUpload"
+                    on-error="_handleFileUploadError"
                 >補充資料或推薦信文件檔</file-upload>
 
                 <br/><br/>
-                <paper-button raised class="submit-button">確認提交</paper-button>
+                <paper-button id="submitButton"
+                              raised class="submit-button"
+                              on-click="_onSubmitForm">確認提交</paper-button>
+                <paper-toast id="successToast" class="success-bg"
+                             text="提交成功！請稍等..."></paper-toast>
+                <paper-toast id="failedToast" class="failed-bg"
+                             text="提交失敗，請稍候再試"></paper-toast>
             </div>
         </paper-header-panel>
     </template>
@@ -103,6 +144,48 @@
             var urlParams = document.URL.extract();
             this.set('hashId', urlParams["hash"]);
             //TODO: Redirect to 404 page if hash empty
+
+            this._transformName = function(rawStr){
+                return rawStr.replace('#', ' / ');
+            };
+
+            this._handleFileBeforeUpload = function(e){
+                var f = e.target;
+                if(f.files.length > 1) {
+                    f.set('files', [f.files[f.files.length - 1]]);
+                }
+            };
+            this._handleFileUpload = function(e){
+
+                var objName = JSON.parse(e.detail.xhr.response);
+                this.set('fileContent', objName.Description);
+            };
+            this._handleFileUploadError = function(e){
+                console.log('Failed');
+                console.log(e);
+            };
+
+            this._onSubmitForm = function(){
+                this.$.mainForm.submit();
+            };
+
+            /*
+            this.$.successToast.addEventListener('iron-overlay-canceled', function(){
+                //Jump back to index page
+                window.location.href = 'http://www.nthuaplus.org';
+            });
+            */
+            this._onFormSuccess = function(){
+                this.$.submitButton.disabled = true;
+                this.$.successToast.opened = true;
+                setTimeout(function(){
+                    //Jump back to index page
+                    window.location.href = 'http://www.nthuaplus.org';
+                }, 2000);
+            };
+            this._onFormFailed = function(){
+                this.$.failedToast.opened = true;
+            };
         });
     </script>
 </body>
