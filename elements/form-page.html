@@ -34,8 +34,8 @@
             #fab-group paper-fab {
                 margin: 10px;
             }
-            #butDrafts {
-                --paper-fab-background: #009688;
+            #butClear {
+                --paper-fab-background: #E91E63;
             }
             #butSubmit {
                 --paper-fab-background: #FF5722;
@@ -86,6 +86,9 @@
             <paper-fab id="butSubmit" icon="send" on-click="_handleFormSubmit"></paper-fab>
             <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
 
+            <paper-fab id="butClear" icon="clear" on-click="_handleFormClear"></paper-fab>
+            <paper-tooltip for="butClear" position="left">清除所有</paper-tooltip>
+
             <paper-toast id="toastSuccess" text="提交成功!"
                          auto-fit-on-attach></paper-toast>
 
@@ -104,7 +107,7 @@
                       on-iron-form-response="_onFormSuccess"
                       on-iron-form-error="_onFormFailed">
                     <h3>申請主題</h3>
-                    <paper-radio-group required>
+                    <paper-radio-group required selected="{{topic}}">
                         <paper-radio-button name="topic1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br />
                         <paper-radio-button name="topic2">具穩健機率運算能力之突波式神經網路系統研發</paper-radio-button><br />
                         <paper-radio-button name="topic3">虛擬載具在高效能異質環境研究</paper-radio-button><br />
@@ -128,41 +131,50 @@
 
                     <paper-input label="學校" name="school" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z ]*"></paper-input><br />
+                                 pattern="[a-zA-Z ]*"
+                                 value="{{school}}"></paper-input><br />
                     <paper-input label="系所" name="department" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z ]*"></paper-input><br />
+                                 pattern="[a-zA-Z ]*"
+                                 value="{{department}}"></paper-input><br />
 
                     <div class="layout horizontal center ">
                         <paper-dropdown-menu name="gradeType" label="年級種類" required style="margin-right: 5px;">
-                            <paper-listbox class="dropdown-content">
+                            <paper-listbox class="dropdown-content" selected="{{schoolGradeType}}">
                                 <paper-item>學士班</paper-item>
                                 <paper-item>碩士班</paper-item>
                                 <paper-item>博士班</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
                         <paper-input label="年級" name="schoolGrade"
-                                     required auto-validate error-message="錯誤" type="number"></paper-input><br />
+                                     required auto-validate error-message="錯誤"
+                                     type="number" value="{{schoolGrade}}"></paper-input><br />
                     </div>
 
                     <br/>
                     <div class="layout horizontal center ">
                         <span>生日</span>
-                        <date-input required name="birthday"></date-input>
+                        <!-- <date-input required name="birthday"></date-input>-->
+                        <paper-date-input required name="birthday"
+                                          date-format='YYYY/MM/DD' value="{{birthday}}"></paper-date-input>
                     </div><br/>
 
                     <paper-input label="身分證字號" name="formalId" class="expand"
-                                 required auto-validate error-message="錯誤"></paper-input><br />
+                                 required auto-validate error-message="錯誤"
+                                 value="{{formalId}}"></paper-input><br />
                     <gold-phone-input label="聯絡電話" name="phoneNumber" class="expand"
                                       country-code="886"
                                       phone-number-pattern="XXXX-XXX-XXX"
-                                      required auto-validate error-message="錯誤"></gold-phone-input><br/>
+                                      required auto-validate error-message="錯誤"
+                                      value="{{phoneNumber}}"></gold-phone-input><br/>
                     <gold-email-input label="Email" name="email" class="expand"
-                                      required auto-validate error-message="錯誤"></gold-email-input><br/>
+                                      required auto-validate error-message="錯誤"
+                                      value="{{email}}"></gold-email-input><br/>
 
                     <paper-textarea name="address" label="通訊地址" class="expand" multiple
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z ]*"></paper-textarea><br/>
+                                    pattern="[a-zA-Z ]*"
+                                    value="{{address}}"></paper-textarea><br/>
 
                     <paper-textarea name="researchArea" label="研究領域" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
@@ -170,27 +182,33 @@
 
                     <paper-input label="指導老師" name="teacher" class="expand"
                                  required auto-validate error-message="必填"
-                                 pattern="[a-zA-Z ]*"></paper-input><br />
+                                 pattern="[a-zA-Z ]*"
+                                 value="{{teacher}}"></paper-input><br />
 
                     <br/>
-                    <classes-history-dialog name="classHistory"></classes-history-dialog>
+                    <classes-history-dialog name="classHistory"
+                                            class-rows="{{classHistory}}"></classes-history-dialog>
                     <paper-button on-click="_showClassDialog" raised >編輯預修課程</paper-button><br/>
 
                     <paper-textarea name="relatedSkills" label="相關專業能力" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z ]*"></paper-textarea><br/>
+                                    pattern="[a-zA-Z ]*"
+                                    value="{{relatedSkills}}"></paper-textarea><br/>
 
                     <br/>
                     <div class="layout horizontal center around-justified expand">
                         <span>成績排名</span>
                         <paper-input name="average" label="總平均" style="margin: 0 20px;"
-                                     required auto-validate error-message="錯誤" type="text"></paper-input>
+                                     required auto-validate error-message="錯誤" type="text"
+                                     value="{{average}}"></paper-input>
                         <paper-input name="ranking" label="年級排名"
-                                     required auto-validate error-message="錯誤" type="text"></paper-input>
+                                     required auto-validate error-message="錯誤" type="text"
+                                     value="{{ranking}}"></paper-input>
                     </div><br/>
 
                     <br/>
-                    <language-ability-dialog name="langAbilities"></language-ability-dialog>
+                    <language-ability-dialog name="langAbilities"
+                                             language-rows="{{langAbilities}}"></language-ability-dialog>
                     <paper-button on-click="_showLanguageDialog" raised >編輯語言能力</paper-button><br/>
 
                     <paper-input name="researchPlan" class="hidden"
@@ -204,9 +222,102 @@
 
                     <!-- <input type="submit"> -->
 
-                    <recommendation-dialog name="recommendationLetters"></recommendation-dialog>
+                    <recommendation-dialog name="recommendationLetters"
+                                           recomm-rows="{{recommLetters}}"></recommendation-dialog>
                     <paper-button on-click="_showRecommDialog" raised>推薦者（至少兩位）</paper-button>
                 </form>
+
+                <!-- Put localstorage stuff here preventing form serializing-->
+                <iron-localstorage
+                    name="topic-storage"
+                    value="{{topic}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                    name="chiName-storage"
+                    value="{{chiName}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="engName-storage"
+                        value="{{engName}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="school-storage"
+                        value="{{school}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="department-storage"
+                        value="{{department}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                    name="schoolGradeType-storage"
+                    value="{{schoolGradeType}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="schoolGrade-storage"
+                        value="{{schoolGrade}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="birthday-storage"
+                        value="{{birthday}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="formalId-storage"
+                        value="{{formalId}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="phoneNumber-storage"
+                        value="{{phoneNumber}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="email-storage"
+                        value="{{email}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="address-storage"
+                        value="{{address}}"
+                ></iron-localstorage>
+
+                <iron-localstorage
+                        name="teacher-storage"
+                        value="{{teacher}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="classHistory-storage"
+                        value="{{classHistory}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="relatedSkills-storage"
+                        value="{{relatedSkills}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="average-storage"
+                        value="{{average}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="ranking-storage"
+                        value="{{ranking}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                    name="langAbilities-storage"
+                    value="{{langAbilities}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="recommLetters-storage"
+                        value="{{recommLetters}}"
+                ></iron-localstorage>
+
+                <iron-localstorage
+                        name="filePlan-storage"
+                        value="{{filePlan}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="fileTranscript-storage"
+                        value="{{fileTranscript}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="fileOthers-storage"
+                        value="{{fileOthers}}"
+                ></iron-localstorage>
 
                 <br/>
 
@@ -308,6 +419,46 @@
             },
             _onFormFailed: function(){
                 this.$.toastError.open();
+            },
+
+            _handleFormClear: function(){
+                this.topic = undefined;
+                this.chiName = undefined;
+                this.engName = undefined;
+                this.school = undefined;
+                this.department = undefined;
+                this.schoolGradeType = undefined;
+                this.schoolGrade = undefined;
+                this.birthday = undefined;
+                this.formalId = undefined;
+                this.email = undefined;
+                this.phoneNumber = undefined;
+                this.address = undefined;
+                this.teacher = undefined;
+                this.classHistory = [{
+                    name: "",
+                    semester: "",
+                    grade: ""
+                }];
+                this.relatedSkills = undefined;
+                this.average = undefined;
+                this.ranking = undefined;
+                this.langAbilities = [{
+                    langName: "",
+                    abilities: [
+                        {text: "聽"},
+                        {text: "說"},
+                        {text: "讀"},
+                        {text: "寫"}
+                    ]
+                }];
+                this.recommLetters = [{
+                    name: "",
+                    email: ""
+                }];
+                this.filePlan = undefined;
+                this.fileTranscript = undefined;
+                this.fileOthers = undefined;
             }
         });
     </script>
