@@ -22429,244 +22429,218 @@ event and do your own custom submission:
     },
   });
 </script>
-<script>
 
-  /**
-   * Use `Polymer.IronValidatorBehavior` to implement a custom input/form validator. Element
-   * instances implementing this behavior will be registered for use in elements that implement
-   * `Polymer.IronValidatableBehavior`.
-   * 
-   * @demo demo/index.html
-   * @polymerBehavior
-   */
-  Polymer.IronValidatorBehavior = {
 
-    properties: {
-
-      /**
-       * Namespace for this validator.
-       */
-      validatorType: {
-        type: String,
-        value: 'validator'
-      },
-
-      /**
-       * Name for this validator, used by `Polymer.IronValidatableBehavior` to lookup this element.
-       */
-      validatorName: {
-        type: String,
-        value: function() {
-          return this.is;
-        }
-      }
-
-    },
-
-    ready: function() {
-      new Polymer.IronMeta({type: this.validatorType, key: this.validatorName, value: this});
-    },
-
-    /**
-     * Implement custom validation logic in this function.
-     * @param {Object} values The value to validate. May be any type depending on the validation logic.
-     * @return {Boolean} true if `values` is valid.
-     */
-    validate: function(values) {
-    }
-  };
-
-</script>
-<script>
-
-  Polymer({
-
-    is: 'date-validator',
-
-    behaviors: [
-      Polymer.IronValidatorBehavior
-    ],
-
-    validate: function(date) {
-      if (!date)
-        return false;
-
-      if (date.month > 12 || date.month < 1 || date.day < 1 || date.day > 31)
-        return false;
-
-      if(date.month == 2){
-        if(date.year % 4 == 0 || date.year % 400 == 0){
-          //29 days
-          if(date.day > 29) return false;
-        }else{
-          //28 days
-          if(date.day > 28 ) return false;
-        }
-      }else{
-        switch(date.month){
-          //30 days
-          case 4:
-          case 6:
-          case 9:
-          case 11:
-            if(date.day > 30) return false;
-            break;
-        }
-      }
-
-      return true;
-    }
-
-  });
-
-</script>
-<dom-module id="date-input" assetpath="../bower_components/gold-date-input/">
-
-  <style>
-    span {
-      @apply(--paper-input-container-font);
-      opacity: 0.33;
-      text-align: center;
-    }
-
-    input {
-      position: relative; /* to make a stacking context */
-      outline: none;
-      box-shadow: none;
-      padding: 0;
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--paper-input-container-input-color, --primary-text-color);
-      text-align: center;
-
-      @apply(--layout-flex);
-      @apply(--paper-font-subhead);
-      @apply(--paper-input-container-input);
-    }
-
-    .container {
-      @apply(--layout-horizontal);
-    }
-
-  </style>
-
+<dom-module id="paper-date-input" assetpath="../bower_components/paper-date-input/">
   <template>
-    <date-validator id="validator"></date-validator>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
 
-    <span aria-hidden="" id="yearLabel" hidden="">Year</span>
-    <span aria-hidden="" id="monthLabel" hidden="">Month</span>
-    <span aria-hidden="" id="dayLabel" hidden="">Day</span>
+      span {
+        @apply(--paper-input-container-font);
+        opacity: 0.8;
+        position: relative;
+        top:5px;
+      }
 
-    <div class="container">
-      <input is="iron-input" id="yearInput" aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'yearLabel')]]" required$="[[required]]" maxlength="4" bind-value="{{year}}" placeholder="YYYY" allowed-pattern="[0-9]" prevent-invalid-input="" autocomplete="cc-exp-year" type="tel" disabled$="[[disabled]]" invalid="{{invalid}}" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]">
-      <span>/</span>
-      <input is="iron-input" id="monthInput" aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'monthLabel')]]" required$="[[required]]" maxlength="2" bind-value="{{month}}" placeholder="MM" allowed-pattern="[0-9]" prevent-invalid-input="" autocomplete="cc-exp-month" type="tel" disabled$="[[disabled]]" invalid="{{invalid}}" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]">
-      <span>/</span>
-      <input is="iron-input" id="dayInput" aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'dayLabel')]]" required$="[[required]]" maxlength="2" bind-value="{{day}}" placeholder="DD" allowed-pattern="[0-9]" prevent-invalid-input="" autocomplete="cc-exp-day" type="tel" disabled$="[[disabled]]" invalid="{{invalid}}" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]">
-    </div>
+      input {
+        position: relative;
+        text-align: center;
+      }
+
+      .container {
+        @apply(--layout-horizontal);
+      }
+    </style>
+
+    <paper-input-container>
+      <label hidden$="[[!label]]">[[label]]</label>
+
+      <div class="container" id="container" align="center">
+        <input is="iron-input" id="a" type="tel" allowed-pattern="[0-9]" bind-value="{{input1Value}}">
+        <span>[[separator]]</span>
+        <input is="iron-input" id="b" type="tel" allowed-pattern="[0-9]" bind-value="{{input2Value}}">
+        <span>[[separator]]</span>
+        <input is="iron-input" id="c" type="tel" allowed-pattern="[0-9]" bind-value="{{input3Value}}">
+      </div>
+    </paper-input-container>
+
   </template>
 
-</dom-module>
+  <script>
+    Polymer({
+      is: 'paper-date-input',
 
-<script>
-  Polymer({
+      behaviors: [
+        Polymer.IronFormElementBehavior
+      ],
 
-    is: 'date-input',
-
-    behaviors: [
-      Polymer.IronValidatableBehavior,
-      Polymer.IronFormElementBehavior
-    ],
-
-    properties: {
-      /**
-       * Set to true to mark the input as required.
-       */
-      required: {
-        type: Boolean,
-        value: false
+      properties: {
+        dateFormat: {
+          type: String,
+          value: 'DD/MM/YYYY'
+        },
+        toTimestamp: {
+          type: Boolean,
+          value: false
+        },
+        input1Value: {
+          type: Number,
+          observer: '_onInput1ValueChange'
+        },
+        input2Value: {
+          type: Number,
+          observer: '_onInput2ValueChange'
+        },
+        input3Value: {
+          type: Number,
+          observer: '_onInput3ValueChange'
+        },
+        separator: {
+          type: String
+        },
+        dayValue: {
+          type: Number,
+          observer: '_onDayValueChange'
+        },
+        monthValue: {
+          type: Number,
+          observer: '_onMonthValueChange'
+        },
+        yearValue: {
+          type: Number,
+          observer: '_onYearValueChange'
+        },
+        yearCharNumber: {
+          type: Number
+        }
       },
-
-
-      day: {
-        type: String
+      attached: function () {
+        this._defineSeparator(this.dateFormat);
+        this._defineYearCharNumber(this.dateFormat);
+        this._defineFormat(this.dateFormat);
       },
-
-      /**
-       * The month component of the date displayed.
-       */
-      month: {
-        type: String
+      _defineSeparator: function (dateFormat) {
+        for (i = 0; i < dateFormat.length; i++) {
+          if (dateFormat[i] == '/' || dateFormat[i] == '-' || dateFormat[i] == '.') {
+            this.separator = dateFormat[i];
+          }
+        }
       },
-
-      /**
-       * The year component of the date displayed.
-       */
-      year: {
-        type: String
+      _defineYearCharNumber: function (dateFormat) {
+        var n = 0;
+        for (i = 0; i < dateFormat.length; i++) {
+          if (dateFormat[i] == 'y' || dateFormat[i] == 'Y') {
+            n++;
+          }
+        }
+        this.yearCharNumber = n;
       },
-
-      /**
-       * The date object used by the validator. Has two properties, month and year.
-       */
-      date: {
-        notify: true,
-        type: Object
+      _defineFormat: function (dateFormat) {
+        var format = dateFormat.split(this.separator);
+        var inputIndex = Polymer.dom(this.$.container).querySelectorAll('input');
+        var tmpId = 'abc';
+        for (i = 0; i < format.length; i++) {
+          if (format[i] == 'DD') {
+            this.$$('#' + tmpId[i]).setAttribute('id', 'day');
+            this.$$('#day').setAttribute('maxlength', '2');
+          } else if (format[i] == 'MM') {
+            this.$$('#' + tmpId[i]).setAttribute('id', 'month');
+            this.$$('#month').setAttribute('maxlength', '2');
+          } else if (format[i] == 'YY' || format[i] == 'YYYY') {
+            this.$$('#' + tmpId[i]).setAttribute('id', 'year');
+            this.$$('#year').setAttribute('maxlength', this.yearCharNumber);
+          } else {
+            var dom = Polymer.dom(this.root).childNodes;
+            for (i = 0; i < dom.length; i++) {
+              Polymer.dom(this.root).removeChild(dom[i]);
+            }
+            console.warn('date-format is invalid. Please check the documentation.');
+          }
+        }
       },
-
-      validator: {
-        type: String,
-        value: 'date-validator'
+      _onInput1ValueChange: function (value) {
+        if (Polymer.dom(this.$.container).querySelectorAll('input')[0].id == 'day') {
+          this.dayValue = value;
+        } else if (Polymer.dom(this.$.container).querySelectorAll('input')[0].id == 'month') {
+          this.monthValue = value;
+        } else if (Polymer.dom(this.$.container).querySelectorAll('input')[0].id == 'year') {
+          this.yearValue = value;
+        }
       },
-
-      ariaLabelPrefix: {
-        type:String
-      }
-
-    },
-
-    observers: [
-      '_computeDate(day,month,year)'
-    ],
-
-    _computeDate: function(day, month, year) {
-      // Months are 0-11.
-      this.date = {
-        year: year,
-        month: month,
-        day: day
-      };
-      this.fire('dateChanged', this.date);
-      this.set('value', this.year + '-' + this.month + '-' + this.day);
-
-      // Advance cursor to month after year entry
-      if (year.length === 4) {
-        if(month.length == 2) {
-          this.$.dayInput.focus();
-        }else{
-          this.$.monthInput.focus();
+      _onInput2ValueChange: function (value) {
+        if (Polymer.dom(this.$.container).querySelectorAll('input')[1].id == 'day') {
+          this.dayValue = value;
+        } else if (Polymer.dom(this.$.container).querySelectorAll('input')[1].id == 'month') {
+          this.monthValue = value;
+        } else if (Polymer.dom(this.$.container).querySelectorAll('input')[1].id == 'year') {
+          this.yearValue = value;
+        }
+      },
+      _onInput3ValueChange: function (value) {
+        if (Polymer.dom(this.$.container).querySelectorAll('input')[2].id == 'day') {
+          this.dayValue = value;
+        } else if (Polymer.dom(this.$.container).querySelectorAll('input')[2].id == 'month') {
+          this.monthValue = value;
+        } else if (Polymer.dom(this.$.container).querySelectorAll('input')[2].id == 'year') {
+          this.yearValue = value;
+        }
+      },
+      _onDayValueChange: function (value) {
+        if (value.toString().length == 2 && Polymer.dom(this.$$('#day')).nextElementSibling) {
+          Polymer.dom(this.$$('#day')).nextElementSibling.nextElementSibling.focus();
+        } else if (!Polymer.dom(this.$$('#day')).nextElementSibling && value.toString().length == 2) {
+          this._defineValue(this.dayValue.toString(), this.monthValue.toString(), this.yearValue.toString());
+        }
+      },
+      _onMonthValueChange: function (value) {
+        if (value.toString().length == 2 && Polymer.dom(this.$$('#month')).nextElementSibling) {
+          Polymer.dom(this.$$('#month')).nextElementSibling.nextElementSibling.focus();
+        } else if (!Polymer.dom(this.$$('#month')).nextElementSibling && value.toString().length == 2) {
+          this._defineValue(this.dayValue.toString(), this.monthValue.toString(), this.yearValue.toString());
+        }
+      },
+      _onYearValueChange: function (value) {
+        if (value.toString().length == this.yearCharNumber && Polymer.dom(this.$$('#year')).nextElementSibling) {
+          Polymer.dom(this.$$('#year')).nextElementSibling.nextElementSibling.focus();
+        } else if (!Polymer.dom(this.$$('#year')).nextElementSibling && value.toString().length == this.yearCharNumber) {
+          this._defineValue(this.dayValue.toString(), this.monthValue.toString(), this.yearValue.toString());
+        }
+      },
+      _defineValue: function (day, month, year) {
+        this.value = year + '-' + month + '-' + day;
+        this._isValidDate(this.value);
+      },
+      _isValidDate: function (value) {
+        var date = new Date(value);
+        if (date != 'Invalid Date') {
+          this._returnValue(date);
+        } else {
+          console.warn(date);
+          this.value="Invalid date"
+        }
+      },
+      _returnValue: function (date) {
+        if (this.toTimestamp) {
+          this.value = Date.parse(date);
+        } else {
+          var value = "";
+          var order = Polymer.dom(this.$.container).querySelectorAll('input');
+          for (i = 0; i < order.length; i++) {
+            if (i != 0) {
+              value += this.separator;
+            }
+            value += order[i].value;
+          }
+          this.value = value;
         }
       }
-    },
-
-    validate: function() {
-      // Empty, non-required input is valid.
-      if (!this.required &&
-              this.day == '' && this.month == '' && this.year == '') {
-        return true;
-      }
-      this.invalid = !this.$.validator.validate(this.date);
-      this.fire('iron-input-validate');
-      return !this.invalid;
-    },
-
-    _computeAriaLabel: function(dateLabel, monthLabel) {
-      return dateLabel + ' ' + monthLabel;
-    }
-
-  });
-</script>
+    });
+  </script>
+</dom-module>
 
 
 <dom-module id="gold-phone-input" assetpath="../bower_components/gold-phone-input/">
@@ -26574,6 +26548,178 @@ event and do your own custom submission:
     });
   </script>
 </dom-module>
+
+<dom-module id="iron-localstorage" assetpath="../bower_components/iron-localstorage/"></dom-module>
+<script>
+
+  Polymer({
+    is: 'iron-localstorage',
+
+    properties: {
+      /**
+       * localStorage item key
+       */
+      name: {
+        type: String,
+        value: ''
+      },
+      /**
+       * The data associated with this storage.
+       * If set to null item will be deleted.
+       * @type {*}
+       */
+      value: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * If true: do not convert value to JSON on save/load
+       */
+      useRaw: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Value will not be saved automatically if true. You'll have to do it manually with `save()`
+       */
+      autoSaveDisabled: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Last error encountered while saving/loading items
+       */
+      errorMessage: {
+        type: String,
+        notify: true
+      },
+
+      /** True if value has been loaded */
+      _loaded: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    observers: [
+      '_debounceReload(name,useRaw)',
+      '_trySaveValue(autoSaveDisabled)',
+      '_trySaveValue(value.*)'
+    ],
+
+    ready: function() {
+      this._boundHandleStorage = this._handleStorage.bind(this);
+    },
+
+    attached: function() {
+      window.addEventListener('storage', this._boundHandleStorage);
+    },
+
+    detached: function() {
+      window.removeEventListener('storage', this._boundHandleStorage);
+    },
+
+    _handleStorage: function(ev) {
+      if (ev.key == this.name) {
+        this._load(true);
+      }
+    },
+
+    _trySaveValue: function() {
+      if (this._doNotSave) {
+        return;
+      }
+      if (this._loaded && !this.autoSaveDisabled) {
+        this.debounce('save', this.save);
+      }
+    },
+
+    _debounceReload: function() {
+      this.debounce('reload', this.reload);
+    },
+
+    /**
+     * Loads the value again. Use if you modify
+     * localStorage using DOM calls, and want to
+     * keep this element in sync.
+     */
+    reload: function() {
+      this._loaded = false;
+      this._load();
+    },
+
+    /**
+     * loads value from local storage
+     * @param {boolean=} externalChange true if loading changes from a different window
+     */
+    _load: function(externalChange) {
+      var v = window.localStorage.getItem(this.name);
+
+      if (v === null) {
+        this._loaded = true;
+        this._doNotSave = true;  // guard for save watchers
+        this.value = null;
+        this._doNotSave = false;
+        this.fire('iron-localstorage-load-empty', { externalChange: externalChange});
+      } else {
+        if (!this.useRaw) {
+          try { // parse value as JSON
+            v = JSON.parse(v);
+          } catch(x) {
+            this.errorMessage = "Could not parse local storage value";
+            console.error("could not parse local storage value", v);
+            v = null;
+          }
+        }
+        this._loaded = true;
+        this._doNotSave = true;
+        this.value = v;
+        this._doNotSave = false;
+        this.fire('iron-localstorage-load', { externalChange: externalChange});
+      }
+    },
+
+    /**
+     * Saves the value to localStorage. Call to save if autoSaveDisabled is set.
+     * If `value` is null or undefined, deletes localStorage.
+     */
+    save: function() {
+      var v = this.useRaw ? this.value : JSON.stringify(this.value);
+      try {
+        if (this.value === null || this.value === undefined) {
+          window.localStorage.removeItem(this.name);
+        } else {
+          window.localStorage.setItem(this.name, /** @type {string} */ (v));
+        }
+      }
+      catch(ex) {
+        // Happens in Safari incognito mode,
+        this.errorMessage = ex.message;
+        console.error("localStorage could not be saved. Safari incoginito mode?", ex);
+      }
+    }
+
+    /**
+     * Fired when value loads from localStorage.
+     *
+     * @event iron-localstorage-load
+     * @param {{externalChange:boolean}} detail -
+     *     externalChange: true if change occured in different window.
+     */
+
+    /**
+     * Fired when loaded value does not exist.
+     * Event handler can be used to initialize default value.
+     *
+     * @event iron-localstorage-load-empty
+     * @param {{externalChange:boolean}} detail -
+     *     externalChange: true if change occured in different window.
+     */
+  });
+
+</script>
 <style is="custom-style">
 
     html, body {
@@ -27125,8 +27271,8 @@ event and do your own custom submission:
             #fab-group paper-fab {
                 margin: 10px;
             }
-            #butDrafts {
-                --paper-fab-background: #009688;
+            #butClear {
+                --paper-fab-background: #E91E63;
             }
             #butSubmit {
                 --paper-fab-background: #FF5722;
@@ -27174,6 +27320,9 @@ event and do your own custom submission:
             <paper-fab id="butSubmit" icon="send" on-click="_handleFormSubmit"></paper-fab>
             <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
 
+            <paper-fab id="butClear" icon="clear" on-click="_handleFormClear"></paper-fab>
+            <paper-tooltip for="butClear" position="left">清除所有</paper-tooltip>
+
             <paper-toast id="toastSuccess" text="提交成功!" auto-fit-on-attach=""></paper-toast>
 
             <paper-toast id="toastError" class="error" text="提交失敗" auto-fit-on-attach=""></paper-toast>
@@ -27186,7 +27335,7 @@ event and do your own custom submission:
                 
                 <form id="appForm" is="iron-form" method="post" action="/api/form/submit" on-iron-form-response="_onFormSuccess" on-iron-form-error="_onFormFailed">
                     <h3>申請主題</h3>
-                    <paper-radio-group required="">
+                    <paper-radio-group required="" selected="{{topic}}">
                         <paper-radio-button name="topic1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br>
                         <paper-radio-button name="topic2">具穩健機率運算能力之突波式神經網路系統研發</paper-radio-button><br>
                         <paper-radio-button name="topic3">虛擬載具在高效能異質環境研究</paper-radio-button><br>
@@ -27202,51 +27351,52 @@ event and do your own custom submission:
                     <paper-input label="英文姓名（護照）" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{engName}}"></paper-input><br>
                     <paper-input name="name" style="display: none;" value="[[_computeFullName(chiName, engName)]]"></paper-input>
 
-                    <paper-input label="學校" name="school" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*"></paper-input><br>
-                    <paper-input label="系所" name="department" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*"></paper-input><br>
+                    <paper-input label="學校" name="school" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{school}}"></paper-input><br>
+                    <paper-input label="系所" name="department" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{department}}"></paper-input><br>
 
                     <div class="layout horizontal center ">
                         <paper-dropdown-menu name="gradeType" label="年級種類" required="" style="margin-right: 5px;">
-                            <paper-listbox class="dropdown-content">
+                            <paper-listbox class="dropdown-content" selected="{{schoolGradeType}}">
                                 <paper-item>學士班</paper-item>
                                 <paper-item>碩士班</paper-item>
                                 <paper-item>博士班</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-input label="年級" name="schoolGrade" required="" auto-validate="" error-message="錯誤" type="number"></paper-input><br>
+                        <paper-input label="年級" name="schoolGrade" required="" auto-validate="" error-message="錯誤" type="number" value="{{schoolGrade}}"></paper-input><br>
                     </div>
 
                     <br>
                     <div class="layout horizontal center ">
                         <span>生日</span>
-                        <date-input required="" name="birthday"></date-input>
+                        
+                        <paper-date-input required="" name="birthday" date-format="YYYY/MM/DD" yearvalue="{{birthdayYear}}" monthvalue="{{birthdayMonth}}" dayvalue="{{birthdayDay}}"></paper-date-input>
                     </div><br>
 
-                    <paper-input label="身分證字號" name="formalId" class="expand" required="" auto-validate="" error-message="錯誤"></paper-input><br>
-                    <gold-phone-input label="聯絡電話" name="phoneNumber" class="expand" country-code="886" phone-number-pattern="XXXX-XXX-XXX" required="" auto-validate="" error-message="錯誤"></gold-phone-input><br>
-                    <gold-email-input label="Email" name="email" class="expand" required="" auto-validate="" error-message="錯誤"></gold-email-input><br>
+                    <paper-input label="身分證字號" name="formalId" class="expand" required="" auto-validate="" error-message="錯誤" value="{{formalId}}"></paper-input><br>
+                    <gold-phone-input label="聯絡電話" name="phoneNumber" class="expand" country-code="886" phone-number-pattern="XXXX-XXX-XXX" required="" auto-validate="" error-message="錯誤" value="{{phoneNumber}}"></gold-phone-input><br>
+                    <gold-email-input label="Email" name="email" class="expand" required="" auto-validate="" error-message="錯誤" value="{{email}}"></gold-email-input><br>
 
-                    <paper-textarea name="address" label="通訊地址" class="expand" multiple="" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*"></paper-textarea><br>
+                    <paper-textarea name="address" label="通訊地址" class="expand" multiple="" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{address}}"></paper-textarea><br>
 
-                    <paper-textarea name="researchArea" label="研究領域" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*"></paper-textarea><br>
+                    <paper-textarea name="researchArea" label="研究領域" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{researchArea}}"></paper-textarea><br>
 
-                    <paper-input label="指導老師" name="teacher" class="expand" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*"></paper-input><br>
+                    <paper-input label="指導老師" name="teacher" class="expand" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{teacher}}"></paper-input><br>
 
                     <br>
-                    <classes-history-dialog name="classHistory"></classes-history-dialog>
+                    <classes-history-dialog name="classHistory" class-rows="{{classHistory}}"></classes-history-dialog>
                     <paper-button on-click="_showClassDialog" raised="">編輯預修課程</paper-button><br>
 
-                    <paper-textarea name="relatedSkills" label="相關專業能力" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*"></paper-textarea><br>
+                    <paper-textarea name="relatedSkills" label="相關專業能力" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{relatedSkills}}"></paper-textarea><br>
 
                     <br>
                     <div class="layout horizontal center around-justified expand">
                         <span>成績排名</span>
-                        <paper-input name="average" label="總平均" style="margin: 0 20px;" required="" auto-validate="" error-message="錯誤" type="text"></paper-input>
-                        <paper-input name="ranking" label="年級排名" required="" auto-validate="" error-message="錯誤" type="text"></paper-input>
+                        <paper-input name="average" label="總平均" style="margin: 0 20px;" required="" auto-validate="" error-message="錯誤" type="text" value="{{average}}"></paper-input>
+                        <paper-input name="ranking" label="年級排名" required="" auto-validate="" error-message="錯誤" type="text" value="{{ranking}}"></paper-input>
                     </div><br>
 
                     <br>
-                    <language-ability-dialog name="langAbilities"></language-ability-dialog>
+                    <language-ability-dialog name="langAbilities" language-rows="{{langAbilities}}"></language-ability-dialog>
                     <paper-button on-click="_showLanguageDialog" raised="">編輯語言能力</paper-button><br>
 
                     <paper-input name="researchPlan" class="hidden" required="" value="{{filePlan}}"></paper-input>
@@ -27257,9 +27407,40 @@ event and do your own custom submission:
 
                     
 
-                    <recommendation-dialog name="recommendationLetters"></recommendation-dialog>
+                    <recommendation-dialog name="recommendationLetters" recomm-rows="{{recommLetters}}"></recommendation-dialog>
                     <paper-button on-click="_showRecommDialog" raised="">推薦者（至少兩位）</paper-button>
                 </form>
+
+                
+                <iron-localstorage name="topic-storage" value="{{topic}}"></iron-localstorage>
+                <iron-localstorage name="chiName-storage" value="{{chiName}}"></iron-localstorage>
+                <iron-localstorage name="engName-storage" value="{{engName}}"></iron-localstorage>
+                <iron-localstorage name="school-storage" value="{{school}}"></iron-localstorage>
+                <iron-localstorage name="department-storage" value="{{department}}"></iron-localstorage>
+                <iron-localstorage name="schoolGradeType-storage" value="{{schoolGradeType}}"></iron-localstorage>
+                <iron-localstorage name="schoolGrade-storage" value="{{schoolGrade}}"></iron-localstorage>
+                
+                
+                <iron-localstorage name="birthday-storage" value="{{birthdayYear}}"></iron-localstorage>
+                <iron-localstorage name="birthday-storage" value="{{birthdayMonth}}"></iron-localstorage>
+                <iron-localstorage name="birthday-storage" value="{{birthdayDay}}"></iron-localstorage>
+                <iron-localstorage name="formalId-storage" value="{{formalId}}"></iron-localstorage>
+                <iron-localstorage name="phoneNumber-storage" value="{{phoneNumber}}"></iron-localstorage>
+                <iron-localstorage name="email-storage" value="{{email}}"></iron-localstorage>
+                <iron-localstorage name="address-storage" value="{{address}}"></iron-localstorage>
+
+                <iron-localstorage name="teacher-storage" value="{{teacher}}"></iron-localstorage>
+                <iron-localstorage name="researchArea-storage" value="{{researchArea}}"></iron-localstorage>
+                <iron-localstorage name="classHistory-storage" value="{{classHistory}}"></iron-localstorage>
+                <iron-localstorage name="relatedSkills-storage" value="{{relatedSkills}}"></iron-localstorage>
+                <iron-localstorage name="average-storage" value="{{average}}"></iron-localstorage>
+                <iron-localstorage name="ranking-storage" value="{{ranking}}"></iron-localstorage>
+                <iron-localstorage name="langAbilities-storage" value="{{langAbilities}}"></iron-localstorage>
+                <iron-localstorage name="recommLetters-storage" value="{{recommLetters}}"></iron-localstorage>
+
+                <iron-localstorage name="filePlan-storage" value="{{filePlan}}"></iron-localstorage>
+                <iron-localstorage name="fileTranscript-storage" value="{{fileTranscript}}"></iron-localstorage>
+                <iron-localstorage name="fileOthers-storage" value="{{fileOthers}}"></iron-localstorage>
 
                 <br>
 
@@ -27339,6 +27520,52 @@ event and do your own custom submission:
             },
             _onFormFailed: function(){
                 this.$.toastError.open();
+            },
+
+            _handleFormClear: function(){
+                this.topic = null;
+                this.chiName = null;
+                this.engName = null;
+                this.school = null;
+                this.department = null;
+                this.schoolGradeType = null;
+                this.schoolGrade = null;
+                this.birthdayYear = null;
+                this.birthdayMonth = null;
+                this.birthdayDay = null;
+                this.formalId = null;
+                this.email = null;
+                this.address = null;
+                this.teacher = null;
+                this.researchArea = null;
+                this.classHistory = [{
+                    name: "",
+                    semester: "",
+                    grade: ""
+                }];
+                this.relatedSkills = undefined;
+                this.average = undefined;
+                this.ranking = undefined;
+                this.langAbilities = [{
+                    langName: "",
+                    abilities: [
+                        {text: "聽"},
+                        {text: "說"},
+                        {text: "讀"},
+                        {text: "寫"}
+                    ]
+                }];
+                this.recommLetters = [{
+                    name: "",
+                    email: ""
+                }];
+                this.filePlan = undefined;
+                this.fileTranscript = undefined;
+                this.fileOthers = undefined;
+
+                //Since this element would throw exception and block following statement
+                //We put it in the last
+                this.phoneNumber = null;
             }
         });
     </script>
