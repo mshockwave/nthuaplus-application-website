@@ -156,7 +156,10 @@
                         <span>生日</span>
                         <!-- <date-input required name="birthday"></date-input>-->
                         <paper-date-input required name="birthday"
-                                          date-format='YYYY/MM/DD' value="{{birthday}}"></paper-date-input>
+                                          date-format='YYYY/MM/DD'
+                                          yearValue="{{birthdayYear}}"
+                                          monthValue="{{birthdayMonth}}"
+                                          dayValue="{{birthdayDay}}"></paper-date-input>
                     </div><br/>
 
                     <paper-input label="身分證字號" name="formalId" class="expand"
@@ -178,7 +181,8 @@
 
                     <paper-textarea name="researchArea" label="研究領域" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z ]*"></paper-textarea><br/>
+                                    pattern="[a-zA-Z ]*"
+                                    value="{{researchArea}}"></paper-textarea><br/>
 
                     <paper-input label="指導老師" name="teacher" class="expand"
                                  required auto-validate error-message="必填"
@@ -256,9 +260,24 @@
                         name="schoolGrade-storage"
                         value="{{schoolGrade}}"
                 ></iron-localstorage>
+                <!-- paper-date-input can't deserialize value-->
+                <!--
                 <iron-localstorage
                         name="birthday-storage"
                         value="{{birthday}}"
+                ></iron-localstorage>
+                -->
+                <iron-localstorage
+                        name="birthday-storage"
+                        value="{{birthdayYear}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="birthday-storage"
+                        value="{{birthdayMonth}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="birthday-storage"
+                        value="{{birthdayDay}}"
                 ></iron-localstorage>
                 <iron-localstorage
                         name="formalId-storage"
@@ -280,6 +299,10 @@
                 <iron-localstorage
                         name="teacher-storage"
                         value="{{teacher}}"
+                ></iron-localstorage>
+                <iron-localstorage
+                        name="researchArea-storage"
+                        value="{{researchArea}}"
                 ></iron-localstorage>
                 <iron-localstorage
                         name="classHistory-storage"
@@ -422,19 +445,21 @@
             },
 
             _handleFormClear: function(){
-                this.topic = undefined;
-                this.chiName = undefined;
-                this.engName = undefined;
-                this.school = undefined;
-                this.department = undefined;
-                this.schoolGradeType = undefined;
-                this.schoolGrade = undefined;
-                this.birthday = undefined;
-                this.formalId = undefined;
-                this.email = undefined;
-                this.phoneNumber = undefined;
-                this.address = undefined;
-                this.teacher = undefined;
+                this.topic = null;
+                this.chiName = null;
+                this.engName = null;
+                this.school = null;
+                this.department = null;
+                this.schoolGradeType = null;
+                this.schoolGrade = null;
+                this.birthdayYear = null;
+                this.birthdayMonth = null;
+                this.birthdayDay = null;
+                this.formalId = null;
+                this.email = null;
+                this.address = null;
+                this.teacher = null;
+                this.researchArea = null;
                 this.classHistory = [{
                     name: "",
                     semester: "",
@@ -459,6 +484,10 @@
                 this.filePlan = undefined;
                 this.fileTranscript = undefined;
                 this.fileOthers = undefined;
+
+                //Since this element would throw exception and block following statement
+                //We put it in the last
+                this.phoneNumber = null;
             }
         });
     </script>
