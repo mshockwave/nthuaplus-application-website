@@ -27334,6 +27334,12 @@ event and do your own custom submission:
             <div id="formContainer" class="layout vertical start">
                 
                 <form id="appForm" is="iron-form" method="post" action="/api/form/submit" on-iron-form-response="_onFormSuccess" on-iron-form-error="_onFormFailed">
+
+                    <h3>※未完成的表單會自動儲存在本地端</h3>
+                    <h3>※除了中文姓名以外，其他欄位請一律用<span class="highlight">英文</span>填寫</h3>
+
+                    <br>
+
                     <h3>申請主題</h3>
                     <paper-radio-group required="" selected="{{topic}}">
                         <paper-radio-button name="topic1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br>
@@ -27343,9 +27349,6 @@ event and do your own custom submission:
                         <paper-radio-button name="topic5">即時神經訊號處理演算法之硬體設計與實現</paper-radio-button><br>
                     </paper-radio-group>
                     <br>
-
-                    <br>
-                    <h3>※除了中文姓名以外，其他欄位請一律用<span class="highlight">英文</span>填寫</h3>
 
                     <paper-input label="中文姓名" class="expand" required="" auto-validate="" error-message="錯誤" value="{{chiName}}"></paper-input><br>
                     <paper-input label="英文姓名（護照）" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{engName}}"></paper-input><br>
@@ -27516,6 +27519,7 @@ event and do your own custom submission:
                 }
             },
             _onFormSuccess: function(){
+                _handleFormClear();
                 this.$.toastSuccess.open();
             },
             _onFormFailed: function(){
