@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Status | NTHU A+ Application</title>
+
+    <link rel="import" href="elements/elements.html">
+
+    <style is="custom-style">
+        table,td,tr{
+            border-collapse: collapse;
+        }
+
+        td,tr,th {
+            border: 1px solid black;
+        }
+        td {
+            padding: 5px;
+        }
+
+        th {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body unresolved class="fullbleed">
+    <template is="dom-bind" id="app">
+        <iron-ajax
+            auto
+            url="/api/misc/status/application"
+            last-response="{{statusObj}}"
+        ></iron-ajax>
+
+        <table>
+            <tr>
+                <td>總報名人數</td>
+                <td>[[statusObj.TotalApplicationNum]]</td>
+            </tr>
+        </table>
+        <br/>
+
+        <table>
+            <tr>
+                <th>個別主題</th>
+                <th>人數</th>
+            </tr>
+
+            <template is="dom-repeat" items="[[statusObj.TopicsNum]]" as="topicNum">
+                <tr>
+                    <td>[[_computeTopicTitle(index)]]</td>
+                    <td>[[topicNum]]</td>
+                </tr>
+            </template>
+        </table>
+    </template>
+
+    <script>
+        var app = document.querySelector('#app');
+        app.addEventListener('dom-change', function(){
+            //Init
+
+            app.set('topicTitles', [
+                "電腦視覺三維模型重建與辨識技術",
+                "具穩健機率運算能力之突波式神經網路系統研發",
+                "虛擬載具在高效能異質環境研究",
+                "單層二維半導體之先進光電元件製程及量測技術",
+                "即時神經訊號處理演算法之硬體設計與實現"
+            ]);
+            app._computeTopicTitle = function(index){
+                if(index < app.topicTitles.length){
+                    return app.topicTitles[index];
+                }else{
+                    return "-";
+                }
+            };
+        });
+    </script>
+</body>
+</html>
