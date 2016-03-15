@@ -27090,9 +27090,9 @@ event and do your own custom submission:
             </tr>
             <tr>
                 <td>總平均</td>
-                <td class="value">[[formData.AcademicGrade.Average]]</td>
+                <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Average)]]</td>
                 <td>年級排名</td>
-                <td class="value">[[formData.AcademicGrade.Rank]]</td>
+                <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Rank)]]</td>
             </tr>
             <tr>
                 <td colspan="4" class="value">
@@ -27194,6 +27194,14 @@ event and do your own custom submission:
                     return date.toLocaleDateString();
                 }catch(e){
                     return birthday;
+                }
+            },
+
+            _computeAcademicGrade: function(value){
+                if(value && value < 0){
+                    return "N/A";
+                }else{
+                    return value;
                 }
             },
 
