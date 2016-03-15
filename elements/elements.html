@@ -27519,8 +27519,8 @@ event and do your own custom submission:
                 }
             },
             _onFormSuccess: function(){
-                _handleFormClear();
                 this.$.toastSuccess.open();
+                _handleFormClear();
             },
             _onFormFailed: function(){
                 this.$.toastError.open();
