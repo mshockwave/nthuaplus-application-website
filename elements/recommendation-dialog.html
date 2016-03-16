@@ -55,7 +55,8 @@
                     value: [{
                         name: "",
                         email: ""
-                    }]
+                    }],
+                    observer: '_recommRowsFilter'
                 }
             },
 
@@ -65,6 +66,15 @@
 
             show: function(){
                 this.$.dialog.open();
+            },
+
+            _recommRowsFilter: function(value){
+                if(value === null || value === undefined){
+                    this.set('recommRows', [{
+                        name: "",
+                        email: ""
+                    }]);
+                }
             },
 
             _computeValue: function(){

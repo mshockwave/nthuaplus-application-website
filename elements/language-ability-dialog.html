@@ -66,22 +66,42 @@
                 Polymer.IronFormElementBehavior
             ],
 
-            ready: function(){
-                this.languageRows = [{
-                    langName: "",
-                    abilities: [
-                        {text: "聽"},
-                        {text: "說"},
-                        {text: "讀"},
-                        {text: "寫"}
-                    ]
-                }];
+            properties:{
+                languageRows:{
+                    type: Array,
+                    value: [{
+                        langName: "",
+                        abilities: [
+                            {text: "聽"},
+                            {text: "說"},
+                            {text: "讀"},
+                            {text: "寫"}
+                        ]
+                    }],
+                    observer: '_langRowsFilter'
+                }
+            },
 
+            ready: function(){
                 this._computeValue();
             },
 
             show: function(){
                 this.$.dialog.open();
+            },
+
+            _langRowsFilter: function(value){
+                if(value === null || value === undefined){
+                    this.set('languageRows', [{
+                        langName: "",
+                        abilities: [
+                            {text: "聽"},
+                            {text: "說"},
+                            {text: "讀"},
+                            {text: "寫"}
+                        ]
+                    }]);
+                }
             },
 
             _computeValue: function(){
