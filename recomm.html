@@ -92,6 +92,9 @@
                 <span><strong>姓名(中/英)：</strong>[[_transformName(recommObj.ApplyUser.Name)]]</span>
                 <span><strong>Email：</strong>[[recommObj.ApplyUser.Email]]</span>
 
+                <br/>
+                <span><strong>※注意：本網頁只能提交一次，送出後即不能修改</strong></span>
+
                 <form id="mainForm" is="iron-form"
                       method="post" action$="/api/form/recomm/[[hashId]]"
                       on-iron-form-response="_onFormSuccess"

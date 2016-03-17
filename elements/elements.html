@@ -27337,10 +27337,10 @@ event and do your own custom submission:
             
 
             <paper-fab id="butSubmit" icon="send" on-click="_handleFormSubmit"></paper-fab>
-            <paper-tooltip for="butSubmit" position="left">提交</paper-tooltip>
+            <paper-tooltip for="butSubmit" position="left">提交 Submit</paper-tooltip>
 
             <paper-fab id="butClear" icon="clear" on-click="_handleFormClear"></paper-fab>
-            <paper-tooltip for="butClear" position="left">清除所有</paper-tooltip>
+            <paper-tooltip for="butClear" position="left">清除所有 Clear</paper-tooltip>
 
             <paper-toast id="toastSuccess" text="提交成功!" auto-fit-on-attach=""></paper-toast>
 
@@ -27361,65 +27361,80 @@ event and do your own custom submission:
 
                     <h3>申請主題</h3>
                     <paper-radio-group required="" selected="{{topic}}">
-                        <paper-radio-button name="topic1">電腦視覺三維模型重建與辨識技術</paper-radio-button><br>
-                        <paper-radio-button name="topic2">具穩健機率運算能力之突波式神經網路系統研發</paper-radio-button><br>
-                        <paper-radio-button name="topic3">虛擬載具在高效能異質環境研究</paper-radio-button><br>
-                        <paper-radio-button name="topic4">單層二維半導體之先進光電元件製程及量測技術</paper-radio-button><br>
-                        <paper-radio-button name="topic5">即時神經訊號處理演算法之硬體設計與實現</paper-radio-button><br>
+                        <paper-radio-button name="topic1">
+                            電腦視覺三維模型重建與辨識技術<br>
+                            3D Object Reconstruction and Recognition
+                        </paper-radio-button><br>
+                        <paper-radio-button name="topic2">
+                            具穩健機率運算能力之突波式神經網路系統研發<br>
+                            The Development of Spiking Neural Network System with Robust Probabilistic Computation
+                        </paper-radio-button><br>
+                        <paper-radio-button name="topic3">
+                            虛擬載具在高效能異質環境研究<br>
+                            Virtualization container in heterogeneous HPC systems
+                        </paper-radio-button><br>
+                        <paper-radio-button name="topic4">
+                            單層二維半導體之先進光電元件製程及量測技術<br>
+                            Study of optoelectronic devices of monolayer two-dimensional semiconductors
+                        </paper-radio-button><br>
+                        <paper-radio-button name="topic5">
+                            即時神經訊號處理演算法之硬體設計與實現<br>
+                            Hardware design and implementation of neural signals real-time processing algorithms
+                        </paper-radio-button><br>
                     </paper-radio-group>
                     <br>
 
-                    <paper-input label="中文姓名" class="expand" required="" auto-validate="" error-message="錯誤" value="{{chiName}}"></paper-input><br>
-                    <paper-input label="英文姓名（護照）" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{engName}}"></paper-input><br>
+                    <paper-input label="中文姓名 Chinese Name" class="expand" required="" auto-validate="" error-message="錯誤" value="{{chiName}}"></paper-input><br>
+                    <paper-input label="英文姓名（護照）English Name(Passport)" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{engName}}"></paper-input><br>
                     <paper-input name="name" style="display: none;" value="[[_computeFullName(chiName, engName)]]"></paper-input>
 
-                    <paper-input label="學校" name="school" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{school}}"></paper-input><br>
-                    <paper-input label="系所" name="department" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{department}}"></paper-input><br>
+                    <paper-input label="學校 School" name="school" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{school}}"></paper-input><br>
+                    <paper-input label="系所 Department" name="department" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{department}}"></paper-input><br>
 
                     <div class="layout horizontal center ">
-                        <paper-dropdown-menu name="gradeType" label="年級種類" required="" style="margin-right: 5px;">
+                        <paper-dropdown-menu name="gradeType" label="年級種類 Grade Type" required="" style="margin-right: 5px;">
                             <paper-listbox class="dropdown-content" selected="{{schoolGradeType}}">
-                                <paper-item>學士班</paper-item>
-                                <paper-item>碩士班</paper-item>
-                                <paper-item>博士班</paper-item>
+                                <paper-item>學士班 Bachelor</paper-item>
+                                <paper-item>碩士班 Master</paper-item>
+                                <paper-item>博士班 Ph.D</paper-item>
                             </paper-listbox>
                         </paper-dropdown-menu>
-                        <paper-input label="年級" name="schoolGrade" required="" auto-validate="" error-message="錯誤" type="number" value="{{schoolGrade}}"></paper-input><br>
+                        <paper-input label="年級 Grade" name="schoolGrade" required="" auto-validate="" error-message="錯誤" type="number" value="{{schoolGrade}}"></paper-input><br>
                     </div>
 
                     <br>
                     <div class="layout horizontal center ">
-                        <span>生日</span>
+                        <span>生日 Birthday</span>
                         
                         <paper-date-input required="" name="birthday" date-format="YYYY-MM-DD" yearvalue="{{birthdayYear}}" monthvalue="{{birthdayMonth}}" dayvalue="{{birthdayDay}}"></paper-date-input>
                     </div><br>
 
-                    <paper-input label="身分證字號" name="formalId" class="expand" required="" auto-validate="" error-message="錯誤" value="{{formalId}}"></paper-input><br>
-                    <gold-phone-input label="聯絡電話" name="phoneNumber" class="expand" country-code="886" required="" auto-validate="" error-message="錯誤" value="{{phoneNumber}}"></gold-phone-input><br>
+                    <paper-input label="身分證字號 Social Security numbers" name="formalId" class="expand" required="" auto-validate="" error-message="錯誤" value="{{formalId}}"></paper-input><br>
+                    <gold-phone-input label="聯絡電話 Contact Number" name="phoneNumber" class="expand" country-code="886" required="" auto-validate="" error-message="錯誤" value="{{phoneNumber}}"></gold-phone-input><br>
                     <gold-email-input label="Email" name="email" class="expand" required="" auto-validate="" error-message="錯誤" value="{{email}}"></gold-email-input><br>
 
-                    <paper-textarea name="address" label="通訊地址" class="expand" multiple="" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{address}}"></paper-textarea><br>
+                    <paper-textarea name="address" label="通訊地址 Address" class="expand" multiple="" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{address}}"></paper-textarea><br>
 
-                    <paper-textarea name="researchArea" label="研究領域" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{researchArea}}"></paper-textarea><br>
+                    <paper-textarea name="researchArea" label="研究領域 Research Area" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{researchArea}}"></paper-textarea><br>
 
-                    <paper-input label="指導老師" name="teacher" class="expand" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{teacher}}"></paper-input><br>
+                    <paper-input label="指導老師 Teacher" name="teacher" class="expand" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{teacher}}"></paper-input><br>
 
                     <br>
                     <classes-history-dialog name="classHistory" class-rows="{{classHistory}}"></classes-history-dialog>
-                    <paper-button on-click="_showClassDialog" raised="">編輯預修課程</paper-button><br>
+                    <paper-button on-click="_showClassDialog" raised="">編輯預修課程 Class History</paper-button><br>
 
-                    <paper-textarea name="relatedSkills" label="相關專業能力" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{relatedSkills}}"></paper-textarea><br>
+                    <paper-textarea name="relatedSkills" label="相關專業能力 Related Skills" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{relatedSkills}}"></paper-textarea><br>
 
                     <br>
                     <div class="layout horizontal center around-justified expand">
-                        <span>成績排名</span>
-                        <paper-input name="average" label="總平均" style="margin: 0 20px;" required="" auto-validate="" error-message="錯誤" type="text" value="{{average}}"></paper-input>
-                        <paper-input name="ranking" label="年級排名" required="" auto-validate="" error-message="錯誤" type="text" value="{{ranking}}"></paper-input>
+                        <span>成績排名 Achievement</span>
+                        <paper-input name="average" label="總平均 Average" style="margin: 0 20px;" required="" auto-validate="" error-message="錯誤" type="text" value="{{average}}"></paper-input>
+                        <paper-input name="ranking" label="年級排名 Rank" required="" auto-validate="" error-message="錯誤" type="text" value="{{ranking}}"></paper-input>
                     </div><br>
 
                     <br>
                     <language-ability-dialog name="langAbilities" language-rows="{{langAbilities}}"></language-ability-dialog>
-                    <paper-button on-click="_showLanguageDialog" raised="">編輯語言能力</paper-button><br>
+                    <paper-button on-click="_showLanguageDialog" raised="">編輯語言能力 Language Abilities</paper-button><br>
 
                     <paper-input name="researchPlan" class="hidden" required="" value="{{filePlan}}"></paper-input>
 
@@ -27430,7 +27445,7 @@ event and do your own custom submission:
                     
 
                     <recommendation-dialog name="recommendationLetters" recomm-rows="{{recommLetters}}"></recommendation-dialog>
-                    <paper-button on-click="_showRecommDialog" raised="">推薦者（至少兩位）</paper-button>
+                    <paper-button on-click="_showRecommDialog" raised="">推薦者（至少兩位）At least two recommenders</paper-button>
                 </form>
 
                 
@@ -27468,11 +27483,11 @@ event and do your own custom submission:
 
                 
 
-                <file-upload target="/api/form/upload" raised="" data-name="researchPlan" on-success="_handleFileUpload" on-error="_handleFileUploadError" on-before-upload="_handleFileBeforeUpload">研究規劃書上傳</file-upload>
+                <file-upload target="/api/form/upload" raised="" data-name="researchPlan" on-success="_handleFileUpload" on-error="_handleFileUploadError" on-before-upload="_handleFileBeforeUpload">研究規劃書上傳 Upload Research Plan</file-upload>
 
-                <file-upload target="/api/form/upload" raised="" data-name="transcript" on-success="_handleFileUpload" on-error="_handleFileUploadError" on-before-upload="_handleFileBeforeUpload">成績單上傳</file-upload>
+                <file-upload target="/api/form/upload" raised="" data-name="transcript" on-success="_handleFileUpload" on-error="_handleFileUploadError" on-before-upload="_handleFileBeforeUpload">成績單上傳 Upload Transcript</file-upload>
 
-                <file-upload target="/api/form/upload" raised="" data-name="others" on-success="_handleFileUpload" on-error="_handleFileUploadError" on-before-upload="_handleFileBeforeUpload">其他補充資料上傳</file-upload>
+                <file-upload target="/api/form/upload" raised="" data-name="others" on-success="_handleFileUpload" on-error="_handleFileUploadError" on-before-upload="_handleFileBeforeUpload">其他補充資料上傳 Upload Others</file-upload>
             </div>
         </div>
     </template>
