@@ -8,6 +8,10 @@
     <link rel="import" href="elements/elements.html">
 
     <style is="custom-style">
+        body{
+            padding: 50px;
+        }
+
         table,td,tr{
             border-collapse: collapse;
         }
@@ -53,6 +57,18 @@
                     <td>[[topicNum]]</td>
                 </tr>
             </template>
+        </table><br/>
+
+        <table>
+            <tr>
+                <td>總帳戶數目</td>
+                <td>[[statusObj.AccountNum]]</td>
+            </tr>
+
+            <tr>
+                <td>已有帳戶但尚未有任何申請數目</td>
+                <td>[[statusObj.AccountNotApplyNum]]</td>
+            </tr>
         </table>
     </template>
 
