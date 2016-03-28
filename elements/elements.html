@@ -26894,25 +26894,36 @@ event and do your own custom submission:
             paper-button {
                 background: var(--button-gray-background);
             }
+
+            paper-dialog {
+                max-height: 45%;
+            }
+            paper-dialog paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 250px;
+                };
+            }
         </style>
 
         <paper-dialog id="dialog">
             <div class="layout vertical center">
-                <table>
-                    
+                <paper-dialog-scrollable>
+                    <table>
+                        
 
-                    <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
-                        <tr>
-                            <td><paper-input label="課程名稱" value="{{classRow.name}}" on-change="_computeValue"></paper-input></td>
+                        <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
+                            <tr>
+                                <td><paper-input label="課程名稱" value="{{classRow.name}}" on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}" on-change="_computeValue"></paper-input></td>
+                                <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}" on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-input label="成績" value="{{classRow.grade}}" on-change="_computeValue"></paper-input></td>
+                                <td><paper-input label="成績" value="{{classRow.grade}}" on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-icon-button icon="clear" data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
-                        </tr>
-                    </template>
-                </table>
+                                <td><paper-icon-button icon="clear" data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            </tr>
+                        </template>
+                    </table>
+                </paper-dialog-scrollable>
                 <div class="layout horizontal center around-justified">
                     <paper-button raised="" on-click="_addClass">增加課程</paper-button>
                     <paper-button raised="" on-click="_clearAll">清除所有</paper-button>
@@ -27354,7 +27365,7 @@ event and do your own custom submission:
                 
                 <form id="appForm" is="iron-form" method="post" action="/api/form/submit" on-iron-form-response="_onFormSuccess" on-iron-form-error="_onFormFailed">
 
-                    <h3>※未完成的表單會自動儲存在本地端</h3>
+                    <h3>※未完成的表單會自動儲存在本地端，請勿使用無痕模式</h3>
                     <h3>※除了中文姓名以外，其他欄位請一律用<span class="highlight">英文</span>填寫</h3>
 
                     <br>
@@ -27381,11 +27392,11 @@ event and do your own custom submission:
                     <br>
 
                     <paper-input label="中文姓名 Chinese Name" class="expand" required="" auto-validate="" error-message="錯誤" value="{{chiName}}"></paper-input><br>
-                    <paper-input label="英文姓名（護照）English Name(Passport)" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{engName}}"></paper-input><br>
+                    <paper-input label="英文姓名（護照）English Name(Passport)" class="expand" required="" auto-validate="" error-message="錯誤" value="{{engName}}"></paper-input><br>
                     <paper-input name="name" style="display: none;" value="[[_computeFullName(chiName, engName)]]"></paper-input>
 
-                    <paper-input label="學校 School" name="school" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{school}}"></paper-input><br>
-                    <paper-input label="系所 Department" name="department" class="expand" required="" auto-validate="" error-message="錯誤" pattern="[a-zA-Z ]*" value="{{department}}"></paper-input><br>
+                    <paper-input label="學校 School" name="school" class="expand" required="" auto-validate="" error-message="錯誤" value="{{school}}"></paper-input><br>
+                    <paper-input label="系所 Department" name="department" class="expand" required="" auto-validate="" error-message="錯誤" value="{{department}}"></paper-input><br>
 
                     <div class="layout horizontal center ">
                         <paper-dropdown-menu name="gradeType" label="年級種類 Grade Type" required="" style="margin-right: 5px;">
@@ -27409,17 +27420,17 @@ event and do your own custom submission:
                     <gold-phone-input label="聯絡電話 Contact Number" name="phoneNumber" class="expand" country-code="886" required="" auto-validate="" error-message="錯誤" value="{{phoneNumber}}"></gold-phone-input><br>
                     <gold-email-input label="Email" name="email" class="expand" required="" auto-validate="" error-message="錯誤" value="{{email}}"></gold-email-input><br>
 
-                    <paper-textarea name="address" label="通訊地址 Address" class="expand" multiple="" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{address}}"></paper-textarea><br>
+                    <paper-textarea name="address" label="通訊地址 Address" class="expand" multiple="" required="" auto-validate="" error-message="必填" value="{{address}}"></paper-textarea><br>
 
-                    <paper-textarea name="researchArea" label="研究領域 Research Area" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{researchArea}}"></paper-textarea><br>
+                    <paper-textarea name="researchArea" label="研究領域 Research Area" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" value="{{researchArea}}"></paper-textarea><br>
 
-                    <paper-input label="指導老師 Teacher" name="teacher" class="expand" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{teacher}}"></paper-input><br>
+                    <paper-input label="指導老師 Teacher" name="teacher" class="expand" required="" auto-validate="" error-message="必填" value="{{teacher}}"></paper-input><br>
 
                     <br>
                     <classes-history-dialog name="classHistory" class-rows="{{classHistory}}"></classes-history-dialog>
                     <paper-button on-click="_showClassDialog" raised="">編輯預修課程 Class History</paper-button><br>
 
-                    <paper-textarea name="relatedSkills" label="相關專業能力 Related Skills" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" pattern="[a-zA-Z ]*" value="{{relatedSkills}}"></paper-textarea><br>
+                    <paper-textarea name="relatedSkills" label="相關專業能力 Related Skills" class="expand" multiple="" rows="3" required="" auto-validate="" error-message="必填" value="{{relatedSkills}}"></paper-textarea><br>
 
                     <br>
                     <div class="layout horizontal center around-justified expand">
@@ -27687,33 +27698,44 @@ event and do your own custom submission:
             paper-button {
                 background: var(--button-gray-background);
             }
+
+            paper-dialog {
+                max-height: 45%;
+            }
+            paper-dialog paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 250px;
+                };
+            }
         </style>
 
         <paper-dialog id="dialog">
             <div class="layout vertical center">
-                <table>
-                    
+                <paper-dialog-scrollable>
+                    <table>
+                        
 
-                    <template is="dom-repeat" items="{{languageRows}}" as="langRow" index-as="rowIndex">
-                        <tr>
+                        <template is="dom-repeat" items="{{languageRows}}" as="langRow" index-as="rowIndex">
+                            <tr>
 
-                            <td><paper-input label="語言" value="{{langRow.langName}}" on-change="_computeValue"></paper-input></td>
+                                <td><paper-input label="語言" value="{{langRow.langName}}" on-change="_computeValue"></paper-input></td>
 
-                            <template is="dom-repeat" items="{{langRow.abilities}}" as="ability" index-as="abIndex">
-                                <td>
-                                    <paper-dropdown-menu label="{{ability.text}}">
-                                        <paper-listbox class="dropdown-content" selected="{{ability.value}}" on-iron-select="_computeValue">
-                                            <paper-item>精通</paper-item>
-                                            <paper-item>中等</paper-item>
-                                            <paper-item>略懂</paper-item>
-                                        </paper-listbox>
-                                    </paper-dropdown-menu>
-                                </td>
-                            </template>
-                            <td><paper-icon-button icon="clear" data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
-                        </tr>
-                    </template>
-                </table>
+                                <template is="dom-repeat" items="{{langRow.abilities}}" as="ability" index-as="abIndex">
+                                    <td>
+                                        <paper-dropdown-menu label="{{ability.text}}">
+                                            <paper-listbox class="dropdown-content" selected="{{ability.value}}" on-iron-select="_computeValue">
+                                                <paper-item>精通</paper-item>
+                                                <paper-item>中等</paper-item>
+                                                <paper-item>略懂</paper-item>
+                                            </paper-listbox>
+                                        </paper-dropdown-menu>
+                                    </td>
+                                </template>
+                                <td><paper-icon-button icon="clear" data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            </tr>
+                        </template>
+                    </table>
+                </paper-dialog-scrollable>
                 <div class="layout horizontal center around-justified">
                     <paper-button raised="" on-click="_addLanguage">增加語言</paper-button>
                     <paper-button raised="" on-click="_clearAll">清除所有</paper-button>
@@ -27921,6 +27943,15 @@ event and do your own custom submission:
             paper-button {
                 background: var(--button-gray-background);
             }
+
+            paper-dialog {
+                max-height: 45%;
+            }
+            paper-dialog paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 200px;
+                };
+            }
         </style>
 
         <paper-dialog id="dialog">
@@ -27928,17 +27959,19 @@ event and do your own custom submission:
                 <p><strong>※系統將寄信至下列填寫之推薦者，請推薦者為您撰寫推薦信。
                     因此請您務必通知推薦者</strong></p>
 
-                <table>
-                    <template is="dom-repeat" items="{{recommRows}}" as="recommRow" index-as="rowIndex">
-                        <tr>
-                            <td><paper-input label="推薦者姓名" value="{{recommRow.name}}" on-change="_computeValue"></paper-input></td>
+                <paper-dialog-scrollable>
+                    <table>
+                        <template is="dom-repeat" items="{{recommRows}}" as="recommRow" index-as="rowIndex">
+                            <tr>
+                                <td><paper-input label="推薦者姓名" value="{{recommRow.name}}" on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-input label="推薦者Email" value="{{recommRow.email}}" on-change="_computeValue"></paper-input></td>
+                                <td><paper-input label="推薦者Email" value="{{recommRow.email}}" on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-icon-button icon="clear" data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
-                        </tr>
-                    </template>
-                </table>
+                                <td><paper-icon-button icon="clear" data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            </tr>
+                        </template>
+                    </table>
+                </paper-dialog-scrollable>
                 <div class="layout horizontal center around-justified">
                     <paper-button raised="" on-click="_addClass">增加推薦者</paper-button>
                     <paper-button raised="" on-click="_clearAll">清除所有</paper-button>
