@@ -12,37 +12,48 @@
             paper-button {
                 background: var(--button-gray-background);
             }
+
+            paper-dialog {
+                max-height: 45%;
+            }
+            paper-dialog paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 250px;
+                };
+            }
         </style>
 
         <paper-dialog id="dialog">
             <div class="layout vertical center">
-                <table>
-                    <!--
-                    <tr>
-                        <th>語言</th>
-                        <th>聽</th>
-                        <th>說</th>
-                        <th>讀</th>
-                        <th>寫</th>
-                    </tr>
-                    -->
-
-                    <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
+                <paper-dialog-scrollable>
+                    <table>
+                        <!--
                         <tr>
-                            <td><paper-input label="課程名稱" value="{{classRow.name}}"
-                                                on-change="_computeValue"></paper-input></td>
-
-                            <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}"
-                                                on-change="_computeValue"></paper-input></td>
-
-                            <td><paper-input label="成績" value="{{classRow.grade}}"
-                                                on-change="_computeValue"></paper-input></td>
-
-                            <td><paper-icon-button icon="clear"
-                                                   data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            <th>語言</th>
+                            <th>聽</th>
+                            <th>說</th>
+                            <th>讀</th>
+                            <th>寫</th>
                         </tr>
-                    </template>
-                </table>
+                        -->
+
+                        <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
+                            <tr>
+                                <td><paper-input label="課程名稱" value="{{classRow.name}}"
+                                                 on-change="_computeValue"></paper-input></td>
+
+                                <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}"
+                                                 on-change="_computeValue"></paper-input></td>
+
+                                <td><paper-input label="成績" value="{{classRow.grade}}"
+                                                 on-change="_computeValue"></paper-input></td>
+
+                                <td><paper-icon-button icon="clear"
+                                                       data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            </tr>
+                        </template>
+                    </table>
+                </paper-dialog-scrollable>
                 <div class="layout horizontal center around-justified">
                     <paper-button raised on-click="_addClass">增加課程</paper-button>
                     <paper-button raised on-click="_clearAll">清除所有</paper-button>

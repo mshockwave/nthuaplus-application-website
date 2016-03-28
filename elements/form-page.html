@@ -107,7 +107,7 @@
                       on-iron-form-response="_onFormSuccess"
                       on-iron-form-error="_onFormFailed">
 
-                    <h3>※未完成的表單會自動儲存在本地端</h3>
+                    <h3>※未完成的表單會自動儲存在本地端，請勿使用無痕模式</h3>
                     <h3>※除了中文姓名以外，其他欄位請一律用<span class="highlight">英文</span>填寫</h3>
 
                     <br/>
@@ -130,10 +130,6 @@
                             單層二維半導體之先進光電元件製程及量測技術<br/>
                             Study of optoelectronic devices of monolayer two-dimensional semiconductors
                         </paper-radio-button><br/>
-                        <paper-radio-button name="topic5">
-                            即時神經訊號處理演算法之硬體設計與實現<br/>
-                            Hardware design and implementation of neural signals real-time processing algorithms
-                        </paper-radio-button><br/>
                     </paper-radio-group>
                     <br/>
 
@@ -142,18 +138,15 @@
                                  value="{{chiName}}"></paper-input><br />
                     <paper-input label="英文姓名（護照）English Name(Passport)" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z ]*"
                                  value="{{engName}}"></paper-input><br />
                     <paper-input name="name" style="display: none;"
                                  value="[[_computeFullName(chiName, engName)]]"></paper-input>
 
                     <paper-input label="學校 School" name="school" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z ]*"
                                  value="{{school}}"></paper-input><br />
                     <paper-input label="系所 Department" name="department" class="expand"
                                  required auto-validate error-message="錯誤"
-                                 pattern="[a-zA-Z ]*"
                                  value="{{department}}"></paper-input><br />
 
                     <div class="layout horizontal center ">
@@ -193,17 +186,14 @@
 
                     <paper-textarea name="address" label="通訊地址 Address" class="expand" multiple
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z ]*"
                                     value="{{address}}"></paper-textarea><br/>
 
                     <paper-textarea name="researchArea" label="研究領域 Research Area" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z ]*"
                                     value="{{researchArea}}"></paper-textarea><br/>
 
                     <paper-input label="指導老師 Teacher" name="teacher" class="expand"
                                  required auto-validate error-message="必填"
-                                 pattern="[a-zA-Z ]*"
                                  value="{{teacher}}"></paper-input><br />
 
                     <br/>
@@ -213,7 +203,6 @@
 
                     <paper-textarea name="relatedSkills" label="相關專業能力 Related Skills" class="expand" multiple rows="3"
                                     required auto-validate error-message="必填"
-                                    pattern="[a-zA-Z ]*"
                                     value="{{relatedSkills}}"></paper-textarea><br/>
 
                     <br/>

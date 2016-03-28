@@ -12,6 +12,15 @@
             paper-button {
                 background: var(--button-gray-background);
             }
+
+            paper-dialog {
+                max-height: 45%;
+            }
+            paper-dialog paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 200px;
+                };
+            }
         </style>
 
         <paper-dialog id="dialog">
@@ -19,20 +28,22 @@
                 <p><strong>※系統將寄信至下列填寫之推薦者，請推薦者為您撰寫推薦信。
                     因此請您務必通知推薦者</strong></p>
 
-                <table>
-                    <template is="dom-repeat" items="{{recommRows}}" as="recommRow" index-as="rowIndex">
-                        <tr>
-                            <td><paper-input label="推薦者姓名" value="{{recommRow.name}}"
-                                                on-change="_computeValue"></paper-input></td>
+                <paper-dialog-scrollable>
+                    <table>
+                        <template is="dom-repeat" items="{{recommRows}}" as="recommRow" index-as="rowIndex">
+                            <tr>
+                                <td><paper-input label="推薦者姓名" value="{{recommRow.name}}"
+                                                 on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-input label="推薦者Email" value="{{recommRow.email}}"
-                                                on-change="_computeValue"></paper-input></td>
+                                <td><paper-input label="推薦者Email" value="{{recommRow.email}}"
+                                                 on-change="_computeValue"></paper-input></td>
 
-                            <td><paper-icon-button icon="clear"
-                                                   data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
-                        </tr>
-                    </template>
-                </table>
+                                <td><paper-icon-button icon="clear"
+                                                       data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            </tr>
+                        </template>
+                    </table>
+                </paper-dialog-scrollable>
                 <div class="layout horizontal center around-justified">
                     <paper-button raised on-click="_addClass">增加推薦者</paper-button>
                     <paper-button raised on-click="_clearAll">清除所有</paper-button>

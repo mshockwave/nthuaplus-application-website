@@ -12,44 +12,55 @@
             paper-button {
                 background: var(--button-gray-background);
             }
+
+            paper-dialog {
+                max-height: 45%;
+            }
+            paper-dialog paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 250px;
+                };
+            }
         </style>
 
         <paper-dialog id="dialog">
             <div class="layout vertical center">
-                <table>
-                    <!--
-                    <tr>
-                        <th>語言</th>
-                        <th>聽</th>
-                        <th>說</th>
-                        <th>讀</th>
-                        <th>寫</th>
-                    </tr>
-                    -->
-
-                    <template is="dom-repeat" items="{{languageRows}}" as="langRow" index-as="rowIndex">
+                <paper-dialog-scrollable>
+                    <table>
+                        <!--
                         <tr>
-
-                            <td><paper-input label="語言" value="{{langRow.langName}}"
-                                                on-change="_computeValue"></paper-input></td>
-
-                            <template is="dom-repeat" items="{{langRow.abilities}}" as="ability" index-as="abIndex">
-                                <td>
-                                    <paper-dropdown-menu label="{{ability.text}}">
-                                        <paper-listbox class="dropdown-content"
-                                                       selected="{{ability.value}}" on-iron-select="_computeValue">
-                                            <paper-item>精通</paper-item>
-                                            <paper-item>中等</paper-item>
-                                            <paper-item>略懂</paper-item>
-                                        </paper-listbox>
-                                    </paper-dropdown-menu>
-                                </td>
-                            </template>
-                            <td><paper-icon-button icon="clear"
-                                                   data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            <th>語言</th>
+                            <th>聽</th>
+                            <th>說</th>
+                            <th>讀</th>
+                            <th>寫</th>
                         </tr>
-                    </template>
-                </table>
+                        -->
+
+                        <template is="dom-repeat" items="{{languageRows}}" as="langRow" index-as="rowIndex">
+                            <tr>
+
+                                <td><paper-input label="語言" value="{{langRow.langName}}"
+                                                 on-change="_computeValue"></paper-input></td>
+
+                                <template is="dom-repeat" items="{{langRow.abilities}}" as="ability" index-as="abIndex">
+                                    <td>
+                                        <paper-dropdown-menu label="{{ability.text}}">
+                                            <paper-listbox class="dropdown-content"
+                                                           selected="{{ability.value}}" on-iron-select="_computeValue">
+                                                <paper-item>精通</paper-item>
+                                                <paper-item>中等</paper-item>
+                                                <paper-item>略懂</paper-item>
+                                            </paper-listbox>
+                                        </paper-dropdown-menu>
+                                    </td>
+                                </template>
+                                <td><paper-icon-button icon="clear"
+                                                       data-row-index="[[rowIndex]]" on-click="_handleClearRow"></paper-icon-button></td>
+                            </tr>
+                        </template>
+                    </table>
+                </paper-dialog-scrollable>
                 <div class="layout horizontal center around-justified">
                     <paper-button raised on-click="_addLanguage">增加語言</paper-button>
                     <paper-button raised on-click="_clearAll">清除所有</paper-button>
