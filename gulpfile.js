@@ -58,11 +58,19 @@ gulp.task('copy', function() {
 
     return merge(app, bower);
 });
+gulp.task('copyReview', function(){
+    return gulp.src([
+        './review/**/*'
+    ], {
+        dot: true
+    }).pipe(gulp.dest(dist('review')));
+});
 
 gulp.task('build', function(callback){
     runSequence(
         'vulcanize',
         'copy',
+        'copyReview',
         'copyImg',
         callback
     );

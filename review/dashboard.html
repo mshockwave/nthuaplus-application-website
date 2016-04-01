@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>NTHU A+ Application</title>
+
+    <link rel="import" href="../elements/elements.html">
+
+    <style is="custom-style">
+        paper-toolbar {
+            --paper-toolbar-background: #F44336;
+            --paper-toolbar-title: {
+                @apply(--my-title-text);
+            };
+        }
+
+        paper-drawer-panel {
+            --paper-drawer-panel-drawer-container: {
+                @apply(--shadow-elevation-8dp);
+                @apply(--layout-vertical);
+                @apply(--layout-start-justified);
+
+                background: #e0e0e0;
+                padding: 10px 20px;
+            };
+        }
+        #drawerTitle {
+            @apply(--my-title-text);
+        }
+
+        paper-listbox {
+            background: transparent;
+        }
+
+    </style>
+</head>
+<body unresolved class="fullbleed">
+    <template is="dom-bind" id="app">
+        <iron-ajax
+                id="accountAjax"
+                auto
+                handle-as="json"
+                url="/api/review/profile"
+        ></iron-ajax>
+
+        <paper-drawer-panel>
+            <paper-header-panel main>
+                <paper-toolbar>
+                    <div class="title">{{selectedItem.textContent}}</div>
+                </paper-toolbar>
+
+                <iron-pages class="content fit" selected="{{pageIndex}}">
+                    <review-list-page></review-list-page>
+                    <account-info
+                        profile-url="/api/review/profile"
+                        login-page-url="/review/entry.html"
+                        logout-url="/api/review/logout"
+                    ></account-info>
+                </iron-pages>
+            </paper-header-panel>
+            <div drawer>
+                <div class="layout horizontal center">
+                    <img src="../img/nthu-a-plus-logo.svg" style="width: 55px;height: 55px; margin-right: 10px">
+                    <span id="drawerTitle">NTHU A+</span>
+                </div>
+
+                <paper-listbox selected="{{pageIndex}}" selected-item="{{selectedItem}}" id="drawerList">
+                    <paper-icon-item>
+                        <iron-icon icon="description"></iron-icon>
+                        申請資料
+                    </paper-icon-item>
+                    <paper-icon-item>
+                        <iron-icon icon="account-circle"></iron-icon>
+                        帳戶資訊
+                    </paper-icon-item>
+                </paper-listbox>
+            </div>
+        </paper-drawer-panel>
+    </template>
+
+    <script>
+        var app = document.querySelector('#app');
+        app.addEventListener('dom-change', function(){
+            //On init
+            app.pageIndex = 0;
+
+            app.$.accountAjax.addEventListener('error', function(){
+                window.location.href = '/review/entry.html';
+            });
+        });
+    </script>
+</body>
+</html>
