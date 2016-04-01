@@ -166,7 +166,14 @@
                                     <tr>
                                         <td>[[recommItem.Recommender.Name]]</td>
                                         <td>[[recommItem.Recommender.Email]]</td>
-                                        <td>[[_computeBoolToStr(recommItem.Done)]]</td>
+                                        <td>
+                                            [[_computeBoolToStr(recommItem.Done)]]
+                                            <template is="dom-if" if="[[recommItem.Done]]">
+                                                <review-recomm-view
+                                                    recomm-item="[[recommItem]]"
+                                                ></review-recomm-view>
+                                            </template>
+                                        </td>
                                     </tr>
                                 </template>
                             </table><br/>

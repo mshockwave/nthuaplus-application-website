@@ -1,0 +1,67 @@
+
+<dom-module id="review-recomm-view">
+    <template>
+        <style>
+            paper-dialog {
+                min-width: 50%;
+                max-height: 550px;
+            }
+            paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 500px;
+                };
+            }
+
+            article {
+                text-align: start;
+                font-size: 20px;
+            }
+        </style>
+
+        <iron-ajax
+                auto
+                url="/api/review/recomm/[[recommItem.Hash]]"
+                last-response="{{recommObj}}"
+        ></iron-ajax>
+        <template is="dom-if" if="[[_isNotNil(recommObj)]]">
+            <paper-icon-button icon="visibility" on-click="_openDialog"></paper-icon-button>
+        </template>
+        <paper-dialog id="dialogInfo">
+            <paper-dialog-scrollable>
+                <article class="layout vertical start">
+                    <marked-element markdown="[[recommObj.Content]]"></marked-element>
+                    <template is="dom-if" if="[[_isNotZeroLength(recommObj.AttachmentUrl)]]">
+                        <paper-button raised onclick="window.open([[recommObj.AttachmentUrl]]);">
+                            <iron-icon icon="attachment"></iron-icon>&nbsp檢視附件
+                        </paper-button>
+                    </template>
+                    <br/>
+                </article>
+            </paper-dialog-scrollable>
+        </paper-dialog>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-recomm-view',
+
+            properties: {
+                recommItem: {
+                    type: Object,
+                    notify: true
+                }
+            },
+
+            _isNotNil: function(v){
+                return !(v === undefined || v === null);
+            },
+            _isNotZeroLength: function(v){
+                return v.length != 0;
+            },
+
+            _openDialog: function(){
+                this.$.dialogInfo.open();
+            }
+        });
+    </script>
+</dom-module>
