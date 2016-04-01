@@ -41,7 +41,7 @@
                 id="accountAjax"
                 auto
                 handle-as="json"
-                url="/api/user/profile"
+                url="/api/review/profile"
         ></iron-ajax>
 
         <paper-drawer-panel>
@@ -51,7 +51,7 @@
                 </paper-toolbar>
 
                 <iron-pages class="content fit" selected="{{pageIndex}}">
-
+                    <review-list></review-list>
                 </iron-pages>
             </paper-header-panel>
             <div drawer>

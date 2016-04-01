@@ -1,0 +1,50 @@
+
+<dom-module id="review-score-dropdown">
+    <template>
+        <style>
+            paper-dropdown-menu{
+                --paper-input-container-label: {
+                    color: white;
+                    background-color: #E91E63;
+                    font-style: bold;
+                    text-align: center;
+                };
+
+                --paper-input-container-input: {
+                    text-align: center;
+                };
+
+                --paper-input-container-underline: {
+                    display: none;
+                };
+            }
+        </style>
+
+        <paper-dropdown-menu label="請評分" no-label-float>
+            <paper-listbox class="dropdown-content" selected="{{score}}">
+                <template is="dom-repeat" items="[[dropdownItems]]">
+                    <paper-item>[[item]]</paper-item>
+                </template>
+            </paper-listbox>
+        </paper-dropdown-menu>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-score-dropdown',
+
+            properties: {
+                dropdownItems: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+
+                score:{
+                    type: Number,
+                    notify: true
+                }
+            }
+        });
+    </script>
+</dom-module>

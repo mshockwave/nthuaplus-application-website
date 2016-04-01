@@ -46,7 +46,8 @@
                     <paper-tab>註冊</paper-tab>
                 </paper-tabs>
                 <iron-pages selected="{{selectIndex}}">
-                    <login-page redirect-url="/index.html" login-node="/api/review/login"></login-page>
+                    <login-page redirect-url="/review/dashboard.html"
+                                login-node="/api/review/login"></login-page>
                     <reviewer-register-page></reviewer-register-page>
                 </iron-pages>
             </div>
@@ -66,7 +67,7 @@
                 if(app.params && app.params['rdr']){
                     window.location.href = app.params['rdr'];
                 }else{
-                    window.location.href = '/dashboard.html';
+                    window.location.href = '/review/dashboard.html';
                 }
             });
         });

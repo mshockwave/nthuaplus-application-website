@@ -48,7 +48,7 @@
             properties:{
                 redirectUrl: {
                     type: String,
-                    value: "/"
+                    value: "/dashboard.html"
                 },
 
                 loginNode: {
@@ -92,9 +92,8 @@
             },
 
             _handleFormSubmit: function(e){
-                //TODO
                 console.log('Login Success!');
-                window.location.href = '/dashboard.html';
+                window.location.href = this.redirectUrl;
             },
             _handleFormSubmitError: function(e){
                 console.log('Login Error');
