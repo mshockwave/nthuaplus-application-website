@@ -230,6 +230,15 @@
                             </td>
                         </tr>
                     </template>
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            總評<br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreOverall}}"
+                            ></review-score-dropdown><br/>
+                        </td>
+                    </tr>
                 </table>
             </div>
             <div class="card-actions">
@@ -346,7 +355,8 @@
                     language: this._numValAdapter(this.scoreLanguage),
                     researchPlan: this._numValAdapter(this.scoreResearchPlan),
                     recomm: this._numValAdapter(this.scoreRecomm),
-                    other: this._numValAdapter(this.scoreOther)
+                    other: this._numValAdapter(this.scoreOther),
+                    overall: this._numValAdapter(this.scoreOverall)
                 };
 
                 var app = this;
