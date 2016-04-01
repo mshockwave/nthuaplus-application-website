@@ -16,7 +16,7 @@
                 id="accountAjax"
                 auto
                 handle-as="json"
-                url="/api/user/profile"
+                url="[[profileUrl]]"
                 last-response="{{accountInfo}}"
         ></iron-ajax>
         <iron-ajax
@@ -54,6 +54,23 @@
             },
 
             properties: {
+                profileUrl: {
+                    type: String,
+                    value: "/api/user/profile",
+                    notify: true
+                },
+                loginPageUrl: {
+                    type: String,
+                    value: "/login.html",
+                    notify: true
+                },
+
+                logoutUrl: {
+                    type: String,
+                    value: "/api/user/logout",
+                    notify: true
+                },
+
                 accountInfo: {
                     type: Object,
                     notify: true,
@@ -66,10 +83,10 @@
             },
 
             _handleLogout: function(){
-                this.$.logoutAjax.url="/api/user/logout";
+                this.$.logoutAjax.url=this.logoutUrl;
             },
             _onLogout: function(){
-                window.location.href = "/login.html";
+                window.location.href = this.loginPageUrl;
             }
         });
     </script>

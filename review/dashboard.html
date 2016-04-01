@@ -52,6 +52,11 @@
 
                 <iron-pages class="content fit" selected="{{pageIndex}}">
                     <review-list-page></review-list-page>
+                    <account-info
+                        profile-url="/api/review/profile"
+                        login-page-url="/review/entry.html"
+                        logout-url="/api/review/logout"
+                    ></account-info>
                 </iron-pages>
             </paper-header-panel>
             <div drawer>
