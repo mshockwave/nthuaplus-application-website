@@ -5,17 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Login</title>
 
-    <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
-
-    <link rel="import" href="../elements/base-elements.html">
-    <link rel="import" href="../bower_components/paper-card/paper-card.html">
-    <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-    <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
-    <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-    <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-
-    <link rel="import" href="../elements/login-page.html">
-    <link rel="import" href="../elements/reviewer-register-page.html">
+    <link rel="import" href="../elements/elements.html">
 
     <style is="custom-style">
         html, body {
@@ -57,7 +47,7 @@
                 </paper-tabs>
                 <iron-pages selected="{{selectIndex}}">
                     <login-page redirect-url="/index.html" login-node="/api/review/login"></login-page>
-                    <register-page></register-page>
+                    <reviewer-register-page></reviewer-register-page>
                 </iron-pages>
             </div>
         </paper-card>
