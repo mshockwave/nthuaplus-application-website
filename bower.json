@@ -20,6 +20,7 @@
     "jquery.scrollTo": "latest",
     "dentistjs": "latest",
     "file-upload": "latest",
+    "fetch": "latest",
 
     "iron-flex-layout": "PolymerElements/iron-flex-layout",
     "iron-ajax": "PolymerElements/iron-ajax",

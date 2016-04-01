@@ -26755,7 +26755,7 @@ event and do your own custom submission:
             }
         </style>
 
-        <iron-ajax id="accountAjax" auto="" handle-as="json" url="/api/user/profile" last-response="{{accountInfo}}"></iron-ajax>
+        <iron-ajax id="accountAjax" auto="" handle-as="json" url="[[profileUrl]]" last-response="{{accountInfo}}"></iron-ajax>
         <iron-ajax id="logoutAjax" auto="" handle-as="json" on-response="_onLogout"></iron-ajax>
         <div class="layout horizontal center center-justified" style="height: 100%;">
             <paper-card heading="[[accountInfo.Username]]">
@@ -26786,6 +26786,23 @@ event and do your own custom submission:
             },
 
             properties: {
+                profileUrl: {
+                    type: String,
+                    value: "/api/user/profile",
+                    notify: true
+                },
+                loginPageUrl: {
+                    type: String,
+                    value: "/login.html",
+                    notify: true
+                },
+
+                logoutUrl: {
+                    type: String,
+                    value: "/api/user/logout",
+                    notify: true
+                },
+
                 accountInfo: {
                     type: Object,
                     notify: true,
@@ -26798,10 +26815,10 @@ event and do your own custom submission:
             },
 
             _handleLogout: function(){
-                this.$.logoutAjax.url="/api/user/logout";
+                this.$.logoutAjax.url=this.logoutUrl;
             },
             _onLogout: function(){
-                window.location.href = "/login.html";
+                window.location.href = this.loginPageUrl;
             }
         });
     </script>
@@ -27853,7 +27870,7 @@ event and do your own custom submission:
         </style>
 
         <div class="layout center vertical">
-            <form is="iron-form" id="loginForm" method="post" action="/api/user/login" on-iron-form-error="_handleFormSubmitError" on-iron-form-response="_handleFormSubmit">
+            <form is="iron-form" id="loginForm" method="post" action$="[[loginNode]]" on-iron-form-error="_handleFormSubmitError" on-iron-form-response="_handleFormSubmit">
 
                 <gold-email-input id="loginEmail" name="email" label="Email" required="" auto-validate="" error-message="格式錯誤，必填"></gold-email-input>
 
@@ -27881,7 +27898,13 @@ event and do your own custom submission:
             properties:{
                 redirectUrl: {
                     type: String,
-                    value: "/"
+                    value: "/dashboard.html"
+                },
+
+                loginNode: {
+                    type: String,
+                    value: "/api/user/login",
+                    notify: true
                 },
 
                 invalid: {
@@ -27919,9 +27942,8 @@ event and do your own custom submission:
             },
 
             _handleFormSubmit: function(e){
-                //TODO
                 console.log('Login Success!');
-                window.location.href = '/dashboard.html';
+                window.location.href = this.redirectUrl;
             },
             _handleFormSubmitError: function(e){
                 console.log('Login Error');
@@ -28163,6 +28185,1059 @@ event and do your own custom submission:
                     this.set('registerError', true);
                     this.set('invalid', false);
                 }
+            }
+        });
+    </script>
+</dom-module><dom-module id="reviewer-register-page" assetpath="/">
+    <template>
+        <style>
+            paper-button {
+                margin-top: 20px;
+                background: var(--button-gray-background);
+            }
+
+            .error {
+                color: red;
+                font-size: 14px;
+            }
+
+            paper-dialog {
+                min-width: 50%;
+                padding: 14px;
+            }
+            paper-dialog p {
+                font-size: 20px;
+                line-height: 150%;
+            }
+            paper-dialog h2 {
+                font-size: 25px;
+                font-weight: bold;
+            }
+            #successDialog paper-button {
+                background: var(--primary-color);
+                color: white;
+                font-size: 20px;
+            }
+        </style>
+
+        <div class="layout center vertical">
+
+            <form id="submitForm" is="iron-form" action="/api/review/register" method="post" on-iron-form-error="_handleFormSubmitError" on-iron-form-response="_handleFormSubmit">
+
+                <gold-email-input id="email" name="email" label="學校信箱" value="{{email}}" required="" auto-validate="" error-message="格式錯誤，必填"></gold-email-input>
+
+                <paper-input id="username" name="username" label="本名" value="{{username}}" required="" auto-validate="" error-message="必填"></paper-input>
+
+                <paper-input id="formalId" name="formalId" label="身分證字號" value="{{formalId}}" required="" auto-validate="" error-message="必填"></paper-input>
+
+                <paper-input id="password" name="password" label="密碼" type="password" value="{{pwd}}" required="" auto-validate="" error-message="必填，英文大小寫或數字" pattern="[a-zA-Z0-9]*"></paper-input>
+                <paper-input id="passwordRe" name="passwordRe" label="再次輸入密碼" type="password" value="{{pwdRe}}" required="" auto-validate="" error-message="密碼不符" pattern="[[pwd]]"></paper-input>
+
+                <paper-input label="大頭貼" name="thumbnail" type="file" accept="image/*"></paper-input>
+
+                <template is="dom-if" if="[[invalid]]">
+                    <span class="error">註冊單格式有誤</span>
+                </template>
+                <template is="dom-if" if="[[registerError]]">
+                    <span class="error">註冊錯誤，請稍候再試</span>
+                </template>
+
+                <div class="layout horizontal center around-justified">
+                    <paper-button on-click="_submitOnClick">註冊</paper-button>
+                    <paper-button on-click="_clearOnClick">清除</paper-button>
+                </div>
+            </form>
+
+            <paper-dialog id="successDialog" on-iron-overlay-closed="_onSuccessDialogClose">
+                <div class="layout vertical start">
+                    <h2>註冊單已送出</h2>
+                    <p>
+                        親愛的審查者您好，您的審查身份註冊單將由人工審查後，才會給予您審查的權利。
+                        <br>您可登入審查頁面查詢狀態。謝謝！
+                    </p>
+                    <paper-button raised="" dialog-dismiss="">前往審查頁面</paper-button>
+                </div>
+            </paper-dialog>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'reviewer-register-page',
+
+            properties: {
+                invalid: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                registerError: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+
+            _submitOnClick: function(){
+
+                if(this.$.submitForm.validate()){
+                    //Submit
+                    this.set('registerError', false);
+                    this.set('invalid', false);
+                    this.$.submitForm.submit();
+                }else{
+                    //Error
+                    this.set('registerError', false);
+                    this.set('invalid', true);
+                }
+            },
+            _clearOnClick: function(){
+                this.set('email', undefined);
+                this.$.email.invalid = false;
+
+                this.set('username', undefined);
+                this.$.username.invalid = false;
+
+                this.set('formalId', undefined);
+                this.$.formalId.invalid = false;
+
+                this.set('pwd', undefined);
+                this.$.password.invalid = false;
+
+                this.set('pwdRe', undefined);
+                this.$.passwordRe.invalid = false;
+
+                this.set('invalid', false);
+                this.set('registerError', false);
+            },
+
+            _handleFormSubmit: function(e){
+                console.log('Register Success!');
+                //window.location.href = '/dashboard.html';
+                this.$.successDialog.open();
+            },
+            _handleFormSubmitError: function(e){
+                console.log('Register Error');
+                console.log(e.detail);
+
+                if(e.detail.request.status == 400){
+                    this.set('registerError', false);
+                    this.set('invalid', true);
+                }else{
+                    this.set('registerError', true);
+                    this.set('invalid', false);
+                }
+            },
+
+            _onSuccessDialogClose: function(){
+                //console.log('Dialog closed!');
+                //window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</dom-module><dom-module id="review-score-dropdown" assetpath="/">
+    <template>
+        <style>
+            paper-dropdown-menu{
+                --paper-input-container-label: {
+                    color: white;
+                    background-color: #E91E63;
+                    font-style: bold;
+                    text-align: center;
+                };
+
+                --paper-input-container-input: {
+                    text-align: center;
+                };
+
+                --paper-input-container-underline: {
+                    display: none;
+                };
+            }
+        </style>
+
+        <paper-dropdown-menu label="{{myLabel}}" no-label-float="">
+            <paper-listbox class="dropdown-content" selected="{{score}}">
+                <template is="dom-repeat" items="[[dropdownItems]]">
+                    <paper-item>[[item]]</paper-item>
+                </template>
+            </paper-listbox>
+        </paper-dropdown-menu>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-score-dropdown',
+
+            properties: {
+                myLabel: {
+                    type: Object, <!-- BUG: Need to use Object instead of String or failed updating utf-8 from outside-->
+                    value: "請評分",
+                    notify: true
+                },
+
+                dropdownItems: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+
+                score:{
+                    type: Number,
+                    notify: true
+                }
+            }
+        });
+    </script>
+</dom-module><dom-module id="review-view" assetpath="/">
+    <template>
+        <style>
+            :host{
+                padding: 20px;
+            }
+
+            table{
+                border-collapse: collapse;
+                width: 100%;
+            }
+            table.inner{
+                width: 100%;
+                margin-top: 5px;
+            }
+            table.inner td,th{
+                padding: 5px;
+            }
+            table.middle td,th{
+                text-align: center;
+            }
+
+            table,tr,td,th {
+                border: 2px solid;
+            }
+            td {
+                padding: 10px;
+                text-align: right;
+            }
+            td.value {
+                text-align: left;
+            }
+
+            a paper-icon-button {
+                color: black;
+            }
+
+        </style>
+
+        <paper-card heading="[[_computeDisplayName2(formData.Name)]]">
+            <div class="card-content layout vertical start">
+                <table>
+                    <tbody><tr>
+                        <td>中 / 英文姓名</td>
+                        <td class="value">[[_computeDisplayName(formData.Name)]]</td>
+                        <td>身分證字號</td>
+                        <td class="value">[[formData.FormalId]]</td>
+                    </tr>
+                    <tr>
+                        <td>學校</td>
+                        <td class="value">[[formData.School]]</td>
+                        <td>系級</td>
+                        <td class="value">[[_computeSchoolGrade(formData.Department, formData.SchoolGrade)]]</td>
+                    </tr>
+                    <tr>
+                        <td>生日</td>
+                        <td class="value">[[_computeBirthday(formData.Birthday)]]</td>
+                        <td>電話</td>
+                        <td class="value">[[formData.Phone]]</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td class="value" colspan="3">[[formData.Email]]</td>
+                    </tr>
+                    <tr>
+                        <td>通訊地址</td>
+                        <td class="value" colspan="3">[[formData.Address]]</td>
+                    </tr>
+                    <tr>
+                        <td>申請主題</td>
+                        <td class="value" colspan="3">[[_computeTopic(formData.Topic)]]</td>
+                    </tr>
+                    <tr>
+                        <td>指導教授</td>
+                        <td class="value" colspan="3">[[formData.Teacher]]</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            研究領域<br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreResearchArea}}"></review-score-dropdown>
+                        </td>
+                        <td class="value" colspan="3">[[formData.ResearchArea]]</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            相關專業技能<br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreSkills}}"></review-score-dropdown><br>
+                        </td>
+                        <td class="value" colspan="3">[[formData.RelatedSkills]]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="value">
+                            預修課程<br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreClasses}}"></review-score-dropdown>
+                            <br>
+                            <table class="inner middle">
+                                <tbody><tr>
+                                    <th>課程名稱</th>
+                                    <th>修課年度/學期</th>
+                                    <th>成績</th>
+                                </tr>
+                                <template is="dom-repeat" items="[[formData.ClassHistories]]" as="classItem">
+                                    <tr>
+                                        <td>[[classItem.Name]]</td>
+                                        <td>[[classItem.Semester]]</td>
+                                        <td>[[classItem.Grade]]</td>
+                                    </tr>
+                                </template>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>總平均</td>
+                        <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Average)]]</td>
+                        <td>年級排名</td>
+                        <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Rank)]]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="value">
+                            語言能力<br>
+                            <table class="inner middle">
+                                <tbody><tr>
+                                    <th>語言</th>
+                                    <th>聽</th>
+                                    <th>說</th>
+                                    <th>讀</th>
+                                    <th>寫</th>
+                                </tr>
+                                <template is="dom-repeat" items="[[formData.LangAbilities]]" as="langItem">
+                                    <tr>
+                                        <td>[[langItem.Name]]</td>
+                                        <td>[[_computeLangLevel(langItem.Listening)]]</td>
+                                        <td>[[_computeLangLevel(langItem.Speaking)]]</td>
+                                        <td>[[_computeLangLevel(langItem.Reading)]]</td>
+                                        <td>[[_computeLangLevel(langItem.Writing)]]</td>
+                                    </tr>
+                                </template>
+                            </tbody></table><br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreLanguage}}"></review-score-dropdown>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" class="value">
+                            推薦函
+                            <table class="inner middle">
+                                <tbody><tr>
+                                    <th>推薦者姓名</th>
+                                    <th>推薦者Email</th>
+                                    <th>本系統是否已收到推薦函</th>
+                                </tr>
+                                <template is="dom-repeat" items="[[formData.Recommendations]]" as="recommItem">
+                                    <tr>
+                                        <td>[[recommItem.Recommender.Name]]</td>
+                                        <td>[[recommItem.Recommender.Email]]</td>
+                                        <td>
+                                            [[_computeBoolToStr(recommItem.Done)]]
+                                            <template is="dom-if" if="[[recommItem.Done]]">
+                                                <review-recomm-view recomm-item="[[recommItem]]"></review-recomm-view>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody></table><br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreRecomm}}"></review-score-dropdown><br>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            研究規劃書
+                            <a href="[[formData.ResearchPlan]]">
+                                <paper-icon-button icon="file-download"></paper-icon-button>
+                            </a><br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreResearchPlan}}"></review-score-dropdown><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            成績單
+                            <a href="[[formData.Transcript]]">
+                                <paper-icon-button icon="file-download"></paper-icon-button>
+                            </a><br>
+                            <review-score-dropdown my-label="請評分（成績部分）" dropdown-items="[[scoreRange]]" score="{{scoreGrade}}"></review-score-dropdown><br>
+                        </td>
+                    </tr>
+                    <template is="dom-if" if="[[_shouldShowOthers(formData.Others)]]">
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 5px;">
+                                其他資料
+                                <a href="[[formData.Recommendations]]">
+                                    <paper-icon-button icon="file-download"></paper-icon-button>
+                                </a><br>
+                                <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreOther}}"></review-score-dropdown><br>
+                            </td>
+                        </tr>
+                    </template>
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            總評<br>
+                            <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreOverall}}"></review-score-dropdown><br>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+            <div class="card-actions">
+                <paper-button on-click="_handleSubmitOnClick">提交審查</paper-button>
+            </div>
+        </paper-card>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-view',
+
+            properties: {
+                formData: {
+                    type: Object,
+                    notify: true
+                },
+
+                scoreRange: {
+                    type: Array,
+                    value: ["0 (不符合)", 1, 2, 3, 4, 5, 6, 7, 8, 9, "10 (符合)"]
+                },
+
+                postUrl: {
+                    type: String,
+                    notify: true,
+                    computed: '_computePostUrl(formData)'
+                }
+            },
+
+            _computePostUrl: function(formData){
+                return  '/api/review/app/' + formData['Hash'];
+            },
+
+            _computeDisplayName: function(fullName){
+                return fullName.replace("#", " / ");
+            },
+            _computeDisplayName2: function(name){
+                var nameStr = name.replace('#', ' (');
+                return nameStr + ')'
+            },
+
+            _computeSchoolGrade: function(department, schoolGrade){
+                var array = schoolGrade.split("@", 2);
+                var gradeStr = array.join("") + "年級";
+                return department + " " + gradeStr;
+            },
+
+            _computeBirthday: function(birthday){
+                try{
+                    var date = new Date(birthday);
+                    return date.toLocaleDateString();
+                }catch(e){
+                    return birthday;
+                }
+            },
+
+            _computeAcademicGrade: function(value){
+                if(value && value < 0){
+                    return "N/A";
+                }else{
+                    return value;
+                }
+            },
+
+            _computeTopic: function(index){
+                switch(index){
+                    case 0:
+                        return "電腦視覺三維模型重建與辨識技術";
+                    case 1:
+                        return "具穩健機率運算能力之突波式神經網路系統研發";
+                    case 2:
+                        return "虛擬載具在高效能異質環境研究";
+                    case 3:
+                        return "單層二維半導體之先進光電元件製程及量測技術";
+                    case 4:
+                        return "即時神經訊號處理演算法之硬體設計與實現";
+                    default:
+                        return "";
+                }
+            },
+
+            _computeLangLevel: function(level){
+                switch(level){
+                    case 0:
+                        return "精通";
+                    case 1:
+                        return "中等";
+                    case 2:
+                        return "略懂";
+                    default:
+                        return "";
+                }
+            },
+
+            _shouldShowOthers: function(value){
+                return value != "";
+            },
+
+            _computeBoolToStr: function(b){
+                return (b === true)? "是" : "否";
+            },
+
+            _numValAdapter: function(v){
+                return (v === undefined || v === null)? 0 : v;
+            },
+
+            _handleSubmitOnClick: function(){
+                var transData = {
+                    researchArea: this._numValAdapter(this.scoreResearchArea),
+                    classes: this._numValAdapter(this.scoreClasses),
+                    skills: this._numValAdapter(this.scoreSkills),
+                    grade: this._numValAdapter(this.scoreGrade),
+                    language: this._numValAdapter(this.scoreLanguage),
+                    researchPlan: this._numValAdapter(this.scoreResearchPlan),
+                    recomm: this._numValAdapter(this.scoreRecomm),
+                    other: this._numValAdapter(this.scoreOther),
+                    overall: this._numValAdapter(this.scoreOverall)
+                };
+
+                var app = this;
+
+                window.fetch(this.postUrl,{
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transData)
+                }).then(function(m){
+                    //Success
+                    app.fire('submit-success');
+                }).catch(function(ex){
+                    //Failed
+                    console.log(ex);
+                    app.fire('submit-failed');
+                });
+            }
+        });
+    </script>
+</dom-module><dom-module id="review-list-page" assetpath="/">
+    <template>
+        <style>
+            :host{
+                padding: 20px;
+            }
+
+            paper-toast {
+                right: 30%;
+                left: 20%;
+                bottom: 20px;
+
+                font-size: 20px;
+
+                --paper-toast-background-color: #689F38;
+                --paper-toast-color: white;
+            }
+            paper-toast.error {
+                --paper-toast-background-color: red;
+                --paper-toast-color: white;
+            }
+            paper-toast.invalid {
+                --paper-toast-background-color: #E91E63;
+                --paper-toast-color: white;
+            }
+        </style>
+
+        <script>(function(self) {
+  'use strict';
+
+  if (self.fetch) {
+    return
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name)
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name')
+    }
+    return name.toLowerCase()
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value)
+    }
+    return value
+  }
+
+  function Headers(headers) {
+    this.map = {}
+
+    if (headers instanceof Headers) {
+      headers.forEach(function(value, name) {
+        this.append(name, value)
+      }, this)
+
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function(name) {
+        this.append(name, headers[name])
+      }, this)
+    }
+  }
+
+  Headers.prototype.append = function(name, value) {
+    name = normalizeName(name)
+    value = normalizeValue(value)
+    var list = this.map[name]
+    if (!list) {
+      list = []
+      this.map[name] = list
+    }
+    list.push(value)
+  }
+
+  Headers.prototype['delete'] = function(name) {
+    delete this.map[normalizeName(name)]
+  }
+
+  Headers.prototype.get = function(name) {
+    var values = this.map[normalizeName(name)]
+    return values ? values[0] : null
+  }
+
+  Headers.prototype.getAll = function(name) {
+    return this.map[normalizeName(name)] || []
+  }
+
+  Headers.prototype.has = function(name) {
+    return this.map.hasOwnProperty(normalizeName(name))
+  }
+
+  Headers.prototype.set = function(name, value) {
+    this.map[normalizeName(name)] = [normalizeValue(value)]
+  }
+
+  Headers.prototype.forEach = function(callback, thisArg) {
+    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+      this.map[name].forEach(function(value) {
+        callback.call(thisArg, value, name, this)
+      }, this)
+    }, this)
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'))
+    }
+    body.bodyUsed = true
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function(resolve, reject) {
+      reader.onload = function() {
+        resolve(reader.result)
+      }
+      reader.onerror = function() {
+        reject(reader.error)
+      }
+    })
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader()
+    reader.readAsArrayBuffer(blob)
+    return fileReaderReady(reader)
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader()
+    reader.readAsText(blob)
+    return fileReaderReady(reader)
+  }
+
+  var support = {
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob();
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  }
+
+  function Body() {
+    this.bodyUsed = false
+
+
+    this._initBody = function(body) {
+      this._bodyInit = body
+      if (typeof body === 'string') {
+        this._bodyText = body
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body
+      } else if (!body) {
+        this._bodyText = ''
+      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+        // Only support ArrayBuffers for POST method.
+        // Receiving ArrayBuffers happens via Blobs, instead.
+      } else {
+        throw new Error('unsupported BodyInit type')
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type)
+        }
+      }
+    }
+
+    if (support.blob) {
+      this.blob = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob')
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]))
+        }
+      }
+
+      this.arrayBuffer = function() {
+        return this.blob().then(readBlobAsArrayBuffer)
+      }
+
+      this.text = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return readBlobAsText(this._bodyBlob)
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as text')
+        } else {
+          return Promise.resolve(this._bodyText)
+        }
+      }
+    } else {
+      this.text = function() {
+        var rejected = consumed(this)
+        return rejected ? rejected : Promise.resolve(this._bodyText)
+      }
+    }
+
+    if (support.formData) {
+      this.formData = function() {
+        return this.text().then(decode)
+      }
+    }
+
+    this.json = function() {
+      return this.text().then(JSON.parse)
+    }
+
+    return this
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase()
+    return (methods.indexOf(upcased) > -1) ? upcased : method
+  }
+
+  function Request(input, options) {
+    options = options || {}
+    var body = options.body
+    if (Request.prototype.isPrototypeOf(input)) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read')
+      }
+      this.url = input.url
+      this.credentials = input.credentials
+      if (!options.headers) {
+        this.headers = new Headers(input.headers)
+      }
+      this.method = input.method
+      this.mode = input.mode
+      if (!body) {
+        body = input._bodyInit
+        input.bodyUsed = true
+      }
+    } else {
+      this.url = input
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit'
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers)
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET')
+    this.mode = options.mode || this.mode || null
+    this.referrer = null
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests')
+    }
+    this._initBody(body)
+  }
+
+  Request.prototype.clone = function() {
+    return new Request(this)
+  }
+
+  function decode(body) {
+    var form = new FormData()
+    body.trim().split('&').forEach(function(bytes) {
+      if (bytes) {
+        var split = bytes.split('=')
+        var name = split.shift().replace(/\+/g, ' ')
+        var value = split.join('=').replace(/\+/g, ' ')
+        form.append(decodeURIComponent(name), decodeURIComponent(value))
+      }
+    })
+    return form
+  }
+
+  function headers(xhr) {
+    var head = new Headers()
+    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+    pairs.forEach(function(header) {
+      var split = header.trim().split(':')
+      var key = split.shift().trim()
+      var value = split.join(':').trim()
+      head.append(key, value)
+    })
+    return head
+  }
+
+  Body.call(Request.prototype)
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {}
+    }
+
+    this.type = 'default'
+    this.status = options.status
+    this.ok = this.status >= 200 && this.status < 300
+    this.statusText = options.statusText
+    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+    this.url = options.url || ''
+    this._initBody(bodyInit)
+  }
+
+  Body.call(Response.prototype)
+
+  Response.prototype.clone = function() {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    })
+  }
+
+  Response.error = function() {
+    var response = new Response(null, {status: 0, statusText: ''})
+    response.type = 'error'
+    return response
+  }
+
+  var redirectStatuses = [301, 302, 303, 307, 308]
+
+  Response.redirect = function(url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code')
+    }
+
+    return new Response(null, {status: status, headers: {location: url}})
+  }
+
+  self.Headers = Headers;
+  self.Request = Request;
+  self.Response = Response;
+
+  self.fetch = function(input, init) {
+    return new Promise(function(resolve, reject) {
+      var request
+      if (Request.prototype.isPrototypeOf(input) && !init) {
+        request = input
+      } else {
+        request = new Request(input, init)
+      }
+
+      var xhr = new XMLHttpRequest()
+
+      function responseURL() {
+        if ('responseURL' in xhr) {
+          return xhr.responseURL
+        }
+
+        // Avoid security warnings on getResponseHeader when not allowed by CORS
+        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+          return xhr.getResponseHeader('X-Request-URL')
+        }
+
+        return;
+      }
+
+      xhr.onload = function() {
+        var status = (xhr.status === 1223) ? 204 : xhr.status
+        if (status < 100 || status > 599) {
+          reject(new TypeError('Network request failed'))
+          return
+        }
+        var options = {
+          status: status,
+          statusText: xhr.statusText,
+          headers: headers(xhr),
+          url: responseURL()
+        }
+        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+        resolve(new Response(body, options))
+      }
+
+      xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.open(request.method, request.url, true)
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob'
+      }
+
+      request.headers.forEach(function(value, name) {
+        xhr.setRequestHeader(name, value)
+      })
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+    })
+  }
+  self.fetch.polyfill = true
+})(typeof self !== 'undefined' ? self : this);
+</script>
+
+        <iron-ajax auto="" url="/api/review/app" last-response="{{appList}}"></iron-ajax>
+        <div class="layout vertical center">
+            <template id="mainList" is="dom-repeat" items="[[appList]]" as="app">
+                <review-view form-data="[[app]]" on-submit-success="_handleSubmitSuccess" on-submit-failed="_handleSubmitFailed"></review-view>
+            </template>
+
+            <paper-toast id="toastSuccess" text="提交成功!" auto-fit-on-attach=""></paper-toast>
+            <paper-toast id="toastError" class="error" text="提交失敗，請再試一次" auto-fit-on-attach=""></paper-toast>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-list-page',
+
+            _handleSubmitSuccess: function(e){
+                //Remove the item from array
+                var model = e.model;
+                var index = model.index
+                this.splice('appList', index, 1);
+
+                this.$.toastSuccess.open();
+            },
+
+            _handleSubmitFailed: function(){
+                this.$.toastError.open();
+            }
+        });
+    </script>
+</dom-module><dom-module id="review-recomm-view" assetpath="/">
+    <template>
+        <style>
+            paper-dialog {
+                min-width: 50%;
+                max-height: 550px;
+            }
+            paper-dialog-scrollable {
+                --paper-dialog-scrollable: {
+                    max-height: 500px;
+                };
+            }
+
+            article {
+                text-align: start;
+                font-size: 20px;
+            }
+        </style>
+
+        <iron-ajax auto="" url="/api/review/recomm/[[recommItem.Hash]]" last-response="{{recommObj}}"></iron-ajax>
+        <template is="dom-if" if="[[_isNotNil(recommObj)]]">
+            <paper-icon-button icon="visibility" on-click="_openDialog"></paper-icon-button>
+        </template>
+        <paper-dialog id="dialogInfo">
+            <paper-dialog-scrollable>
+                <article class="layout vertical start">
+                    <marked-element markdown="[[recommObj.Content]]"></marked-element>
+                    <template is="dom-if" if="[[_isNotZeroLength(recommObj.AttachmentUrl)]]">
+                        <paper-button raised="" onclick="window.open([[recommObj.AttachmentUrl]]);">
+                            <iron-icon icon="attachment"></iron-icon>&nbsp;檢視附件
+                        </paper-button>
+                    </template>
+                    <br>
+                </article>
+            </paper-dialog-scrollable>
+        </paper-dialog>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-recomm-view',
+
+            properties: {
+                recommItem: {
+                    type: Object,
+                    notify: true
+                }
+            },
+
+            _isNotNil: function(v){
+                return !(v === undefined || v === null);
+            },
+            _isNotZeroLength: function(v){
+                return v.length != 0;
+            },
+
+            _openDialog: function(){
+                this.$.dialogInfo.open();
             }
         });
     </script>
