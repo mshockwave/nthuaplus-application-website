@@ -35,191 +35,200 @@
             a paper-icon-button {
                 color: black;
             }
+
         </style>
 
-        <table>
-            <tr>
-                <td>中 / 英文姓名</td>
-                <td class="value">[[_computeDisplayName(formData.Name)]]</td>
-                <td>身分證字號</td>
-                <td class="value">[[formData.FormalId]]</td>
-            </tr>
-            <tr>
-                <td>學校</td>
-                <td class="value">[[formData.School]]</td>
-                <td>系級</td>
-                <td class="value">[[_computeSchoolGrade(formData.Department, formData.SchoolGrade)]]</td>
-            </tr>
-            <tr>
-                <td>生日</td>
-                <td class="value">[[_computeBirthday(formData.Birthday)]]</td>
-                <td>電話</td>
-                <td class="value">[[formData.Phone]]</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td class="value" colspan="3">[[formData.Email]]</td>
-            </tr>
-            <tr>
-                <td>通訊地址</td>
-                <td class="value" colspan="3">[[formData.Address]]</td>
-            </tr>
-            <tr>
-                <td>申請主題</td>
-                <td class="value" colspan="3">[[_computeTopic(formData.Topic)]]</td>
-            </tr>
-            <tr>
-                <td>指導教授</td>
-                <td class="value" colspan="3">[[formData.Teacher]]</td>
-            </tr>
-            <tr>
-                <td>
-                    研究領域<br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreResearchArea}}"
-                    ></review-score-dropdown>
-                </td>
-                <td class="value" colspan="3">[[formData.ResearchArea]]</td>
-            </tr>
-            <tr>
-                <td>
-                    相關專業技能<br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreSkills}}"
-                    ></review-score-dropdown><br/>
-                </td>
-                <td class="value" colspan="3">[[formData.RelatedSkills]]</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="value">
-                    預修課程<br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreClasses}}"
-                    ></review-score-dropdown>
-                    <br/>
-                    <table class="inner middle">
-                        <tr>
-                            <th>課程名稱</th>
-                            <th>修課年度/學期</th>
-                            <th>成績</th>
-                        </tr>
-                        <template is="dom-repeat" items="[[formData.ClassHistories]]" as="classItem">
-                            <tr>
-                                <td>[[classItem.Name]]</td>
-                                <td>[[classItem.Semester]]</td>
-                                <td>[[classItem.Grade]]</td>
-                            </tr>
-                        </template>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td>總平均</td>
-                <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Average)]]</td>
-                <td>年級排名</td>
-                <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Rank)]]</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="value">
-                    語言能力<br/>
-                    <table class="inner middle">
-                        <tr>
-                            <th>語言</th>
-                            <th>聽</th>
-                            <th>說</th>
-                            <th>讀</th>
-                            <th>寫</th>
-                        </tr>
-                        <template is="dom-repeat" items="[[formData.LangAbilities]]" as="langItem">
-                            <tr>
-                                <td>[[langItem.Name]]</td>
-                                <td>[[_computeLangLevel(langItem.Listening)]]</td>
-                                <td>[[_computeLangLevel(langItem.Speaking)]]</td>
-                                <td>[[_computeLangLevel(langItem.Reading)]]</td>
-                                <td>[[_computeLangLevel(langItem.Writing)]]</td>
-                            </tr>
-                        </template>
-                    </table><br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreLanguage}}"
-                    ></review-score-dropdown>
-                </td>
-            </tr>
+        <paper-card heading="[[_computeDisplayName2(formData.Name)]]">
+            <div class="card-content layout vertical start">
+                <table>
+                    <tr>
+                        <td>中 / 英文姓名</td>
+                        <td class="value">[[_computeDisplayName(formData.Name)]]</td>
+                        <td>身分證字號</td>
+                        <td class="value">[[formData.FormalId]]</td>
+                    </tr>
+                    <tr>
+                        <td>學校</td>
+                        <td class="value">[[formData.School]]</td>
+                        <td>系級</td>
+                        <td class="value">[[_computeSchoolGrade(formData.Department, formData.SchoolGrade)]]</td>
+                    </tr>
+                    <tr>
+                        <td>生日</td>
+                        <td class="value">[[_computeBirthday(formData.Birthday)]]</td>
+                        <td>電話</td>
+                        <td class="value">[[formData.Phone]]</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td class="value" colspan="3">[[formData.Email]]</td>
+                    </tr>
+                    <tr>
+                        <td>通訊地址</td>
+                        <td class="value" colspan="3">[[formData.Address]]</td>
+                    </tr>
+                    <tr>
+                        <td>申請主題</td>
+                        <td class="value" colspan="3">[[_computeTopic(formData.Topic)]]</td>
+                    </tr>
+                    <tr>
+                        <td>指導教授</td>
+                        <td class="value" colspan="3">[[formData.Teacher]]</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            研究領域<br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreResearchArea}}"
+                            ></review-score-dropdown>
+                        </td>
+                        <td class="value" colspan="3">[[formData.ResearchArea]]</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            相關專業技能<br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreSkills}}"
+                            ></review-score-dropdown><br/>
+                        </td>
+                        <td class="value" colspan="3">[[formData.RelatedSkills]]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="value">
+                            預修課程<br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreClasses}}"
+                            ></review-score-dropdown>
+                            <br/>
+                            <table class="inner middle">
+                                <tr>
+                                    <th>課程名稱</th>
+                                    <th>修課年度/學期</th>
+                                    <th>成績</th>
+                                </tr>
+                                <template is="dom-repeat" items="[[formData.ClassHistories]]" as="classItem">
+                                    <tr>
+                                        <td>[[classItem.Name]]</td>
+                                        <td>[[classItem.Semester]]</td>
+                                        <td>[[classItem.Grade]]</td>
+                                    </tr>
+                                </template>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>總平均</td>
+                        <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Average)]]</td>
+                        <td>年級排名</td>
+                        <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Rank)]]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="value">
+                            語言能力<br/>
+                            <table class="inner middle">
+                                <tr>
+                                    <th>語言</th>
+                                    <th>聽</th>
+                                    <th>說</th>
+                                    <th>讀</th>
+                                    <th>寫</th>
+                                </tr>
+                                <template is="dom-repeat" items="[[formData.LangAbilities]]" as="langItem">
+                                    <tr>
+                                        <td>[[langItem.Name]]</td>
+                                        <td>[[_computeLangLevel(langItem.Listening)]]</td>
+                                        <td>[[_computeLangLevel(langItem.Speaking)]]</td>
+                                        <td>[[_computeLangLevel(langItem.Reading)]]</td>
+                                        <td>[[_computeLangLevel(langItem.Writing)]]</td>
+                                    </tr>
+                                </template>
+                            </table><br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreLanguage}}"
+                            ></review-score-dropdown>
+                        </td>
+                    </tr>
 
-            <tr>
-                <td colspan="4" class="value">
-                    推薦函
-                    <table class="inner middle">
+                    <tr>
+                        <td colspan="4" class="value">
+                            推薦函
+                            <table class="inner middle">
+                                <tr>
+                                    <th>推薦者姓名</th>
+                                    <th>推薦者Email</th>
+                                    <th>本系統是否已收到推薦函</th>
+                                </tr>
+                                <template is="dom-repeat" items="[[formData.Recommendations]]" as="recommItem">
+                                    <tr>
+                                        <td>[[recommItem.Recommender.Name]]</td>
+                                        <td>[[recommItem.Recommender.Email]]</td>
+                                        <td>[[_computeBoolToStr(recommItem.Done)]]</td>
+                                    </tr>
+                                </template>
+                            </table><br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreRecomm}}"
+                            ></review-score-dropdown><br/>
+                        </td>
+                    </tr>
+                    <!--<tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            推薦函
+                            <a href="[[formData.Recommendations]]">
+                                <paper-icon-button icon="file-download"></paper-icon-button>
+                            </a>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            研究規劃書
+                            <a href="[[formData.ResearchPlan]]">
+                                <paper-icon-button icon="file-download"></paper-icon-button>
+                            </a><br/>
+                            <review-score-dropdown
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreResearchPlan}}"
+                            ></review-score-dropdown><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 5px;">
+                            成績單
+                            <a href="[[formData.Transcript]]">
+                                <paper-icon-button icon="file-download"></paper-icon-button>
+                            </a><br/>
+                            <review-score-dropdown
+                                    my-label="請評分（成績部分）"
+                                    dropdown-items="[[scoreRange]]"
+                                    score="{{scoreGrade}}"
+                            ></review-score-dropdown><br/>
+                        </td>
+                    </tr>
+                    <template is="dom-if" if="[[_shouldShowOthers(formData.Others)]]">
                         <tr>
-                            <th>推薦者姓名</th>
-                            <th>推薦者Email</th>
-                            <th>本系統是否已收到推薦函</th>
+                            <td colspan="4" style="text-align: center; padding: 5px;">
+                                其他資料
+                                <a href="[[formData.Recommendations]]">
+                                    <paper-icon-button icon="file-download"></paper-icon-button>
+                                </a><br/>
+                                <review-score-dropdown
+                                        dropdown-items="[[scoreRange]]"
+                                        score="{{scoreOther}}"
+                                ></review-score-dropdown><br/>
+                            </td>
                         </tr>
-                        <template is="dom-repeat" items="[[formData.Recommendations]]" as="recommItem">
-                            <tr>
-                                <td>[[recommItem.Recommender.Name]]</td>
-                                <td>[[recommItem.Recommender.Email]]</td>
-                                <td>[[_computeBoolToStr(recommItem.Done)]]</td>
-                            </tr>
-                        </template>
-                    </table><br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreRecomm}}"
-                    ></review-score-dropdown><br/>
-                </td>
-            </tr>
-            <!--<tr>
-                <td colspan="4" style="text-align: center; padding: 5px;">
-                    推薦函
-                    <a href="[[formData.Recommendations]]">
-                        <paper-icon-button icon="file-download"></paper-icon-button>
-                    </a>
-                </td>
-            </tr> -->
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 5px;">
-                    研究規劃書
-                    <a href="[[formData.ResearchPlan]]">
-                        <paper-icon-button icon="file-download"></paper-icon-button>
-                    </a><br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreResearchPlan}}"
-                    ></review-score-dropdown><br/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 5px;">
-                    成績單
-                    <a href="[[formData.Transcript]]">
-                        <paper-icon-button icon="file-download"></paper-icon-button>
-                    </a><br/>
-                    <review-score-dropdown
-                            dropdown-items="[[scoreRange]]"
-                            score="{{scoreGrade}}"
-                    ></review-score-dropdown><br/>
-                </td>
-            </tr>
-            <template is="dom-if" if="[[_shouldShowOthers(formData.Others)]]">
-                <tr>
-                    <td colspan="4" style="text-align: center; padding: 5px;">
-                        其他資料
-                        <a href="[[formData.Recommendations]]">
-                            <paper-icon-button icon="file-download"></paper-icon-button>
-                        </a><br/>
-                        <review-score-dropdown
-                                dropdown-items="[[scoreRange]]"
-                                score="{{scoreOther}}"
-                        ></review-score-dropdown><br/>
-                    </td>
-                </tr>
-            </template>
-        </table>
+                    </template>
+                </table>
+            </div>
+            <div class="card-actions">
+                <paper-button on-click="_handleSubmitOnClick">提交審查</paper-button>
+            </div>
+        </paper-card>
     </template>
 
     <script>
@@ -235,11 +244,25 @@
                 scoreRange: {
                     type: Array,
                     value: ["0 (不符合)", 1, 2, 3, 4, 5, 6, 7, 8, 9, "10 (符合)"]
+                },
+
+                postUrl: {
+                    type: String,
+                    notify: true,
+                    computed: '_computePostUrl(formData)'
                 }
+            },
+
+            _computePostUrl: function(formData){
+                return  '/api/review/app/' + formData['Hash'];
             },
 
             _computeDisplayName: function(fullName){
                 return fullName.replace("#", " / ");
+            },
+            _computeDisplayName2: function(name){
+                var nameStr = name.replace('#', ' (');
+                return nameStr + ')'
             },
 
             _computeSchoolGrade: function(department, schoolGrade){
@@ -301,6 +324,42 @@
 
             _computeBoolToStr: function(b){
                 return (b === true)? "是" : "否";
+            },
+
+            _numValAdapter: function(v){
+                return (v === undefined || v === null)? 0 : v;
+            },
+
+            _handleSubmitOnClick: function(){
+                var transData = {
+                    researchArea: this._numValAdapter(this.scoreResearchArea),
+                    classes: this._numValAdapter(this.scoreClasses),
+                    skills: this._numValAdapter(this.scoreSkills),
+                    grade: this._numValAdapter(this.scoreGrade),
+                    language: this._numValAdapter(this.scoreLanguage),
+                    researchPlan: this._numValAdapter(this.scoreResearchPlan),
+                    recomm: this._numValAdapter(this.scoreRecomm),
+                    other: this._numValAdapter(this.scoreOther)
+                };
+
+                var app = this;
+
+                window.fetch(this.postUrl,{
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transData)
+                }).then(function(m){
+                    //Success
+                    app.fire('submit-success');
+                }).catch(function(ex){
+                    //Failed
+                    console.log(ex);
+                    app.fire('submit-failed');
+                });
             }
         });
     </script>

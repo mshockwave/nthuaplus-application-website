@@ -1,0 +1,72 @@
+
+<dom-module id="review-list-page">
+    <template>
+        <style>
+            :host{
+                padding: 20px;
+            }
+
+            paper-toast {
+                right: 30%;
+                left: 20%;
+                bottom: 20px;
+
+                font-size: 20px;
+
+                --paper-toast-background-color: #689F38;
+                --paper-toast-color: white;
+            }
+            paper-toast.error {
+                --paper-toast-background-color: red;
+                --paper-toast-color: white;
+            }
+            paper-toast.invalid {
+                --paper-toast-background-color: #E91E63;
+                --paper-toast-color: white;
+            }
+        </style>
+
+        <script src="../bower_components/fetch/fetch.js"></script>
+
+        <iron-ajax
+            auto
+            url="/api/review/app"
+            last-response="{{appList}}"
+        ></iron-ajax>
+        <div class="layout vertical center">
+            <template id="mainList" is="dom-repeat" items="[[appList]]" as="app">
+                <review-view
+                        form-data="[[app]]"
+                        on-submit-success="_handleSubmitSuccess"
+                        on-submit-failed="_handleSubmitFailed"
+                ></review-view>
+            </template>
+
+            <paper-toast id="toastSuccess"
+                         text="提交成功!"
+                         auto-fit-on-attach></paper-toast>
+            <paper-toast id="toastError" class="error"
+                         text="提交失敗，請再試一次"
+                         auto-fit-on-attach></paper-toast>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'review-list-page',
+
+            _handleSubmitSuccess: function(e){
+                //Remove the item from array
+                var model = e.model;
+                var index = model.index
+                this.splice('appList', index, 1);
+
+                this.$.toastSuccess.open();
+            },
+
+            _handleSubmitFailed: function(){
+                this.$.toastError.open();
+            }
+        });
+    </script>
+</dom-module>

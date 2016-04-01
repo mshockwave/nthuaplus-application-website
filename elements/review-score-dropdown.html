@@ -20,7 +20,7 @@
             }
         </style>
 
-        <paper-dropdown-menu label="請評分" no-label-float>
+        <paper-dropdown-menu label="{{myLabel}}" no-label-float>
             <paper-listbox class="dropdown-content" selected="{{score}}">
                 <template is="dom-repeat" items="[[dropdownItems]]">
                     <paper-item>[[item]]</paper-item>
@@ -34,6 +34,12 @@
             is: 'review-score-dropdown',
 
             properties: {
+                myLabel: {
+                    type: Object, <!-- BUG: Need to use Object instead of String or failed updating utf-8 from outside-->
+                    value: "請評分",
+                    notify: true
+                },
+
                 dropdownItems: {
                     type: Array,
                     value: [],

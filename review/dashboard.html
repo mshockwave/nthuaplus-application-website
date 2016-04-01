@@ -51,7 +51,7 @@
                 </paper-toolbar>
 
                 <iron-pages class="content fit" selected="{{pageIndex}}">
-                    <review-list></review-list>
+                    <review-list-page></review-list-page>
                 </iron-pages>
             </paper-header-panel>
             <div drawer>
@@ -81,7 +81,7 @@
             app.pageIndex = 0;
 
             app.$.accountAjax.addEventListener('error', function(){
-                //window.location.href = '/login.html';
+                window.location.href = '/review/entry.html';
             });
         });
     </script>
