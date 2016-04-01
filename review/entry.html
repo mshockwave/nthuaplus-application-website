@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Login</title>
+
+    <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+    <link rel="import" href="../elements/base-elements.html">
+    <link rel="import" href="../bower_components/paper-card/paper-card.html">
+    <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+    <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+    <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+    <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+    <link rel="import" href="../elements/login-page.html">
+    <link rel="import" href="../elements/reviewer-register-page.html">
+
+    <style is="custom-style">
+        html, body {
+            height: 100%;
+            background: #616161;
+        }
+
+        paper-card {
+            margin: 10px;
+            width: 20%;
+        }
+        paper-card .card-content{
+            padding: 30px;
+        }
+
+        paper-tabs {
+            --paper-tabs-selection-bar-color: black;
+        }
+    </style>
+</head>
+<body unresolved class="layout vertical center center-justified">
+
+    <script src="../bower_components/dentistjs/js/dentist.js"></script>
+
+    <template is="dom-bind" id="app">
+        <iron-ajax
+            id="accountAjax"
+            auto
+            handle-as="json"
+            url="/api/review/profile"
+        ></iron-ajax>
+
+        <img src="../img/nthu-a-plus-logo.svg" style="width: 70px;height: 70px">
+        <paper-card>
+            <div class="card-content">
+                <paper-tabs selected="{{selectIndex}}">
+                    <paper-tab>登入</paper-tab>
+                    <paper-tab>註冊</paper-tab>
+                </paper-tabs>
+                <iron-pages selected="{{selectIndex}}">
+                    <login-page redirect-url="/index.html" login-node="/api/review/login"></login-page>
+                    <register-page></register-page>
+                </iron-pages>
+            </div>
+        </paper-card>
+    </template>
+    <script>
+        var app = document.querySelector('#app');
+        app.addEventListener('dom-change', function(){
+            //On init
+            this.selectIndex = 0;
+
+            //Get url parameter
+            this.params = document.URL.extract();
+
+            app.$.accountAjax.addEventListener('response', function(e){
+                //console.log(e.detail);
+                if(app.params && app.params['rdr']){
+                    window.location.href = app.params['rdr'];
+                }else{
+                    window.location.href = '/dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

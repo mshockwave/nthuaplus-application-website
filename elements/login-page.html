@@ -16,7 +16,7 @@
         <div class="layout center vertical">
             <form is="iron-form" id="loginForm"
                   method="post"
-                  action="/api/user/login"
+                  action$="[[loginNode]]"
                   on-iron-form-error="_handleFormSubmitError"
                   on-iron-form-response="_handleFormSubmit">
 
@@ -49,6 +49,12 @@
                 redirectUrl: {
                     type: String,
                     value: "/"
+                },
+
+                loginNode: {
+                    type: String,
+                    value: "/api/user/login",
+                    notify: true
                 },
 
                 invalid: {
