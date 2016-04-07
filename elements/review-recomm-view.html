@@ -16,6 +16,10 @@
                 text-align: start;
                 font-size: 20px;
             }
+
+            a {
+                color: black;
+            }
         </style>
 
         <iron-ajax
@@ -31,9 +35,11 @@
                 <article class="layout vertical start">
                     <marked-element markdown="[[recommObj.Content]]"></marked-element>
                     <template is="dom-if" if="[[_isNotZeroLength(recommObj.AttachmentUrl)]]">
-                        <paper-button raised onclick="window.open([[recommObj.AttachmentUrl]]);">
-                            <iron-icon icon="attachment"></iron-icon>&nbsp檢視附件
-                        </paper-button>
+                        <a href$="[[recommObj.AttachmentUrl]]" target="_blank">
+                            <paper-button raised>
+                                <iron-icon icon="attachment"></iron-icon>&nbsp檢視附件
+                            </paper-button>
+                        </a>
                     </template>
                     <br/>
                 </article>
