@@ -10,6 +10,15 @@
                 margin: 5px;
                 margin-right: 10px;
             }
+
+            paper-button{
+                padding: 5px;
+            }
+
+            paper-dialog span {
+                margin: 5px;
+                font-size: 17px;
+            }
         </style>
 
         <iron-ajax
@@ -29,7 +38,20 @@
                 <template is="dom-if" if="[[!accountExist]]">
                     <iron-icon suffix icon="warning"></iron-icon>
                 </template>
+
+                <paper-button suffix raised disabled="[[!accountExist]]"
+                              on-click="_onShowUserInfo">
+                    我的生辰八字
+                </paper-button>
             </paper-input>
+
+            <paper-dialog id="userInfoDialog">
+                <div class="layout vertical start">
+                    <span>Email: [[accountInfo.Email]]</span>
+                    <span>Username: [[accountInfo.Username]]</span>
+                    <span>身分證字號(小聲): [[accountInfo.FormalId]]</span>
+                </div>
+            </paper-dialog>
         </div>
 
     </template>
@@ -64,12 +86,18 @@
                 }
             },
 
-            _handleAccountQueryResult: function(){
+            _handleAccountQueryResult: function(e){
                 this.set('email', this._internalEmail);
                 this.set('accountExist', true);
+
+                this.set('accountInfo', e.detail.response);
             },
             _handleAccountQueryError: function(){
                 this.set('accountExist', false);
+            },
+
+            _onShowUserInfo: function(){
+                this.$.userInfoDialog.open();
             }
         });
     </script>

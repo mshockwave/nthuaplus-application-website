@@ -1,0 +1,114 @@
+
+<dom-module id="gm-recomm-list-page">
+
+    <template>
+        <style>
+            gm-account-input{
+                width: 80%;
+            }
+
+            paper-card {
+                margin: 10px;
+            }
+
+            .card-content span {
+                margin: 3px;
+                font-size: 20px;
+            }
+            .card-actions paper-button {
+                padding: 5px;
+            }
+
+            paper-toast {
+                right: 30%;
+                left: 20%;
+                bottom: 20px;
+
+                font-size: 20px;
+
+                --paper-toast-background-color: #689F38;
+                --paper-toast-color: white;
+            }
+            paper-toast.error {
+                --paper-toast-background-color: red;
+                --paper-toast-color: white;
+            }
+            paper-toast.invalid {
+                --paper-toast-background-color: #E91E63;
+                --paper-toast-color: white;
+            }
+        </style>
+
+        <div class="layout vertical center">
+            <gm-account-input
+                    account-exist="{{userExist}}"
+                    email="{{userEmail}}"
+            ></gm-account-input>
+
+            <template is="dom-if" if="[[userExist]]">
+                <iron-ajax
+                        auto
+                        url="[[_computeRecommUrl(userEmail)]]"
+                        handle-as="json"
+                        last-response="{{recommList}}"
+                ></iron-ajax>
+
+                <paper-toast id="toastSuccess" text="嗯，好了"
+                             auto-fit-on-attach></paper-toast>
+
+                <paper-toast id="toastError" class="error" text="X! 出問題了"
+                             auto-fit-on-attach></paper-toast>
+
+                <template is="dom-repeat" items="[[recommList]]" as="recommItem">
+                    <paper-card>
+                        <div class="card-content layout vertical start">
+                            <span>推薦者姓名：[[recommItem.Recommender.Name]]</span>
+                            <span>推薦者Email：[[recommItem.Recommender.Email]]</span>
+                            <span>推薦者提交了沒：[[_computeRecommSubmittedStr(recommItem.Done)]]</span>
+                        </div>
+                        <div class="card-actions">
+                            <paper-button on-click="_handleResendOnClick">
+                                <iron-icon icon="cached"></iron-icon>
+                                &nbsp重送邀請信
+                            </paper-button>
+                        </div>
+                    </paper-card>
+                </template>
+            </template>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gm-recomm-list-page',
+
+            _computeRecommUrl: function(_email){
+                if(_email){
+                    return encodeURI("/api/gm/form/recomm?email=" + _email);
+                }else{
+                    return "/api/gm/form/recomm";
+                }
+            },
+
+            _computeRecommSubmittedStr: function(b){
+                return (b)? "有": "還沒餒";
+            },
+
+            _handleResendOnClick: function(e){
+                var hash = e.model.recommItem.Hash;
+                //console.log(e);
+                if(hash){
+
+                    window.fetch('/api/gm/form/recomm/' + hash + '/resend',{
+                        credentials: 'include'
+                    }).then(function(){
+                        document.querySelector('#toastSuccess').open();
+                    }).catch(function(e){
+                        console.log(e);
+                        document.querySelector('#toastError').open();
+                    });
+                }
+            }
+        });
+    </script>
+</dom-module>

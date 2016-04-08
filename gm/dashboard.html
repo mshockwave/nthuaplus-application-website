@@ -26,7 +26,7 @@
             };
         }
         #drawerTitle {
-            @apply(--my-title-text);
+            font-size: 20px;
         }
 
         paper-listbox {
@@ -37,6 +37,9 @@
 </head>
 <body unresolved class="fullbleed">
     <template is="dom-bind" id="app">
+        <script src="../bower_components/promise-polyfill/Promise.min.js"></script>
+        <script src="../bower_components/fetch/fetch.js"></script>
+
         <iron-ajax
                 id="accountAjax"
                 auto
@@ -52,6 +55,7 @@
 
                 <iron-pages class="content fit" selected="{{pageIndex}}">
                     <gm-form-control></gm-form-control>
+                    <gm-recomm-list-page></gm-recomm-list-page>
                     <account-info
                         profile-url="/api/gm/profile"
                         login-page-url="/gm/entry.html"
@@ -62,18 +66,23 @@
             <div drawer>
                 <div class="layout horizontal center">
                     <img src="../img/nthu-a-plus-logo.svg" style="width: 55px;height: 55px; margin-right: 10px">
-                    <span id="drawerTitle">NTHU A+</span>
+                    <span id="drawerTitle">NTHU ㄟ普拉斯</span>
                 </div>
 
                 <paper-listbox selected="{{pageIndex}}" selected-item="{{selectedItem}}" id="drawerList">
                     <paper-icon-item>
-                        <iron-icon icon="account-circle"></iron-icon>
-                        表單控制
+                        <iron-icon icon="assignment"></iron-icon>
+                        &nbsp新增申請表單
+                    </paper-icon-item>
+
+                    <paper-icon-item>
+                        <iron-icon icon="mail"></iron-icon>
+                        &nbsp查看推薦信
                     </paper-icon-item>
 
                     <paper-icon-item>
                         <iron-icon icon="account-circle"></iron-icon>
-                        帳戶資訊
+                        &nbspGMの情報
                     </paper-icon-item>
                 </paper-listbox>
             </div>
