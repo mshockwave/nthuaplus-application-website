@@ -28560,7 +28560,7 @@ event and do your own custom submission:
                     <tr>
                         <td colspan="4" style="text-align: center; padding: 5px;">
                             研究規劃書
-                            <a href="[[formData.ResearchPlan]]">
+                            <a href="[[formData.ResearchPlan]]" target="_blank">
                                 <paper-icon-button icon="file-download"></paper-icon-button>
                             </a><br>
                             <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreResearchPlan}}"></review-score-dropdown><br>
@@ -28569,7 +28569,7 @@ event and do your own custom submission:
                     <tr>
                         <td colspan="4" style="text-align: center; padding: 5px;">
                             成績單
-                            <a href="[[formData.Transcript]]">
+                            <a href="[[formData.Transcript]]" target="_blank">
                                 <paper-icon-button icon="file-download"></paper-icon-button>
                             </a><br>
                             <review-score-dropdown my-label="請評分（成績部分）" dropdown-items="[[scoreRange]]" score="{{scoreGrade}}"></review-score-dropdown><br>
@@ -28579,7 +28579,7 @@ event and do your own custom submission:
                         <tr>
                             <td colspan="4" style="text-align: center; padding: 5px;">
                                 其他資料
-                                <a href="[[formData.Recommendations]]">
+                                <a href="[[formData.Others]]" target="_blank">
                                     <paper-icon-button icon="file-download"></paper-icon-button>
                                 </a><br>
                                 <review-score-dropdown dropdown-items="[[scoreRange]]" score="{{scoreOther}}"></review-score-dropdown><br>
