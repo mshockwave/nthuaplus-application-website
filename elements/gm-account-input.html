@@ -1,0 +1,76 @@
+
+<dom-module id="gm-account-input">
+    <template>
+        <style>
+            :host{
+                margin: 5px;
+            }
+
+            iron-icon {
+                margin: 5px;
+                margin-right: 10px;
+            }
+        </style>
+
+        <iron-ajax
+                id="queryAjax"
+                auto
+                url="[[_computeAccountQueryUrl(_internalEmail)]]"
+                handle-as="json"
+                on-response="_handleAccountQueryResult"
+                on-error="_handleAccountQueryError"
+        ></iron-ajax>
+
+        <div class="layout horizontal start">
+            <paper-input class="flex" label="User Email" value="{{_internalEmail}}">
+                <template is="dom-if" if="[[accountExist]]">
+                    <iron-icon suffix icon="check"></iron-icon>
+                </template>
+                <template is="dom-if" if="[[!accountExist]]">
+                    <iron-icon suffix icon="warning"></iron-icon>
+                </template>
+            </paper-input>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gm-account-input',
+
+            properties: {
+                email: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+                accountExist: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+
+                _internalEmail: {
+                    type: String,
+                    notify: true
+                }
+            },
+
+            _computeAccountQueryUrl: function(_email){
+                if(_email){
+                    return encodeURI("/api/gm/account/profile?email=" + _email);
+                }else{
+                    return "/api/gm/account/profile";
+                }
+            },
+
+            _handleAccountQueryResult: function(){
+                this.set('email', this._internalEmail);
+                this.set('accountExist', true);
+            },
+            _handleAccountQueryError: function(){
+                this.set('accountExist', false);
+            }
+        });
+    </script>
+</dom-module>

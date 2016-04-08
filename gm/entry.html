@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="import" href="../elements/elements.html">
+
+    <style is="custom-style">
+        html, body {
+            height: 100%;
+            background: #616161;
+        }
+
+        paper-card {
+            margin: 10px;
+            width: 20%;
+        }
+        paper-card .card-content{
+            padding: 30px;
+        }
+
+        paper-tabs {
+            --paper-tabs-selection-bar-color: black;
+        }
+    </style>
+</head>
+<body unresolved class="layout vertical center center-justified">
+
+    <script src="../bower_components/dentistjs/js/dentist.js"></script>
+
+    <template is="dom-bind" id="app">
+        <iron-ajax
+            id="accountAjax"
+            auto
+            handle-as="json"
+            url="/api/gm/profile"
+        ></iron-ajax>
+
+        <img src="../img/nthu-a-plus-logo.svg" style="width: 70px;height: 70px">
+        <paper-card>
+            <div class="card-content">
+                <login-page redirect-url="/gm/dashboard.html"
+                            login-node="/api/gm/login"></login-page>
+            </div>
+        </paper-card>
+    </template>
+    <script>
+        var app = document.querySelector('#app');
+        app.addEventListener('dom-change', function(){
+            //On init
+
+            //Get url parameter
+            this.params = document.URL.extract();
+
+            app.$.accountAjax.addEventListener('response', function(e){
+                //console.log(e.detail);
+                if(app.params && app.params['rdr']){
+                    window.location.href = app.params['rdr'];
+                }else{
+                    window.location.href = '/gm/dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

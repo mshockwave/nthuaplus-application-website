@@ -1,0 +1,44 @@
+
+<dom-module id="gm-form-control">
+    <template>
+        <style>
+            gm-account-input{
+                width: 80%;
+            }
+        </style>
+
+        <div class="layout vertical center">
+            <gm-account-input
+                    account-exist="{{userExist}}"
+                    email="{{userEmail}}"
+            ></gm-account-input>
+            <template is="dom-if" if="[[userExist]]">
+                <form-page
+                    form-submit-url="[[_computeFormSubmitUrl(userEmail)]]"
+                    file-upload-url="[[_computeFormFileUploadUrl(userEmail)]]"
+                ></form-page>
+            </template>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gm-form-control',
+
+            _computeFormSubmitUrl: function(_email){
+                if(_email){
+                    return encodeURI("/api/gm/form/submit?email=" + _email);
+                }else{
+                    return "/api/gm/form/submit";
+                }
+            },
+            _computeFormFileUploadUrl: function(_email){
+                if(_email){
+                    return encodeURI("/api/gm/form/upload?email=" + _email);
+                }else{
+                    return "/api/gm/form/upload";
+                }
+            }
+        });
+    </script>
+</dom-module>

@@ -103,7 +103,7 @@
             <div id="formContainer" class="layout vertical start">
                 <!-- iron-form hasn't support multipart/form-data!-->
                 <form id="appForm" is="iron-form"
-                      method="post" action="/api/form/submit"
+                      method="post" action="[[formSubmitUrl]]"
                       on-iron-form-response="_onFormSuccess"
                       on-iron-form-error="_onFormFailed">
 
@@ -359,21 +359,21 @@
                              on-before-upload="_handleFileBeforeUpload">推薦函（至少兩封，請合併成一份）上傳</file-upload>
                              -->
 
-                <file-upload target="/api/form/upload"
+                <file-upload target="[[fileUploadUrl]]"
                              raised
                              data-name="researchPlan"
                              on-success="_handleFileUpload"
                              on-error="_handleFileUploadError"
                              on-before-upload="_handleFileBeforeUpload">研究規劃書上傳 Upload Research Plan</file-upload>
 
-                <file-upload target="/api/form/upload"
+                <file-upload target="[[fileUploadUrl]]"
                              raised
                              data-name="transcript"
                              on-success="_handleFileUpload"
                              on-error="_handleFileUploadError"
                              on-before-upload="_handleFileBeforeUpload">成績單上傳 Upload Transcript</file-upload>
 
-                <file-upload target="/api/form/upload"
+                <file-upload target="[[fileUploadUrl]]"
                              raised
                              data-name="others"
                              on-success="_handleFileUpload"
@@ -386,6 +386,20 @@
     <script>
         Polymer({
             is: 'form-page',
+
+            properties:{
+                formSubmitUrl: {
+                    type: String,
+                    value: "/api/form/submit",
+                    notify: true
+                },
+
+                fileUploadUrl: {
+                    type: String,
+                    value: "/api/form/upload",
+                    notify: true
+                }
+            },
 
             _showLanguageDialog: function(){
                 document.querySelector('language-ability-dialog').show();
