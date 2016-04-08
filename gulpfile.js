@@ -65,12 +65,20 @@ gulp.task('copyReview', function(){
         dot: true
     }).pipe(gulp.dest(dist('review')));
 });
+gulp.task('copyGM', function(){
+    return gulp.src([
+        './gm/**/*'
+    ], {
+        dot: true
+    }).pipe(gulp.dest(dist('gm')));
+});
 
 gulp.task('build', function(callback){
     runSequence(
         'vulcanize',
         'copy',
         'copyReview',
+        'copyGM',
         'copyImg',
         callback
     );
