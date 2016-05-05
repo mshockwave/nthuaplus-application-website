@@ -39,21 +39,21 @@
 
         <table>
             <tr>
-                <td>中 / 英文姓名</td>
+                <td>Chinese Name / English Name</td>
                 <td class="value">[[_computeDisplayName(formData.Name)]]</td>
-                <td>身分證字號</td>
+                <td>Social Security Number</td>
                 <td class="value">[[formData.FormalId]]</td>
             </tr>
             <tr>
-                <td>學校</td>
+                <td>School</td>
                 <td class="value">[[formData.School]]</td>
-                <td>系級</td>
+                <td>Department and Grade</td>
                 <td class="value">[[_computeSchoolGrade(formData.Department, formData.SchoolGrade)]]</td>
             </tr>
             <tr>
-                <td>生日</td>
+                <td>Birthday</td>
                 <td class="value">[[_computeBirthday(formData.Birthday)]]</td>
-                <td>電話</td>
+                <td>Phone Number</td>
                 <td class="value">[[formData.Phone]]</td>
             </tr>
             <tr>
@@ -61,33 +61,33 @@
                 <td class="value" colspan="3">[[formData.Email]]</td>
             </tr>
             <tr>
-                <td>通訊地址</td>
+                <td>Address</td>
                 <td class="value" colspan="3">[[formData.Address]]</td>
             </tr>
             <tr>
-                <td>申請主題</td>
+                <td>Topic</td>
                 <td class="value" colspan="3">[[_computeTopic(formData.Topic)]]</td>
             </tr>
             <tr>
-                <td>指導教授</td>
+                <td>Advising Professor</td>
                 <td class="value" colspan="3">[[formData.Teacher]]</td>
             </tr>
             <tr>
-                <td>研究領域</td>
+                <td>Research Area</td>
                 <td class="value" colspan="3">[[formData.ResearchArea]]</td>
             </tr>
             <tr>
-                <td>相關專業技能</td>
+                <td>Related Skills</td>
                 <td class="value" colspan="3">[[formData.RelatedSkills]]</td>
             </tr>
             <tr>
                 <td colspan="4" class="value">
-                    預修課程<br/>
+                    Prerequisites<br/>
                     <table class="inner middle">
                         <tr>
-                            <th>課程名稱</th>
-                            <th>修課年度/學期</th>
-                            <th>成績</th>
+                            <th>Name</th>
+                            <th>Year / Semester</th>
+                            <th>Grade</th>
                         </tr>
                         <template is="dom-repeat" items="[[formData.ClassHistories]]" as="classItem">
                             <tr>
@@ -100,21 +100,21 @@
                 </td>
             </tr>
             <tr>
-                <td>總平均</td>
+                <td>Total Average</td>
                 <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Average)]]</td>
-                <td>年級排名</td>
+                <td>Ranking</td>
                 <td class="value">[[_computeAcademicGrade(formData.AcademicGrade.Rank)]]</td>
             </tr>
             <tr>
                 <td colspan="4" class="value">
-                    語言能力<br/>
+                    Language Ability<br/>
                     <table class="inner middle">
                         <tr>
-                            <th>語言</th>
-                            <th>聽</th>
-                            <th>說</th>
-                            <th>讀</th>
-                            <th>寫</th>
+                            <th>Language Name</th>
+                            <th>Listening</th>
+                            <th>Speaking</th>
+                            <th>Reading</th>
+                            <th>Writing</th>
                         </tr>
                         <template is="dom-repeat" items="[[formData.LangAbilities]]" as="langItem">
                             <tr>
@@ -131,12 +131,12 @@
 
             <tr>
                 <td colspan="4" class="value">
-                    推薦函狀況
+                    Recommendation Letters Status
                     <table class="inner middle">
                         <tr>
-                            <th>推薦者姓名</th>
-                            <th>推薦者Email</th>
-                            <th>本系統是否已收到推薦函</th>
+                            <th>Recommender</th>
+                            <th>Recommender Email</th>
+                            <th>System Had Received Recommendation</th>
                         </tr>
                         <template is="dom-repeat" items="[[formData.Recommendations]]" as="recommItem">
                             <tr>
@@ -158,7 +158,7 @@
             </tr> -->
             <tr>
                 <td colspan="4" style="text-align: center; padding: 5px;">
-                    研究規劃書
+                    Research Plan
                     <a href="[[formData.ResearchPlan]]">
                         <paper-icon-button icon="file-download"></paper-icon-button>
                     </a>
@@ -166,7 +166,7 @@
             </tr>
             <tr>
                 <td colspan="4" style="text-align: center; padding: 5px;">
-                    成績單
+                    Transcript
                     <a href="[[formData.Transcript]]">
                         <paper-icon-button icon="file-download"></paper-icon-button>
                     </a>
@@ -175,7 +175,7 @@
             <template is="dom-if" if="[[_shouldShowOthers(formData.Others)]]">
                 <tr>
                     <td colspan="4" style="text-align: center; padding: 5px;">
-                        其他資料
+                        Other Data
                         <a href="[[formData.Recommendations]]">
                             <paper-icon-button icon="file-download"></paper-icon-button>
                         </a>
@@ -202,7 +202,14 @@
 
             _computeSchoolGrade: function(department, schoolGrade){
                 var array = schoolGrade.split("@", 2);
-                var gradeStr = array.join("") + "年級";
+                if(array[0].equals("學士班")){
+                    array[0] = "Bachelor Year ";
+                }else if(array[0].equals("碩士班")){
+                    array[0] = "Master Year ";
+                }else if(array[0].equals("博士班")){
+                    array[0] = "Ph.D Year ";
+                }
+                var gradeStr = array.join("");
                 return department + " " + gradeStr;
             },
 
@@ -226,15 +233,14 @@
             _computeTopic: function(index){
                 switch(index){
                     case 0:
-                        return "電腦視覺三維模型重建與辨識技術";
+                        return "3D Object Reconstruction and Recognition";
                     case 1:
-                        return "具穩健機率運算能力之突波式神經網路系統研發";
+                        return "The Development of Spiking Neural Network System with Robust Probabilistic Computation";
                     case 2:
-                        return "虛擬載具在高效能異質環境研究";
+                        return "Virtualization container in heterogeneous HPC systems";
                     case 3:
-                        return "單層二維半導體之先進光電元件製程及量測技術";
-                    case 4:
-                        return "即時神經訊號處理演算法之硬體設計與實現";
+                        return "Study of optoelectronic devices of monolayer two-dimensional semiconductors";
+
                     default:
                         return "";
                 }
@@ -243,11 +249,11 @@
             _computeLangLevel: function(level){
                 switch(level){
                     case 0:
-                        return "精通";
+                        return "Mastery";
                     case 1:
-                        return "中等";
+                        return "Medium";
                     case 2:
-                        return "略懂";
+                        return "Little";
                     default:
                         return "";
                 }
@@ -258,7 +264,7 @@
             },
 
             _computeBoolToStr: function(b){
-                return (b === true)? "是" : "否";
+                return (b === true)? "Yes" : "No";
             }
         });
     </script>

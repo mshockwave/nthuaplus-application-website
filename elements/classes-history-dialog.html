@@ -39,13 +39,13 @@
 
                         <template is="dom-repeat" items="{{classRows}}" as="classRow" index-as="rowIndex">
                             <tr>
-                                <td><paper-input label="課程名稱" value="{{classRow.name}}"
+                                <td><paper-input label="Class Name" value="{{classRow.name}}"
                                                  on-change="_computeValue"></paper-input></td>
 
-                                <td><paper-input label="修課年度 / 學期" value="{{classRow.semester}}"
+                                <td><paper-input label="Year / Semester" value="{{classRow.semester}}"
                                                  on-change="_computeValue"></paper-input></td>
 
-                                <td><paper-input label="成績" value="{{classRow.grade}}"
+                                <td><paper-input label="Grade" value="{{classRow.grade}}"
                                                  on-change="_computeValue"></paper-input></td>
 
                                 <td><paper-icon-button icon="clear"
