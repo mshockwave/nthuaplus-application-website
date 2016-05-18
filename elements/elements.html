@@ -27223,11 +27223,11 @@ event and do your own custom submission:
 
             _computeSchoolGrade: function(department, schoolGrade){
                 var array = schoolGrade.split("@", 2);
-                if(array[0].equals("學士班")){
+                if(array[0] == "學士班"){
                     array[0] = "Bachelor Year ";
-                }else if(array[0].equals("碩士班")){
+                }else if(array[0] == "碩士班"){
                     array[0] = "Master Year ";
-                }else if(array[0].equals("博士班")){
+                }else if(array[0] == "博士班"){
                     array[0] = "Ph.D Year ";
                 }
                 var gradeStr = array.join("");
@@ -28651,11 +28651,11 @@ event and do your own custom submission:
 
             _computeSchoolGrade: function(department, schoolGrade){
                 var array = schoolGrade.split("@", 2);
-                if(array[0].equals("學士班")){
+                if(array[0] == "學士班"){
                     array[0] = "Bachelor Year ";
-                }else if(array[0].equals("碩士班")){
+                }else if(array[0] == "碩士班"){
                     array[0] = "Master Year ";
-                }else if(array[0].equals("博士班")){
+                }else if(array[0] == "博士班"){
                     array[0] = "Ph.D Year ";
                 }
                 var gradeStr = array.join("");
