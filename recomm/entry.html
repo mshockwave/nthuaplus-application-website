@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Redirecting...</title>
+
+    <link rel="import" href="../elements/elements.html">
+
+</head>
+<body unresolved class="layout vertical center center-justified">
+
+<template is="dom-bind" id="app">
+    <iron-ajax
+            id="accountAjax"
+            auto
+            handle-as="json"
+            url="/api/recomm/doorbell"
+    ></iron-ajax>
+</template>
+<script>
+    var app = document.querySelector('#app');
+    app.addEventListener('dom-change', function(){
+        //On init
+        this.selectIndex = 0;
+
+        var accountAjax = app.$.accountAjax;
+
+        accountAjax.addEventListener('response', function(e){
+            window.location.href = '/recomm/dashboard.html';
+        });
+        accountAjax.addEventListener('error', function(e){
+
+            var login_uri = '/login.html?rdr=/recomm/entry.html';
+
+            window.location.href = encodeURI(login_uri);
+        });
+    });
+</script>
+</body>
+</html>

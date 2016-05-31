@@ -65,6 +65,13 @@ gulp.task('copyReview', function(){
         dot: true
     }).pipe(gulp.dest(dist('review')));
 });
+gulp.task('copyRecomm', function(){
+    return gulp.src([
+        './recomm/**/*'
+    ], {
+        dot: true
+    }).pipe(gulp.dest(dist('recomm')));
+});
 gulp.task('copyGM', function(){
     return gulp.src([
         './gm/**/*'
@@ -78,6 +85,7 @@ gulp.task('build', function(callback){
         'vulcanize',
         'copy',
         'copyReview',
+        'copyRecomm',
         'copyGM',
         'copyImg',
         callback
@@ -95,6 +103,24 @@ gulp.task('build-deploy', function(callback){
     runSequence(
         'build',
         'deploy',
+        callback
+    );
+});
+
+gulp.task('serve-dev', $.serve({
+    root: ['.'],
+    port: 8081
+}));
+
+gulp.task('serve-release', $.serve({
+    root: ['dist'],
+    port: 8081
+}));
+
+gulp.task('build-serve', function(callback){
+    runSequence(
+        'build',
+        'serve-release',
         callback
     );
 });
