@@ -1,0 +1,216 @@
+
+<dom-module id="recomm-input-dialog">
+
+    <template>
+
+        <style>
+
+            div.content {
+                width: 100%;
+                margin: 10px;
+
+                font-size: 20px;
+            }
+
+            form{
+                width: 90%;
+            }
+
+            span{
+                line-height: 150%;
+            }
+
+            #action-fabs{
+                position: absolute;
+                bottom: 10px;
+                right: 40px;
+            }
+            #action-fabs paper-fab{
+                margin: 10px;
+            }
+            #fab-draft {
+                --paper-fab-background: #009688;
+            }
+
+            paper-tooltip {
+                --paper-tooltip-opacity: 1.0;
+                --paper-tooltip: {
+                    font-size: 16px;
+                };
+            }
+
+            paper-toast.toast-info {
+                --paper-toast-background-color: #689F38;
+                --paper-toast-color: white;
+            }
+            paper-toast.toast-error {
+                --paper-toast-background-color: #EF6C00;
+                --paper-toast-color: white;
+            }
+
+            /*.hidden {
+                display: none;
+            }
+            */
+
+        </style>
+
+        <div id="contentArea" class="content layout vertical start">
+
+            <p>先生/小姐&nbsp您好，
+                下列計畫申請人邀請您為他(她)撰寫推薦信
+            </p>
+
+            <span><strong>姓名(中/英)：</strong>[[_transformName(recommObj.ApplyUser.Name)]]</span>
+            <span><strong>Email：</strong>[[recommObj.ApplyUser.Email]]</span>
+            <span><strong>申請主題：</strong>[[recommObj.Topic]]</span>
+
+            <form id="mainForm" is="iron-form"
+                  method="post" action$="[[_submitUrl]]"
+                  on-iron-form-response="_onFormSuccess"
+                  on-iron-form-error="_onFormFailed">
+                <paper-textarea
+                        label="推薦內容，您也可直接使用下方按鈕上傳推薦信"
+                        rows="15"
+                        name="content"
+                        value="[[recommObj.Content]]"
+                        on-change="_onTextContentEdit"
+                ></paper-textarea>
+                <input type="hidden"
+                       name="attachment"
+                       value$="{{fileContent}}">
+
+            </form>
+
+            <br/>
+            <file-upload
+                    target="/api/recomm/a/upload"
+                    raised
+                    on-before-upload="_handleFileBeforeUpload"
+                    on-success="_handleFileUpload"
+                    on-error="_handleFileUploadError"
+            >上傳補充資料或推薦信文件檔</file-upload>
+
+            <div id="action-fabs" class="layout vertical center">
+                <paper-fab id="fab-draft"
+                           icon="drafts"
+                           on-click="_onSaveRecommDraft"></paper-fab>
+                <paper-tooltip for="fab-draft" position="left">
+                    儲存草稿
+                </paper-tooltip>
+
+                <paper-fab id="fab-submit"
+                           icon="check"
+                           on-click="_onSubmitRecomm"></paper-fab>
+                <paper-tooltip for="fab-submit" position="left">
+                    確定提交
+                </paper-tooltip>
+            </div>
+
+
+            <paper-toast id="infoToast" class="toast-info"></paper-toast>
+            <paper-toast id="errorToast" class="toast-error"></paper-toast>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'recomm-input-dialog',
+
+            properties:{
+                recommObj: {
+                    type: Object,
+                    notify: true
+                },
+
+                modified: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+
+            ready: function(){
+                this._submitUrl = "/api/recomm/staging/" +
+                                    ((this.recommObj)? this.recommObj.Hash : "");
+
+                // Config toasts' anchor
+                this.$.infoToast.fitInto = this.$.contentArea;
+                this.$.errorToast.fitInto = this.$.contentArea;
+            },
+
+            _transformName: function(rawStr){
+                return rawStr.replace('#', '/');
+            },
+
+            _onTextContentEdit: function(e){
+                this.set('modified', true);
+            },
+
+            _handleFileBeforeUpload: function(e){
+                var f = e.target;
+                if(f.files.length > 1) {
+                    f.set('files', [f.files[f.files.length - 1]]);
+                }
+            },
+
+            _handleFileUpload: function(e){
+                console.log(e);
+
+                var objName = JSON.parse(e.detail.xhr.response);
+                this.set('fileContent', objName.Description);
+                this.set('modified', true);
+            },
+
+            _handleFileUploadError: function(e){
+                console.log('Failed');
+                console.log(e);
+            },
+
+            _showInfoToast: function(contentText){
+                  if(this.$.infoToast.opened){
+                      this.$.infoToast.close();
+                  }
+
+                this.$.infoToast.text = contentText;
+                this.$.infoToast.open();
+            },
+            _errorInfoToast: function(contentText){
+                if(this.$.errorToast.opened){
+                    this.$.errorToast.close();
+                }
+
+                this.$.errorToast.text = contentText;
+                this.$.errorToast.open();
+            },
+
+            _onSaveRecommDraft: function(e){
+                this.set('_submitUrl', "/api/recomm/staging/" + this.recommObj.Hash);
+                this.$.mainForm.submit();
+
+                this._showInfoToast("Please Wait...");
+            },
+
+            _onSubmitRecomm: function(e){
+                this.set('_submitUrl', "/api/recomm/" + this.recommObj.Hash);
+                this.$.mainForm.submit();
+            },
+
+            _onFormSuccess: function(e){
+                this._showInfoToast("Success!");
+                if(this._submitUrl.indexOf("/staging") < 0){
+                    // Not draft
+                    setTimeout(function(){
+                        window.location.reload();
+                    }, 600);
+                }
+            },
+
+            _onFormFailed: function(e){
+                this._errorInfoToast("Error. Please Try Later");
+            }
+        });
+    </script>
+
+</dom-module>

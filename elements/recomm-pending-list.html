@@ -1,0 +1,105 @@
+
+<dom-module id="recomm-pending-list">
+
+    <template>
+
+        <style>
+
+            div.content {
+                width: 100%;
+                margin: 20px;
+            }
+
+            paper-card{
+                min-width: 70%;
+
+                --paper-card-header-text: {
+                    font-size: 25px;
+                    font-weight: 500;
+                };
+
+                --paper-card-content: {
+                    font-size: 20px;
+                };
+
+                --paper-card-actions: {
+                    padding: 5px;
+                };
+            }
+            paper-card span {
+                line-height: 150%;
+            }
+
+            paper-dialog {
+                min-width: 70%;
+            }
+
+        </style>
+
+        <iron-ajax
+                auto
+                id="listAjax"
+                url="/api/recomm/staging"
+                last-response="{{pendingList}}"
+        ></iron-ajax>
+
+        <div class="content layout vertical center">
+
+            <paper-dialog id="editDialog">
+                <paper-dialog-scrollable>
+                    <recomm-input-dialog recomm-obj="[[editItem]]"></recomm-input-dialog>
+                </paper-dialog-scrollable>
+            </paper-dialog>
+
+            <template is="dom-repeat" items="[[pendingList]]">
+
+                <paper-card heading="[[item.ApplyUser.Name]]">
+                    <div class="card-content layout vertical start">
+                        <span>
+                            <b>Email</b>: &nbsp[[item.ApplyUser.Email]]
+                        </span>
+                        <span>
+                            <b>Topic</b>: &nbsp[[item.Topic]]
+                        </span>
+
+                        <br/>
+                        <span>
+                            <small>Last Modified: &nbsp[[item.LastModified]]</small>
+                        </span>
+                    </div>
+
+                    <div class="card-actions">
+                        <paper-button on-click="_onListEditclick">
+                            <iron-icon icon="editor:mode-edit"></iron-icon>
+                            &nbspEdit
+                        </paper-button>
+                    </div>
+                </paper-card>
+
+            </template>
+
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'recomm-pending-list',
+
+            properties:{
+
+            },
+
+            _transformName: function(rawStr){
+                return rawStr.replace('#', '/');
+            },
+
+            _onListEditclick: function(e){
+                var model = e.model;
+                this.set('editItem', model.item);
+                this.$.editDialog.open();
+            }
+        });
+    </script>
+
+</dom-module>
