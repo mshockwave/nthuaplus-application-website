@@ -199,6 +199,7 @@
 
             _onFormSuccess: function(e){
                 this._showInfoToast("Success!");
+                this.set('modified', false); // Clear modified flag
                 if(this._submitUrl.indexOf("/staging") < 0){
                     // Not draft
                     setTimeout(function(){

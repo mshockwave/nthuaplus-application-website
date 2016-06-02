@@ -45,9 +45,11 @@
 
         <div class="content layout vertical center">
 
-            <paper-dialog id="editDialog">
+            <paper-dialog id="editDialog"
+                          on-iron-overlay-canceled="_onDialogClosed">
                 <paper-dialog-scrollable>
-                    <recomm-input-dialog recomm-obj="[[editItem]]"></recomm-input-dialog>
+                    <recomm-input-dialog recomm-obj="[[editItem]]"
+                                         modified="{{inputNotSaved}}"></recomm-input-dialog>
                 </paper-dialog-scrollable>
             </paper-dialog>
 
@@ -86,10 +88,6 @@
         Polymer({
             is: 'recomm-pending-list',
 
-            properties:{
-
-            },
-
             _transformName: function(rawStr){
                 return rawStr.replace('#', '/');
             },
@@ -98,6 +96,13 @@
                 var model = e.model;
                 this.set('editItem', model.item);
                 this.$.editDialog.open();
+            },
+
+            _onDialogClosed: function(e){
+                if(this.inputNotSaved){
+                    var closeAnyway = window.confirm("Dialog not saved. Close Anyway?");
+                    if(!closeAnyway) e.preventDefault();
+                }
             }
         });
     </script>
