@@ -1,5 +1,5 @@
 
-<dom-module id="recomm-pending-list">
+<dom-module id="recomm-history-page">
 
     <template>
 
@@ -39,21 +39,19 @@
         <iron-ajax
                 auto
                 id="listAjax"
-                url="/api/recomm/staging"
-                last-response="{{pendingList}}"
+                url="/api/recomm/"
+                last-response="{{formalList}}"
         ></iron-ajax>
 
         <div class="content layout vertical center">
 
-            <paper-dialog id="editDialog"
-                          on-iron-overlay-canceled="_onDialogClosed">
+            <paper-dialog id="viewDialog">
                 <paper-dialog-scrollable>
-                    <recomm-input-dialog recomm-obj="[[editItem]]"
-                                         modified="{{inputNotSaved}}"></recomm-input-dialog>
+                    <recomm-view-dialog recomm-obj="[[viewItem]]"></recomm-view-dialog>
                 </paper-dialog-scrollable>
             </paper-dialog>
 
-            <template is="dom-repeat" items="[[pendingList]]">
+            <template is="dom-repeat" items="[[formalList]]">
 
                 <paper-card heading="[[item.ApplyUser.Name]]">
                     <div class="card-content layout vertical start">
@@ -71,9 +69,9 @@
                     </div>
 
                     <div class="card-actions">
-                        <paper-button on-click="_onListEditclick">
-                            <iron-icon icon="editor:mode-edit"></iron-icon>
-                            &nbsp Edit
+                        <paper-button on-click="_onListViewclick">
+                            <iron-icon icon="visibility"></iron-icon>
+                            &nbsp View
                         </paper-button>
                     </div>
                 </paper-card>
@@ -86,7 +84,7 @@
 
     <script>
         Polymer({
-            is: 'recomm-pending-list',
+            is: 'recomm-history-page',
 
             _transformName: function(rawStr){
                 return rawStr.replace('#', '/');
@@ -101,17 +99,10 @@
                 }
             },
 
-            _onListEditclick: function(e){
+            _onListViewclick: function(e){
                 var model = e.model;
-                this.set('editItem', model.item);
-                this.$.editDialog.open();
-            },
-
-            _onDialogClosed: function(e){
-                if(this.inputNotSaved){
-                    var closeAnyway = window.confirm("Dialog not saved. Close Anyway?");
-                    if(!closeAnyway) e.preventDefault();
-                }
+                this.set('viewItem', model.item);
+                this.$.viewDialog.open();
             }
         });
     </script>

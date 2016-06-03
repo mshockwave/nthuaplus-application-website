@@ -1,0 +1,74 @@
+
+<dom-module id="recomm-view-dialog">
+
+    <template>
+
+        <style>
+
+            div.content {
+                width: 100%;
+                margin: 10px;
+
+                font-size: 20px;
+                line-height: 110%;
+            }
+
+            article {
+                text-align: start;
+                font-size: 20px;
+            }
+
+            a {
+                color: black;
+            }
+
+        </style>
+
+        <div id="contentArea" class="content layout vertical start">
+
+            <span><strong>姓名(中/英)：</strong>[[_transformName(recommObj.ApplyUser.Name)]]</span>
+            <span><strong>Email：</strong>[[recommObj.ApplyUser.Email]]</span>
+            <span><strong>申請主題：</strong>[[recommObj.Topic]]</span>
+
+            <hr>
+
+            <article class="layout vertical start">
+                <marked-element markdown="[[recommObj.Content]]"></marked-element>
+                <template is="dom-if" if="[[_isNotZeroLength(recommObj.Attachment)]]">
+                    <a href$="[[recommObj.Attachment]]" target="_blank">
+                        <paper-button raised>
+                            <iron-icon icon="attachment"></iron-icon>&nbsp檢視附件
+                        </paper-button>
+                    </a>
+                </template>
+                <br/>
+            </article>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'recomm-view-dialog',
+
+            properties:{
+                recommObj: {
+                    type: Object,
+                    notify: true
+                }
+            },
+
+            _transformName: function(rawStr){
+                return rawStr.replace('#', '/');
+            },
+
+            _isNotNil: function(v){
+                return !(v === undefined || v === null);
+            },
+            _isNotZeroLength: function(v){
+                return v.length != 0;
+            }
+        });
+    </script>
+
+</dom-module>
