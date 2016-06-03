@@ -47,7 +47,7 @@
                     <paper-tab>註冊</paper-tab>
                 </paper-tabs>
                 <iron-pages selected="{{selectIndex}}">
-                    <login-page redirect-url="/index.html"></login-page>
+                    <login-page redirect-url="[[redirectUrl]]"></login-page>
                     <register-page></register-page>
                 </iron-pages>
             </div>
@@ -62,13 +62,15 @@
             //Get url parameter
             this.params = document.URL.extract();
 
+            if(this.params && this.params['rdr']){
+                this.redirectUrl = decodeURI(this.params['rdr']);
+            }else{
+                this.redirectUrl = '/index.html';
+            }
+
             app.$.accountAjax.addEventListener('response', function(e){
                 //console.log(e.detail);
-                if(app.params && app.params['rdr']){
-                    window.location.href = decodeURI(app.params['rdr']);
-                }else{
-                    window.location.href = '/dashboard.html';
-                }
+                window.location.href = app.redirectUrl;
             });
         });
     </script>
