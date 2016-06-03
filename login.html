@@ -65,7 +65,7 @@
             app.$.accountAjax.addEventListener('response', function(e){
                 //console.log(e.detail);
                 if(app.params && app.params['rdr']){
-                    window.location.href = app.params['rdr'];
+                    window.location.href = decodeURI(app.params['rdr']);
                 }else{
                     window.location.href = '/dashboard.html';
                 }
