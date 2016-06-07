@@ -29607,6 +29607,10 @@ event and do your own custom submission:
                 };
             }
 
+            paper-toast {
+                font-size: 21px;
+            }
+
             paper-toast.toast-info {
                 --paper-toast-background-color: #689F38;
                 --paper-toast-color: white;
@@ -29740,6 +29744,14 @@ event and do your own custom submission:
             },
 
             _onSubmitRecomm: function(e){
+
+                var confirmMsg = "Recommendation can't be modified after submitting.\n" +
+                                "Sure to submit?";
+
+                if(!window.confirm(confirmMsg)){
+                    return;
+                }
+
                 this.set('_submitUrl', "/api/recomm/" + this.recommObj.Hash);
                 this.$.mainForm.submit();
             },
